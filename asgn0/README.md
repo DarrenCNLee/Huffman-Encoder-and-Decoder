@@ -1,6 +1,6 @@
 Darren Lee  
 danalee  
-Spring 2021  
+Spring 2021
 # Assignment 0: git’n Started
 This program prints `Hello World!\n` when run.
 ## Build
