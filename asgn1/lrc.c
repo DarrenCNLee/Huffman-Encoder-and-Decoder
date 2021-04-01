@@ -45,49 +45,53 @@ int main(void) {
     while (alive > 1) {
         for (uint32_t i = 0; i < philos; i++) {
             roll_state = 0;
+            alive = 0;
+            for (uint32_t k = 0; k < philos; k++) {
+                if (dollars[k] > 0) {
+                    alive++;
+                }
+            }
+            if (alive == 1) {
+                break;
+            }
             if (dollars[i] > 0) {
                 printf("%s rolls... ", philosophers[i]);
                 roll_state = 1;
             }
-            uint32_t current_dollars = dollars[i];
-            uint32_t min;
+            uint32_t current_dollars = dollars[i], min, space_count;
             if (3 < current_dollars) {
                 min = 3;
             } else {
                 min = current_dollars;
             }
+            space_count = 0;
             for (uint32_t j = 0; j < min; j++) {
                 uint32_t roll_num = roll(6);
                 if (die[roll_num] == LEFT) {
                     dollars[i]--;
-                    dollars[left(i, alive)]++;
-                    printf("gives $1 to %s ", philosophers[left(i, philos)]);
+                    dollars[left(i, philos)]++;
+                    printf("gives $1 to %s", philosophers[left(i, philos)]);
                 }
                 if (die[roll_num] == RIGHT) {
                     dollars[i]--;
-                    dollars[right(i, alive)]++;
-                    printf("gives $1 to %s ", philosophers[right(i, philos)]);
+                    dollars[right(i, philos)]++;
+                    printf("gives $1 to %s", philosophers[right(i, philos)]);
                 }
                 if (die[roll_num] == CENTER) {
                     dollars[i]--;
                     pot++;
-                    printf("puts $1 in the pot ");
+                    printf("puts $1 in the pot");
                 }
                 if (die[roll_num] == PASS) {
-                    printf("gets a pass ");
+                    printf("gets a pass");
                 }
-                alive = 0;
-                for (uint32_t i = 0; i < philos; i++) {
-                    if (dollars[i] > 0) {
-                        alive++;
-                    }
+                if (space_count < min - 1) {
+                    printf(" ");
                 }
+                space_count++;
             }
             if (roll_state) {
                 printf("\n");
-            }
-            if (alive == 1) {
-                break;
             }
         }
     }
