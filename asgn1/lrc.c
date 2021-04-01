@@ -28,11 +28,10 @@ int main(void) {
     typedef enum faciem { PASS, LEFT, RIGHT, CENTER } faces;
     faces die[] = { LEFT, RIGHT, CENTER, PASS, PASS, PASS };
     uint32_t dollars[] = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };
-    uint32_t seed, philos;
+    uint32_t seed, philos, roll_state;
     uint32_t pot = 0;
     printf("Random seed: ");
     if (scanf("%u", &seed) < 1) {
-        //        printf("Pseudorandom seed must be non-negative\n");
         printf("Pseudorandom seed must be non-negative (%u).\n", seed);
         return 1;
     }
@@ -45,11 +44,13 @@ int main(void) {
     uint32_t alive = philos;
     while (alive > 1) {
         for (uint32_t i = 0; i < philos; i++) {
-            if (dollars[i] > 0){
-		printf("%s rolls... ", philosophers[i]);
-	    }
+            roll_state = 0;
+            if (dollars[i] > 0) {
+                printf("%s rolls... ", philosophers[i]);
+                roll_state = 1;
+            }
             uint32_t current_dollars = dollars[i];
-	    uint32_t min;
+            uint32_t min;
             if (3 < current_dollars) {
                 min = 3;
             } else {
@@ -59,19 +60,13 @@ int main(void) {
                 uint32_t roll_num = roll(6);
                 if (die[roll_num] == LEFT) {
                     dollars[i]--;
-                    if (dollars[left(i, alive)] == 0) {
-                        alive++;
-                    }
                     dollars[left(i, alive)]++;
-                    printf("gives $1 to %s ", philosophers[left(i, alive)]);
+                    printf("gives $1 to %s ", philosophers[left(i, philos)]);
                 }
                 if (die[roll_num] == RIGHT) {
                     dollars[i]--;
-                    if (dollars[right(i, alive)] == 0) {
-                        alive++;
-                    }
                     dollars[right(i, alive)]++;
-                    printf("gives $1 to %s ", philosophers[right(i, alive)]);
+                    printf("gives $1 to %s ", philosophers[right(i, philos)]);
                 }
                 if (die[roll_num] == CENTER) {
                     dollars[i]--;
@@ -81,16 +76,19 @@ int main(void) {
                 if (die[roll_num] == PASS) {
                     printf("gets a pass ");
                 }
+                alive = 0;
+                for (uint32_t i = 0; i < philos; i++) {
+                    if (dollars[i] > 0) {
+                        alive++;
+                    }
+                }
             }
-            printf("\n");
-        }
-        for (uint32_t i = 0; i < philos; i++) {
-            if (dollars[i] == 0) {
-                alive--;  
-	    } else {
-		printf("%s has $%u remaining.\n", philosophers[i], dollars[i]);
-	    }
-
+            if (roll_state) {
+                printf("\n");
+            }
+            if (alive == 1) {
+                break;
+            }
         }
     }
     for (uint32_t i = 0; i < philos; i++) {
