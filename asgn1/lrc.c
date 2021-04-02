@@ -20,6 +20,7 @@ static inline uint8_t right(uint8_t pos, uint8_t players) {
     return ((pos + 1) % players);
 }
 
+// Returns a random number from 0 to n
 static inline uint32_t roll(uint32_t n) {
     return random() % n;
 }
@@ -27,7 +28,7 @@ static inline uint32_t roll(uint32_t n) {
 int main(void) {
     typedef enum faciem { PASS, LEFT, RIGHT, CENTER } faces;
     faces die[] = { LEFT, RIGHT, CENTER, PASS, PASS, PASS };
-    uint32_t dollars[] = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };
+    uint32_t dollars[] = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };    // array for the dollars of each player
     uint32_t seed, philos, roll_state;
     uint32_t pot = 0;
     printf("Random seed: ");
@@ -35,10 +36,10 @@ int main(void) {
         printf("Pseudorandom seed must be non-negative (%u).\n", seed);
         return 1;
     }
-    srandom(seed);
+    srandom(seed);                                                        
     printf("How many players? ");
-    if ((scanf("%u", &philos) < 1) || philos < 1 || philos > PHILOS) {
-        printf("Number of players must be from 1 to 14.\n");
+    if ((scanf("%u", &philos) < 1) || philos < 1 || philos > PHILOS) {    // exit main function if the number of players
+        printf("Number of players must be from 1 to 14.\n");              // is not from 1 to 14
         return 1;
     }
     uint32_t alive = philos;
@@ -54,7 +55,7 @@ int main(void) {
             if (alive == 1) {
                 break;
             }
-            if (dollars[i] > 0) {
+            if (dollars[i] > 0) {                                         // check how much money the player has
                 printf("%s rolls... ", philosophers[i]);
                 roll_state = 1;
             }
