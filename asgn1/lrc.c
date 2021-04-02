@@ -55,7 +55,7 @@ int main(void) {
 
     printf("Random seed: ");
     if (scanf("%u", &seed) < 1) { // read a seed
-        printf("Pseudorandom seed must be non-negative (%u).\n", seed);
+        fprintf(stderr, "Pseudorandom seed must be non-negative (%u).\n", seed);
         return 1;
     }
     srandom(seed);
