@@ -33,7 +33,7 @@ int main(void) {
     printf("Random seed: ");
     if (scanf("%u", &seed) < 1 || seed < 1) {
         printf("Pseudorandom seed must be non-negative (%u).\n", seed);
-	return 1;
+        return 1;
     }
     srandom(seed);
     printf("How many players? ");
