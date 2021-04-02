@@ -31,9 +31,9 @@ int main(void) {
     uint32_t seed, philos, roll_state;
     uint32_t pot = 0;
     printf("Random seed: ");
-    if (scanf("%u", &seed) < 1) {
+    if (scanf("%u", &seed) < 1 || seed < 1) {
         printf("Pseudorandom seed must be non-negative (%u).\n", seed);
-        return 1;
+	return 1;
     }
     srandom(seed);
     printf("How many players? ");
