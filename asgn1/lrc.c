@@ -28,53 +28,51 @@
 // Returns  the  position  of the  player  to the  left.
 // pos:     The  position  of the  current  player.
 // players: The  number  of  players  in the  game.
-static inline uint8_t left(uint8_t pos, uint8_t players) {
+static inline uint8_t left(uint8_t pos, uint8_t players) { // Code from assignment PDF
     return ((pos + players - 1) % players);
 }
 
 //  Returns  the  position  of the  player  to the  right.
 //  pos:     The  position  of the  current  player.
 //  players: The  number  of  players  in the  game.
-static inline uint8_t right(uint8_t pos, uint8_t players) {
+static inline uint8_t right(uint8_t pos, uint8_t players) { // Code from assignment PDF
     return ((pos + 1) % players);
 }
 
-// Returns a random number from 0 to n - 1
-static inline uint32_t roll(uint32_t n) {
-    return random() % n;
-}
-
 int main(void) {
-    typedef enum faciem { PASS, LEFT, RIGHT, CENTER } faces;
-    faces die[] = { LEFT, RIGHT, CENTER, PASS, PASS, PASS }; // array for the faces of each die
-    uint32_t dollars[]
+    typedef enum faciem { PASS, LEFT, RIGHT, CENTER } faces; // Code from assignment PDF
+    faces die[] = { LEFT, RIGHT, CENTER, PASS, PASS,
+        PASS }; // Code from assignment PDF, array for the faces of each die
+    int dollars[]
         = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }; // array for the dollars of each player
-    uint32_t seed, philos,
+    int32_t seed;
+    int philos,
         roll_state; // philos is the number of players, roll_state is 1 if the player rolls and 0 if the player does not roll
-    uint32_t pot = 0;
+    int pot = 0;
 
     printf("Random seed: ");
-    if (scanf("%u", &seed) < 1) { // read a seed
-        fprintf(stderr, "Pseudorandom seed must be non-negative (%u).\n", seed);
-        return 1;
+    if ((scanf("%u", &seed) < 1) || seed < 1) { // read a seed
+        printf("Pseudorandom seed must be non-negative (%d).\n", seed);
+        return 1; // exit main function if number of items succesfully read is < 1 or seed is < 1
     }
     srandom(seed);
 
     printf("How many players? ");
-    if ((scanf("%u", &philos) < 1) || philos < 1
-        || philos > PHILOS) { // exit main function if the number of players is not from 1 to 14
+    if ((scanf("%u", &philos) < 1) || philos < 1 // read number of players
+        || philos
+               > PHILOS) { // exit main function if number of items successfully read < 1 or the number of players is not from 1 to 14
         printf("Number of players must be from 1 to 14.\n");
         return 1;
     }
-    uint32_t alive = philos;
+    int alive = philos;
 
     while (alive > 1) { // start game loop
 
-        for (uint32_t i = 0; i < philos; i++) { // loop through the players
+        for (int i = 0; i < philos; i++) { // loop through the players
             roll_state = 0;
             alive = 0;
 
-            for (uint32_t j = 0; j < philos;
+            for (int j = 0; j < philos;
                  j++) { // loop through players to check how many still have money
                 if (dollars[j] > 0) {
                     alive++;
@@ -87,9 +85,7 @@ int main(void) {
                 printf("%s rolls... ", philosophers[i]);
                 roll_state = 1; // player can roll if he or she has money
             }
-            uint32_t current_dollars
-                = dollars[i],
-                roll_count,
+            int current_dollars = dollars[i], roll_count,
                 space_count; // current_dollars is how much money the player has, roll_count is the number of times the player will roll, space_count is how many spaces to print
             if (3
                 < current_dollars) { // player can roll 3 times if he or she has more than 3 dollars
@@ -99,8 +95,8 @@ int main(void) {
             }
             space_count = 0;
 
-            for (uint32_t k = 0; k < roll_count; k++) { // loop through rolls
-                uint32_t roll_num = roll(6); // call roll function to generate a roll number
+            for (int k = 0; k < roll_count; k++) { // loop through rolls
+                int roll_num = random() % 6; // generate a random roll number
                 if (die[roll_num] == LEFT) {
                     dollars[i]--;
                     dollars[left(i, philos)]++;
@@ -130,7 +126,7 @@ int main(void) {
             }
         }
     }
-    for (uint32_t i = 0; i < philos; i++) { // loop through the players
+    for (int i = 0; i < philos; i++) { // loop through the players
         if (dollars[i] > 0) { // the player with money at the end is the winner
             printf("%s wins the $%u pot with $%u left in the bank!\n", philosophers[i], pot,
                 dollars[i]);
