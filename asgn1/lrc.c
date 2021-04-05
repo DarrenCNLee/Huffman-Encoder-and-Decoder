@@ -46,19 +46,19 @@ int main(void) {
     int dollars[]
         = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }; // array for the dollars of each player
     int32_t seed;
-    int philos,
-        roll_state; // philos is the number of players, roll_state is 1 if the player rolls and 0 if the player does not roll
+    int philos; // philos is the number of players
+    int roll_state; // roll_state is 1 if the player rolls and 0 if the player does not roll
     int pot = 0;
 
     printf("Random seed: ");
-    if ((scanf("%u", &seed) < 1) || seed < 1) { // read a seed
+    if ((scanf("%d", &seed) < 1) || seed < 1) { // read a seed
         printf("Pseudorandom seed must be non-negative (%d).\n", seed);
         return 1; // exit main function if number of items succesfully read is < 1 or seed is < 1
     }
     srandom(seed);
 
     printf("How many players? ");
-    if ((scanf("%u", &philos) < 1) || philos < 1 // read number of players
+    if ((scanf("%d", &philos) < 1) || philos < 1 // read number of players
         || philos
                > PHILOS) { // exit main function if number of items successfully read < 1 or the number of players is not from 1 to 14
         printf("Number of players must be from 1 to 14.\n");
