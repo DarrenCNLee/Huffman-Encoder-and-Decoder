@@ -42,8 +42,7 @@ static inline uint8_t right(uint8_t pos, uint8_t players) { // Code from assignm
 
 int main(void) {
     typedef enum faciem { PASS, LEFT, RIGHT, CENTER } faces; // Code from assignment PDF
-    faces die[] = { LEFT, RIGHT, CENTER, PASS, PASS,
-        PASS }; // Code from assignment PDF, array for the faces of each die
+    faces die[] = { LEFT, RIGHT, CENTER, PASS, PASS, PASS }; // Code from assignment PDF
     int dollars[PHILOS]
         = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }; // array for the dollars of each player
     int32_t seed;
@@ -59,11 +58,9 @@ int main(void) {
     srandom(seed);
 
     printf("How many players? ");
-    if ((scanf("%d", &philos) < 1) || philos < 1 // read number of players
-        || philos
-               > PHILOS) { // exit main function if number of items successfully read < 1 or the number of players is not from 1 to 14
+    if ((scanf("%d", &philos) < 1) || philos < 1 || philos > PHILOS) {
         printf("Number of players must be from 1 to 14.\n");
-        return 1;
+        return 1; // exit main function if < 1 item successfully read or number of players is not between 1 and 14
     }
     int alive = philos;
 
@@ -73,8 +70,7 @@ int main(void) {
             roll_state = 0;
             alive = 0;
 
-            for (int j = 0; j < philos;
-                 j++) { // loop through players to check how many still have money
+            for (int j = 0; j < philos; j++) { // loop to check how many playes are in the game
                 if (dollars[j] > 0) {
                     alive++;
                 }
@@ -86,12 +82,10 @@ int main(void) {
                 printf("%s rolls... ", philosophers[i]);
                 roll_state = 1; // player can roll if he or she has money
             }
-            int current_dollars = dollars[i], roll_count,
-                space_count; // current_dollars is how much money the player has, roll_count is the number of times the player will roll, space_count is how many spaces to print
+            int roll_count; // roll_count is the number of times the player will roll
+            int space_count; // space_count is how many spaces to print
             roll_count
-                = ROLLS < current_dollars
-                      ? ROLLS
-                      : current_dollars; // player can roll 3 times if he or she has more than 3 dollars; otherwise, the number of rolls is equal to the number of dollars the player has
+                = dollars[i] > ROLLS ? ROLLS : dollars[i]; // minimum between 3 and player's dollars
             space_count = 0;
 
             for (int k = 0; k < roll_count; k++) { // loop through rolls
@@ -114,9 +108,8 @@ int main(void) {
                 if (die[roll_num] == PASS) {
                     printf("gets a pass");
                 }
-                if (space_count
-                    < roll_count - 1) { // print a space after each roll message except the last one
-                    printf(" ");
+                if (space_count < roll_count - 1) {
+                    printf(" "); // print a space after each roll message except the last one
                 }
                 space_count++;
             }
