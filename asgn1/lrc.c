@@ -43,7 +43,7 @@ int main(void) {
     typedef enum faciem { PASS, LEFT, RIGHT, CENTER } faces; // Code from assignment PDF
     faces die[] = { LEFT, RIGHT, CENTER, PASS, PASS,
         PASS }; // Code from assignment PDF, array for the faces of each die
-    int dollars[]
+    int dollars[PHILOS]
         = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }; // array for the dollars of each player
     int32_t seed;
     int philos; // philos is the number of players
