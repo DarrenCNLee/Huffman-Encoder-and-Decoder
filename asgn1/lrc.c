@@ -24,6 +24,7 @@
 #include <stdlib.h>
 
 #define PHILOS 14 // maximum of 14 players
+#define ROLLS  3 // maximum of 3 rolls per turn
 
 // Returns  the  position  of the  player  to the  left.
 // pos:     The  position  of the  current  player.
@@ -87,12 +88,10 @@ int main(void) {
             }
             int current_dollars = dollars[i], roll_count,
                 space_count; // current_dollars is how much money the player has, roll_count is the number of times the player will roll, space_count is how many spaces to print
-            if (3
-                < current_dollars) { // player can roll 3 times if he or she has more than 3 dollars
-                roll_count = 3;
-            } else { // otherwise, the number of rolls is equal to the number of dollars the player has
-                roll_count = current_dollars;
-            }
+            roll_count
+                = ROLLS < current_dollars
+                      ? ROLLS
+                      : current_dollars; // player can roll 3 times if he or she has more than 3 dollars; otherwise, the number of rolls is equal to the number of dollars the player has
             space_count = 0;
 
             for (int k = 0; k < roll_count; k++) { // loop through rolls
