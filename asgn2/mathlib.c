@@ -3,10 +3,6 @@
 
 #define EPSILON 1e-12
 
-int main(void) {
-    return 0;
-}
-
 double Sin(double x) { // code from Piazza
     // Normalize –2π ≤ x ≤ 2π
     x = fmod(x, 2.0 * M_PI);
