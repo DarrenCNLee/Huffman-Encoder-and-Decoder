@@ -8,3 +8,8 @@
 **/*.bbl
 **/*.blg
 **/*.aux
+hello
+lrc
+.hello.c.swp
+myoutput
+expected

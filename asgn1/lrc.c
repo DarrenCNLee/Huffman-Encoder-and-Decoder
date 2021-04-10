@@ -3,7 +3,7 @@
 // Spring 2021
 
 // This program implements the game Left, Right, and Center.
-// The players are 1 to 14 philosophers.
+// The players are 2 to 14 philosophers.
 // Each player starts with $3. There are 3 dice with 6 faces each.
 // There are 3 pass faces, 1 left face, 1 right face, and 1 center face
 // on each die. Player 1 starts and rolls 3 dice if he or she has
@@ -45,22 +45,22 @@ int main(void) {
     faces die[] = { LEFT, RIGHT, CENTER, PASS, PASS, PASS }; // Code from assignment PDF
     int dollars[PHILOS]
         = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }; // array for the dollars of each player
-    int32_t seed;
+    int64_t seed;
     int philos; // philos is the number of players
     int roll_state; // roll_state is 1 if the player rolls and 0 if the player does not roll
     int pot = 0;
 
     printf("Random seed: ");
-    if ((scanf("%d", &seed) < 1) || seed < 1) { // read a seed
-        printf("Pseudorandom seed must be non-negative (%d).\n", seed);
+    if ((scanf("%ld", &seed) < 1) || seed < 1) { // read a seed
+        printf("Pseudorandom seed must be non-negative (%ld).\n", seed);
         return 1; // exit main function if number of items succesfully read is < 1 or seed is < 1
     }
     srandom(seed);
 
     printf("How many players? ");
-    if ((scanf("%d", &philos) < 1) || philos < 1 || philos > PHILOS) {
-        printf("Number of players must be from 1 to 14.\n");
-        return 1; // exit main function if < 1 item successfully read or number of players is not between 1 and 14
+    if ((scanf("%d", &philos) < 1) || philos < 2 || philos > PHILOS) {
+        printf("Number of players must be from 2 to 14.\n");
+        return 1; // exit main function if < 1 item successfully read or number of players is not between 2 and 14
     }
     int alive = philos;
 
