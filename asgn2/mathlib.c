@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <math.h>
 
-#define EPSILON 1e-10
+#define EPSILON 1e-12
 
 double Sin(double x) { // code from Piazza
     // Normalize –2π ≤ x ≤ 2π
@@ -85,7 +85,7 @@ double arcSin(double x) {
 }
 
 double arcCos(double x) {
-    return M_PI - arcSin(x);
+    return M_PI / 2 - arcSin(x);
 }
 
 double arcTan(double x) {
