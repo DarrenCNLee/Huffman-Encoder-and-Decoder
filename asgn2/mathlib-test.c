@@ -1,6 +1,7 @@
+#include "mathlib.c"
+
 #include <stdio.h>
 #include <unistd.h>
-#include "mathlib.c"
 
 #define OPTIONS "asctl"
 
