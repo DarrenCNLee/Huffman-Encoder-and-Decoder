@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
             }
             break;
         case 'l':
-            for (double i = -1.0; i <= 1.0; i += 0.1) {
+            for (double i = 1.0; i <= 10.0; i += 0.5) {
                 printf("%7.4lf%16.8lf%16.8lf%16.10lf\n", i, Log(i), log(i), Log(i) - log(i));
             }
             break;
