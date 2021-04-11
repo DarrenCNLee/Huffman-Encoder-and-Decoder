@@ -35,7 +35,8 @@ Start with player 1, then move to the next player to the right. Repeat until onl
 		File containing C program for the game
 	
 	Makefile
-		Contains the directives for building lrc and and cleaning
+		Contains the directives for building lrc and cleaning
 	
 	DESIGN.pdf
-		Contains a description of the game, inputs and expected outputs, pseudocode, and drawings/scratch work on paper
+		Contains a description of the game, inputs and expected outputs, layout and structure, functionality of the code
+		 pseudocode, and drawings/scratch work on paper
