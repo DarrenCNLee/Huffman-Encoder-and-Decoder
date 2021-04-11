@@ -4,6 +4,8 @@ CruzID: danalee
 
 Spring 2021
 # Assignment 1: Left, Right and Center 
+This program implements the game Left, Right, and Center.
+
 In the game Left, Right, and Center, there are 2 to 14 players that each have $3, and there are three dice with 6 faces each. 
 3 of the faces are a •, 1 is an L (left), 1 is an R (right), and 1 is a C (center). A player rolls 3 dice if he or she has 
 $3 or more. A player rolls 2 dice if he or has $2 and 1 die if he or she has $1. Players pass if they have no money. 
