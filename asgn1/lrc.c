@@ -52,14 +52,14 @@ int main(void) {
 
     printf("Random seed: ");
     if ((scanf("%ld", &seed) < 1) || seed < 1) { // read a seed
-        printf("Pseudorandom seed must be non-negative (%ld).\n", seed);
+        fprintf(stderr, "Pseudorandom seed must be non-negative (%ld).\n", seed);
         return 1; // exit main function if number of items succesfully read is < 1 or seed is < 1
     }
     srandom(seed);
 
     printf("How many players? ");
     if ((scanf("%d", &philos) < 1) || philos < 2 || philos > PHILOS) {
-        printf("Number of players must be from 2 to 14.\n");
+        fprintf(stderr, "Number of players must be from 2 to 14.\n");
         return 1; // exit main function if < 1 item successfully read or number of players is not between 2 and 14
     }
     int alive = philos;
