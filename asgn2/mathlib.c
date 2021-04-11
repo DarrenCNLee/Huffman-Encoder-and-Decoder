@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <math.h>
 
-#define EPSILON 1e-12
+#define EPSILON 1e-10
 
 double Sin(double x) { // code from Piazza
     // Normalize –2π ≤ x ≤ 2π
@@ -72,7 +72,7 @@ double Sqrt(double x) { // code from Piazza
 }
 
 double arcSin(double x) {
-    double m, l = 0.0, h = (x < M_PI / 2) ? M_PI / 2 : x;
+    double m, l = -M_PI / 2, h = M_PI / 2;
     do {
         m = (l + h) / 2.0;
         if (Sin(m) < x) {
@@ -80,7 +80,7 @@ double arcSin(double x) {
         } else {
             h = m;
         }
-    } while (Abs(1 - h) > EPSILON);
+    } while (Abs(l - h) > EPSILON);
     return m;
 }
 
