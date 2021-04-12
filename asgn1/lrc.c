@@ -43,16 +43,15 @@ static inline uint8_t right(uint8_t pos, uint8_t players) { // Code from assignm
 int main(void) {
     typedef enum faciem { PASS, LEFT, RIGHT, CENTER } faces; // Code from assignment PDF
     faces die[] = { LEFT, RIGHT, CENTER, PASS, PASS, PASS }; // Code from assignment PDF
-    int dollars[PHILOS]
-        = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }; // array for the dollars of each player
+    int dollars[PHILOS] = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }; // array for the banks
     int64_t seed;
     int philos; // philos is the number of players
     int roll_state; // roll_state is 1 if the player rolls and 0 if the player does not roll
     int pot = 0;
 
     printf("Random seed: ");
-    if ((scanf("%ld", &seed) < 1) || seed < 1) { // read a seed
-        fprintf(stderr, "Pseudorandom seed must be non-negative (%ld).\n", seed);
+    if ((scanf("%" SCNd64, &seed) < 1) || seed < 1) { // read a seed
+        fprintf(stderr, "Pseudorandom seed must be non-negative (%" PRId64 ").\n", seed);
         return 1; // exit main function if number of items succesfully read is < 1 or seed is < 1
     }
     srandom(seed);
