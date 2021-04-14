@@ -4,10 +4,10 @@ CFLAGS = -Wall -Wextra -Werror -Wpedantic
 all:		mathlib-test
 
 mathlib-test:	mathlib-test.o
-		$(CC) -o mathlib-test mathlib-test.o mathlib.o -lm
+		$(CC) $(CFLAGS) -o mathlib-test mathlib-test.o -lm 
 
 mathlib-test.o:	mathlib-test.c
-		$(CC) $(CFLAGS) -c mathlib-test 
+		$(CC) $(CFLAGS) -c mathlib-test.c 
 
 clean:
 		rm -f mathlib-test mathlib-test.o
