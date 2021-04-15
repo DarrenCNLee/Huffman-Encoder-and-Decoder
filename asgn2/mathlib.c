@@ -78,8 +78,8 @@ double arcCos(double x) {
 
 // Returns the arctan of x
 // x: value of which to take the arctan
-double arcTan(double x) {
-    return arcSin(x / Sqrt(x * x + 1)); // arcTan=arcSin(x / Sqrt(x^2-1))
+double arcTan(double x) { // arcTan=arcCos(1/Sqrt(x^2+1))
+    return arcCos(1 / Sqrt(x * x + 1));
 }
 
 // Returns the log base n of x
