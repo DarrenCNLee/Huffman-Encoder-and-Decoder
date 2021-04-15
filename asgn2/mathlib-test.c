@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
             if (!sin_test) {
                 printf(" x           arcSin          Library       Difference\n");
                 for (double i = -1.0; i <= 1.0; i += 0.1) {
-                    printf("%7.4lf%16.8lf%16.8lf%16.10lf\n", i, arcSin(i), asin(i),
+                    printf("%7.4lf%16.8lf%16.8lf%16.12lf\n", i, arcSin(i), asin(i),
                         arcSin(i) - asin(i));
                 }
                 sin_test = 1; // arcSin test has been run
@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
             if (!cos_test) {
                 printf(" x           arcCos          Library       Difference\n");
                 for (double i = -1.0; i <= 1.0; i += 0.1) {
-                    printf("%7.4lf%16.8lf%16.8lf%16.10lf\n", i, arcCos(i), acos(i),
+                    printf("%7.4lf%16.8lf%16.8lf%16.12lf\n", i, arcCos(i), acos(i),
                         arcCos(i) - acos(i));
                 }
                 cos_test = 1; // arcCos test has been run
@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
             if (!tan_test) {
                 printf(" x           arcTan          Library       Difference\n");
                 for (double i = -1.0; i <= 1.0; i += 0.1) {
-                    printf("%7.4lf%16.8lf%16.8lf%16.10lf\n", i, arcTan(i), atan(i),
+                    printf("%7.4lf%16.8lf%16.8lf%16.12lf\n", i, arcTan(i), atan(i),
                         arcTan(i) - atan(i));
                 }
                 tan_test = 1; // arcTan test has been run
@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
             if (!log_test) {
                 printf(" x           Log             Library       Difference\n");
                 for (double i = 1.0; i <= 10.0; i += 0.5) {
-                    printf("%7.4lf%16.8lf%16.8lf%16.10lf\n", i, Log(i), log(i), Log(i) - log(i));
+                    printf("%7.4lf%16.8lf%16.8lf%16.12lf\n", i, Log(i), log(i), Log(i) - log(i));
                 }
                 log_test = 1; // Log test has been run
             }
@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
             if (!sin_test) {
                 printf(" x           arcSin          Library       Difference\n");
                 for (double i = -1.0; i <= 1.0; i += 0.1) {
-                    printf("%7.4lf%16.8lf%16.8lf%16.10lf\n", i, arcSin(i), asin(i),
+                    printf("%7.4lf%16.8lf%16.8lf%16.12lf\n", i, arcSin(i), asin(i),
                         arcSin(i) - asin(i));
                 }
                 sin_test = 1; // arcSin test has been run
@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
             if (!cos_test) {
                 printf(" x           arcCos          Library       Difference\n");
                 for (double i = -1.0; i <= 1.0; i += 0.1) {
-                    printf("%7.4lf%16.8lf%16.8lf%16.10lf\n", i, arcCos(i), acos(i),
+                    printf("%7.4lf%16.8lf%16.8lf%16.12lf\n", i, arcCos(i), acos(i),
                         arcCos(i) - acos(i));
                 }
                 cos_test = 1; // arcCos test has been run
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
             if (!tan_test) {
                 printf(" x           arcTan          Library       Difference\n");
                 for (double i = -1.0; i <= 1.0; i += 0.1) {
-                    printf("%7.4lf%16.8lf%16.8lf%16.10lf\n", i, arcTan(i), atan(i),
+                    printf("%7.4lf%16.8lf%16.8lf%16.12lf\n", i, arcTan(i), atan(i),
                         arcTan(i) - atan(i));
                 }
                 tan_test = 1; // arcTan test has been run
@@ -86,12 +86,20 @@ int main(int argc, char **argv) {
             if (!log_test) {
                 printf(" x           Log             Library       Difference\n");
                 for (double i = 1.0; i <= 10.0; i += 0.5) {
-                    printf("%7.4lf%16.8lf%16.8lf%16.10lf\n", i, Log(i), log(i), Log(i) - log(i));
+                    printf("%7.4lf%16.8lf%16.8lf%16.12lf\n", i, Log(i), log(i), Log(i) - log(i));
                 }
                 log_test = 1; // Log test has been run
             }
             break;
         }
+    }
+    if (!sin_test && !cos_test && !tan_test && !log_test) {
+        printf("Program usage ./mathlib-test -[asctl]\n");
+        printf("  -a   Runs all tests (arcsin, arccos, arctan, log)\n");
+        printf("  -s   Runs arcsin tests\n");
+        printf("  -c   Runs arccos tests\n");
+        printf("  -t   Runs arctan tests\n");
+        printf("  -l   Runs log tests\n");
     }
     return 0;
 }

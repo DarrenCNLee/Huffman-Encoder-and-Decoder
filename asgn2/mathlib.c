@@ -42,6 +42,14 @@ double Sqrt(double x) { // code from Piazza
 // Returns the arcsin of x
 // x: the value of which to take the arcsin
 double arcSin(double x) {
+    double k = 1.0;
+    if (x > 0.99) {
+        for (double guess = 0.0; Abs(k - guess) > EPSILON; k = (k + (x - sin(k)) / cos(k))) {
+            guess = k;
+        }
+        return k;
+    }
+
     double m, l = -M_PI / 2, h = M_PI / 2;
     do {
         m = (l + h) / 2.0;
@@ -50,7 +58,7 @@ double arcSin(double x) {
         } else {
             h = m;
         }
-    } while (Abs(l - h) > EPSILON);
+    } while (Abs(l - h) > EPSILON / 2);
     return m;
 }
 
