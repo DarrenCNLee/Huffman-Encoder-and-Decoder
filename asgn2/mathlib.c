@@ -42,41 +42,49 @@ double Sqrt(double x) { // code from Piazza
 // Returns the arcsin of x
 // x: the value of which to take the arcsin
 double arcSin(double x) {
-    double k = 1.0;
-    if (x > 0.99) {
-        for (double guess = 0.0; Abs(k - guess) > EPSILON; k = (k + (x - sin(k)) / cos(k))) {
+    double k = 0.0, prev = sin(k);
+    if (x > 0.99) { // use inverse method if x is close to 1
+        for (double guess = 1.0; Abs(k - guess) > EPSILON; k = (k + (x - sin(k)) / cos(k))) {
             guess = k;
         }
         return k;
     }
 
-    double m, l = -M_PI / 2, h = M_PI / 2;
-    do {
-        m = (l + h) / 2.0;
-        if (sin(m) < x) {
-            l = m;
-        } else {
-            h = m;
-        }
-    } while (Abs(l - h) > EPSILON / 2);
-    return m;
+    if (x < -0.99) { // use binary search if x is close to -1
+        double m, l = -M_PI / 2, h = M_PI / 2;
+        do {
+            m = (l + h) / 2.0;
+            if (sin(m) < x) {
+                l = m;
+            } else {
+                h = m;
+            }
+        } while (Abs(l - h) > EPSILON / 2);
+        return m;
+    }
+
+    while (Abs(prev - x) > EPSILON) { // use Newton's method if x is not close to -1 or 1
+        k = k + (x - prev) / cos(k);
+        prev = sin(k);
+    }
+    return k;
 }
 
 // Returns the arccos of x
 // x: value of which to take the arccos
 double arcCos(double x) {
-    return M_PI / 2 - arcSin(x);
+    return M_PI / 2 - arcSin(x); // arcCos(x)=pi/2-arcSin(x)
 }
 
 // Returns the arctan of x
 // x: value of which to take the arctan
 double arcTan(double x) {
-    return arcSin(x / Sqrt(x * x + 1));
+    return arcSin(x / Sqrt(x * x + 1)); // arcTan=arcSin(x / Sqrt(x^2-1))
 }
 
 // Returns the log base n of x
 // x: value of which to take the natural log
-double Log(double x) {
+double Log(double x) { // uses Newton's method
     double k = 1.0;
     assert(x > 0);
     for (double guess = 0.0; Abs(k - guess) > EPSILON; k = (k + (x - Exp(k)) / Exp(k))) {
