@@ -42,12 +42,12 @@ double Sqrt(double x) { // code from Piazza
 // Returns the arcsin of x
 // x: the value of which to take the arcsin
 double arcSin(double x) {
-    double k = 0.0, prev = sin(k);
+    double k = x, prev = sin(k), j = 0.0;
     if (x > 0.99) { // use inverse method if x is close to 1
-        for (double guess = 1.0; Abs(k - guess) > EPSILON; k = (k + (x - sin(k)) / cos(k))) {
-            guess = k;
+        for (double guess = 1.0; Abs(j - guess) > EPSILON; j = (j + (x - sin(j)) / cos(j))) {
+            guess = j;
         }
-        return k;
+        return j;
     }
 
     if (x < -0.99) { // use binary search if x is close to -1
