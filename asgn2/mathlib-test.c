@@ -46,8 +46,8 @@ void print_Log(void) { // prints Log tests
 
 int main(int argc, char **argv) {
     int opt = 0;
-    int sin_test = 0, cos_test = 0, tan_test = 0,
-        log_test = 0; // test state is 1 if the test has been run; otherwise, test state is 0
+    int sin_test = 0, cos_test = 0, tan_test = 0, log_test = 0;
+    // test state is 1 if the test has been run; otherwise, test state is 0
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'a': // run all tests that have not been run yet if user types -a on command line
@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
     }
     // print program usage if none of the tests have been run
     if (!sin_test && !cos_test && !tan_test && !log_test) {
-        printf("Program usage ./mathlib-test -[asctl]\n");
+        printf("Program usage: ./mathlib-test -[asctl]\n");
         printf("  -a   Runs all tests (arcsin, arccos, arctan, log)\n");
         printf("  -s   Runs arcsin tests\n");
         printf("  -c   Runs arccos tests\n");

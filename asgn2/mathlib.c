@@ -60,7 +60,7 @@ double arcSin(double x) {
             } else {
                 h = m;
             }
-        } while (Abs(l - h) > EPSILON / 2);
+        } while (Abs(l - h) > EPSILON);
         return m;
     }
 
