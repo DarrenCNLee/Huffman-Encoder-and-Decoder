@@ -13,7 +13,7 @@
 
 // Returns the absolute value of x
 // x: double of which to take the absolute value
-double Abs(double x) {
+double Abs(double x) { // code from Piazza
     return (x < 0) ? -x : x;
 }
 
@@ -42,10 +42,11 @@ double Sqrt(double x) { // code from Piazza
 // Returns the arcsin of x
 // x: the value of which to take the arcsin
 double arcSin(double x) {
-    double k = x, prev = sin(k), j = 0.0;
-    if (x > 0.99) { // use inverse method if x is close to 1
-        for (double guess = 1.0; Abs(j - guess) > EPSILON; j = (j + (x - sin(j)) / cos(j))) {
-            guess = j;
+    double k = x, prev = sin(k), j = 1.0, p = cos(j);
+    if (x > 0.99) { // use Newton's method and trig identity if x is close to 1
+        while (Abs(p - Sqrt(1 - x * x)) > EPSILON) { // arcSin=arcCos(Sqrt(1-x^2))
+            j = j - (Sqrt(1 - x * x) - p) / sin(j);
+            p = cos(j);
         }
         return j;
     }
@@ -72,8 +73,8 @@ double arcSin(double x) {
 
 // Returns the arccos of x
 // x: value of which to take the arccos
-double arcCos(double x) {
-    return M_PI / 2 - arcSin(x); // arcCos(x)=pi/2-arcSin(x)
+double arcCos(double x) { // arcCos(x)=pi/2-arcSin(x)
+    return M_PI / 2 - arcSin(x);
 }
 
 // Returns the arctan of x
