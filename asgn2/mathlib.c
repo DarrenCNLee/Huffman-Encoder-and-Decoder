@@ -42,31 +42,21 @@ double Sqrt(double x) { // code from Piazza
 // Returns the arcsin of x
 // x: the value of which to take the arcsin
 double arcSin(double x) {
-    double k = x, prev = sin(k), j = 1.0, p = cos(j);
-    if (x > 0.99) { // use Newton's method and trig identity if x is close to 1
-        while (Abs(p - Sqrt(1 - x * x)) > EPSILON) { // arcSin=arcCos(Sqrt(1-x^2))
-            j = j - (Sqrt(1 - x * x) - p) / sin(j);
-            p = cos(j);
+    double k = x, prev = 0.0, j = 1.0, p = 0.0;
+    if (x > 0.99 || x < -0.99) { // use Newton's method and trig identity if x is close to 1 or -1
+        while (Abs(p - j) > EPSILON) {
+            p = j;
+            j = j - (Sqrt(1 - x * x) - cos(j)) / sin(j); // arcSin=arcCos(Sqrt(1-x^2))
+        }
+        if (x < -0.99) {
+            return j - M_PI; // use guess - pi for values close to -1
         }
         return j;
     }
 
-    if (x < -0.99) { // use binary search if x is close to -1
-        double m, l = -M_PI / 2, h = M_PI / 2;
-        do {
-            m = (l + h) / 2.0;
-            if (sin(m) < x) {
-                l = m;
-            } else {
-                h = m;
-            }
-        } while (Abs(l - h) > EPSILON);
-        return m;
-    }
-
-    while (Abs(prev - x) > EPSILON) { // use Newton's method if x is not close to -1 or 1
-        k = k + (x - prev) / cos(k);
-        prev = sin(k);
+    while (Abs(prev - k) > EPSILON) { // use Newton's method if x is not close to -1 or 1
+        prev = k;
+        k = k + (x - sin(k)) / cos(k);
     }
     return k;
 }
@@ -74,7 +64,7 @@ double arcSin(double x) {
 // Returns the arccos of x
 // x: value of which to take the arccos
 double arcCos(double x) { // arcCos(x)=pi/2-arcSin(x)
-    return M_PI / 2 - arcSin(x);
+    return M_PI_2 - arcSin(x);
 }
 
 // Returns the arctan of x
@@ -86,10 +76,11 @@ double arcTan(double x) { // arcTan=arcCos(1/Sqrt(x^2+1))
 // Returns the log base n of x
 // x: value of which to take the natural log
 double Log(double x) { // uses Newton's method
-    double k = 1.0;
+    double k = 1.0, p = 0.0;
     assert(x > 0);
-    for (double guess = 0.0; Abs(k - guess) > EPSILON; k = (k + (x - Exp(k)) / Exp(k))) {
-        guess = k;
+    while (Abs(p - k) > EPSILON) {
+        p = k;
+        k = k + (x - Exp(k)) / Exp(k);
     }
     return k;
 }

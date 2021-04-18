@@ -46,56 +46,70 @@ void print_Log(void) { // prints Log tests
 
 int main(int argc, char **argv) {
     int opt = 0;
-    int sin_test = 0, cos_test = 0, tan_test = 0, log_test = 0;
+    int sin_test = 0, cos_test = 0, tan_test = 0, log_test = 0, default_state = 0;
     // test state is 1 if the test has been run; otherwise, test state is 0
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'a': // run all tests that have not been run yet if user types -a on command line
             if (!sin_test) {
-                print_arcSin();
                 sin_test = 1; // arcSin test has been run
             }
             if (!cos_test) {
-                print_arcCos();
                 cos_test = 1; // arcCos test has been run
             }
             if (!tan_test) {
-                print_arcTan();
                 tan_test = 1; // arcTan test has been run
             }
             if (!log_test) {
-                print_Log();
                 log_test = 1; // Log test has been run
             }
             break;
         case 's': // run arcSin test if it has not been run yet if user types -s on command line
             if (!sin_test) {
-                print_arcSin();
                 sin_test = 1; // arcSin test has been run
             }
             break;
         case 'c': // run arcCos test if it has not been run yet if user types -c on command line
             if (!cos_test) {
-                print_arcCos();
                 cos_test = 1; // arcCos test has been run
             }
             break;
         case 't': // run arcTan test if it has not been run yet if user types -t on command line
             if (!tan_test) {
-                print_arcTan();
                 tan_test = 1; // arcTan test has been run
             }
             break;
         case 'l': // run Log test if it has not been run yet if user types -l on the command line
             if (!log_test) {
-                print_Log();
                 log_test = 1; // Log test has been run
+            }
+            break;
+        default:
+            if (!default_state) {
+                default_state = 1;
+                printf("Program usage: ./mathlib-test -[asctl]\n");
+                printf("  -a   Runs all tests (arcsin, arccos, arctan, log)\n");
+                printf("  -s   Runs arcsin tests\n");
+                printf("  -c   Runs arccos tests\n");
+                printf("  -t   Runs arctan tests\n");
             }
             break;
         }
     }
+    if (sin_test) {
+        print_arcSin();
+    }
+    if (cos_test) {
+        print_arcCos();
+    }
+    if (tan_test) {
+        print_arcTan();
+    }
+    if (log_test) {
+        print_Log();
+    }
     // print program usage if none of the tests have been run
-    if (!sin_test && !cos_test && !tan_test && !log_test) {
+    if (!sin_test && !cos_test && !tan_test && !log_test && !default_state) {
         printf("Program usage: ./mathlib-test -[asctl]\n");
         printf("  -a   Runs all tests (arcsin, arccos, arctan, log)\n");
         printf("  -s   Runs arcsin tests\n");
