@@ -6,8 +6,9 @@
 // for the math library mathlib.c. It contains
 // tests for arcSin, arcCos, arcTan, and Log.
 
-#include "mathlib.c"
+#include "mathlib.h"
 
+#include <math.h>
 #include <stdio.h>
 #include <unistd.h>
 

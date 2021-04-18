@@ -6,6 +6,8 @@
 // The included functions are Abs, Exp, Sqrt, arcSin, arcCos,
 // and Log.
 
+#include "mathlib.h"
+
 #include <assert.h>
 #include <math.h>
 
