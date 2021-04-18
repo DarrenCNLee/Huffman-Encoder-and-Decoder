@@ -4,15 +4,21 @@ CruzID: danalee
 
 Spring 2021
 # Assignment 2: A Small Numerical Library
-This program implements a mathematical library and test harness.
+This program implements a mathematical library in mathlib.c  and test harness with mathlib-test.c.
 
-The library includes the arcSin, arcCos, arcTan, and Log functions. I used the inverse method
-to implement arcSin and trigonometric identities to implement arcCos and arcTan. I used Newton's
-method to implement the Log function.
+The library includes the arcSin, arcCos, arcTan, and Log functions. I used Newton's method and 
+trigonometric identities to implement arcSin and trigonometric identities to implement arcCos and arcTan. 
+I used Newton's method to implement the Log function.
 ## Build
 	$ make
 ## Running
 	$ ./mathlib-test -[asctl]
+	
+	-a option runs all tests
+	-s option runs arcSin tests
+	-c option runs arcCos tests
+	-t option runs arcTan tests
+	-l options runs Log tests
 ## Cleaning
 	$ make clean
 ## Files
@@ -32,4 +38,4 @@ method to implement the Log function.
 		Contains description of program, layout and structure, functionality, pseudocode, and scratch work on paper
 
 	WRITEUP.pdf
-		Contains analysis for the differences between my library and the <math.h> library		
+		Contains graphs and analysis for the differences between my library and the <math.h> library		
