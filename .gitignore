@@ -17,3 +17,13 @@ expected
 mathlib
 .README.md.swp
 mathlib-test
+plot.sh
+plots.sh
+arccos.pdf
+arccosdiff.pdf
+arcsin.pdf
+arcsindiff.pdf
+arctan.pdf
+arctandiff.pdf
+log.pdf
+logdiff.pdf

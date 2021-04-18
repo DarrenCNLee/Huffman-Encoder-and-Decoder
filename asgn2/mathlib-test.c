@@ -15,7 +15,7 @@
 
 void print_arcSin(void) { // prints arcSin tests
     printf(" x           arcSin          Library       Difference\n");
-    for (double i = -1.0; i <= 1.0; i += 0.1) {
+    for (double i = -1.0; i <= 1.0; i += 0.1) { // print format from assignment pdf
         printf("%7.4lf%16.8lf%16.8lf%16.10lf\n", i, arcSin(i), asin(i), arcSin(i) - asin(i));
     }
     return;
@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
     int opt = 0;
     int sin_test = 0, cos_test = 0, tan_test = 0, log_test = 0;
     // test state is 1 if the test has been run; otherwise, test state is 0
-    while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
+    while ((opt = getopt(argc, argv, OPTIONS)) != -1) { // code from assignment pdf
         switch (opt) {
         case 'a': // run all tests that have not been run yet if user types -a on command line
             if (!sin_test) {
