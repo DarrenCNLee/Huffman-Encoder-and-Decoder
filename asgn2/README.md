@@ -8,7 +8,9 @@ This program implements a mathematical library in mathlib.c  and test harness wi
 
 The library includes the arcSin, arcCos, arcTan, and Log functions. I used Newton's method and 
 trigonometric identities to implement arcSin and trigonometric identities to implement arcCos and arcTan. 
-I used Newton's method to implement the Log function.
+I used Newton's method to implement the Log function. Log will only work for positive values because 0
+and negative values are not in the domain of the natural log function. I used an assert macro to ensure 
+that the Log function only accepts positive inputs.
 ## Build
 	$ make
 ## Running
@@ -29,7 +31,7 @@ I used Newton's method to implement the Log function.
 		Contains math function implementations
 
 	mathlib-test.c
-		Contains main() porgram and serves as a test harness for math library, supports -asctl as getopt() options
+		Contains main() program and serves as a test harness for math library, supports -asctl as getopt() options
 
 	Makefile
 		Contains directives to build and compile program

@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 #define OPTIONS "asctl"
+
 void print_arcSin(void) { // prints arcSin tests
     printf(" x           arcSin          Library       Difference\n");
     for (double i = -1.0; i <= 1.0; i += 0.1) {
@@ -46,7 +47,7 @@ void print_Log(void) { // prints Log tests
 
 int main(int argc, char **argv) {
     int opt = 0;
-    int sin_test = 0, cos_test = 0, tan_test = 0, log_test = 0, default_state = 0;
+    int sin_test = 0, cos_test = 0, tan_test = 0, log_test = 0;
     // test state is 1 if the test has been run; otherwise, test state is 0
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
@@ -84,16 +85,14 @@ int main(int argc, char **argv) {
                 log_test = 1; // Log test has been run
             }
             break;
-        default:
-            if (!default_state) {
-                default_state = 1;
-                printf("Program usage: ./mathlib-test -[asctl]\n");
-                printf("  -a   Runs all tests (arcsin, arccos, arctan, log)\n");
-                printf("  -s   Runs arcsin tests\n");
-                printf("  -c   Runs arccos tests\n");
-                printf("  -t   Runs arctan tests\n");
-            }
-            break;
+        default: // print program usage if an invalid option is entered
+            fprintf(stderr, "Program usage: ./mathlib-test -[asctl]\n");
+            fprintf(stderr, "  -a   Runs all tests (arcsin, arccos, arctan, log)\n");
+            fprintf(stderr, "  -s   Runs arcsin tests\n");
+            fprintf(stderr, "  -c   Runs arccos tests\n");
+            fprintf(stderr, "  -t   Runs arctan tests\n");
+            fprintf(stderr, "  -l   Runs log tests\n");
+            return 1;
         }
     }
     if (sin_test) {
@@ -109,13 +108,14 @@ int main(int argc, char **argv) {
         print_Log();
     }
     // print program usage if none of the tests have been run
-    if (!sin_test && !cos_test && !tan_test && !log_test && !default_state) {
-        printf("Program usage: ./mathlib-test -[asctl]\n");
-        printf("  -a   Runs all tests (arcsin, arccos, arctan, log)\n");
-        printf("  -s   Runs arcsin tests\n");
-        printf("  -c   Runs arccos tests\n");
-        printf("  -t   Runs arctan tests\n");
-        printf("  -l   Runs log tests\n");
+    if (!sin_test && !cos_test && !tan_test && !log_test) {
+        fprintf(stderr, "Program usage: ./mathlib-test -[asctl]\n");
+        fprintf(stderr, "  -a   Runs all tests (arcsin, arccos, arctan, log)\n");
+        fprintf(stderr, "  -s   Runs arcsin tests\n");
+        fprintf(stderr, "  -c   Runs arccos tests\n");
+        fprintf(stderr, "  -t   Runs arctan tests\n");
+        fprintf(stderr, "  -l   Runs log tests\n");
+        return 1;
     }
     return 0;
 }
