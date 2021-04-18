@@ -20,7 +20,7 @@ that the Log function only accepts positive inputs.
 	-s option runs arcSin tests
 	-c option runs arcCos tests
 	-t option runs arcTan tests
-	-l options runs Log tests
+	-l option runs Log tests
 ## Cleaning
 	$ make clean
 ## Files
