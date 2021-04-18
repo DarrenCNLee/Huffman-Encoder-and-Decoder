@@ -42,7 +42,8 @@ double Sqrt(double x) { // code from Piazza
 // Returns the arcsin of x
 // x: the value of which to take the arcsin
 double arcSin(double x) {
-    double k = x, prev = 0.0, j = 1.0, p = 0.0;
+    double k = x, prev = 0.0, j = 1.0,
+           p = 0.0; // k and j are next terms, prev and p are previous terms
     if (x > 0.99 || x < -0.99) { // use Newton's method and trig identity if x is close to 1 or -1
         while (Abs(p - j) > EPSILON) {
             p = j;
@@ -76,7 +77,7 @@ double arcTan(double x) { // arcTan=arcCos(1/Sqrt(x^2+1))
 // Returns the log base n of x
 // x: value of which to take the natural log
 double Log(double x) { // uses Newton's method
-    double k = 1.0, p = 0.0;
+    double k = 1.0, p = 0.0; // k is next term, p is previous term
     assert(x > 0);
     while (Abs(p - k) > EPSILON) {
         p = k;
