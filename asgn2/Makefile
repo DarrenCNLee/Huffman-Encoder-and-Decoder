@@ -14,7 +14,7 @@ mathlib.o:	mathlib.c
 		$(CC) $(CFLAGS) -c mathlib.c
 
 clean:
-		rm -f mathlib-test mathlib-test.o
+		rm -f mathlib-test mathlib-test.o mathlib.o
 
 scan-build:	clean
 		scan-build make
