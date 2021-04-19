@@ -16,6 +16,7 @@
 
 void print_arcSin(void) { // prints arcSin tests
     printf(" x           arcSin          Library       Difference\n");
+    printf(" -           ------          -------       ----------\n");
     for (double i = -1.0; i <= 1.0; i += 0.1) { // print format from assignment pdf
         printf("%7.4lf%16.8lf%16.8lf%16.10lf\n", i, arcSin(i), asin(i), arcSin(i) - asin(i));
     }
@@ -24,6 +25,7 @@ void print_arcSin(void) { // prints arcSin tests
 
 void print_arcCos(void) { // prints arcCos tests
     printf(" x           arcCos          Library       Difference\n");
+    printf(" -           ------          -------       ----------\n");
     for (double i = -1.0; i <= 1.0; i += 0.1) {
         printf("%7.4lf%16.8lf%16.8lf%16.10lf\n", i, arcCos(i), acos(i), arcCos(i) - acos(i));
     }
@@ -32,6 +34,7 @@ void print_arcCos(void) { // prints arcCos tests
 
 void print_arcTan(void) { // prints arcTan tests
     printf(" x           arcTan          Library       Difference\n");
+    printf(" -           ------          -------       ----------\n");
     for (double i = 1.0; i <= 10.0; i += 0.1) {
         printf("%7.4lf%16.8lf%16.8lf%16.10lf\n", i, arcTan(i), atan(i), arcTan(i) - atan(i));
     }
@@ -40,6 +43,7 @@ void print_arcTan(void) { // prints arcTan tests
 
 void print_Log(void) { // prints Log tests
     printf(" x           Log             Library       Difference\n");
+    printf(" -           ------          -------       ----------\n");
     for (double i = 1.0; i <= 10.0; i += 0.1) {
         printf("%7.4lf%16.8lf%16.8lf%16.10lf\n", i, Log(i), log(i), Log(i) - log(i));
     }
