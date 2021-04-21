@@ -9,9 +9,8 @@ void shell_sort(uint32_t *A, uint32_t n) {
             j = k;
             temp = A[k];
             while (j >= gap && temp < A[j - gap]) {
-                swap = *A[j];
                 *A[j] = *A[j - gap];
-                *A[j - gap] = swap;
+		j-=gap;
             }
             *A[j] = temp;
         }
