@@ -1,6 +1,6 @@
 #include "bubble.h"
 #include "quick.h"
-#include "set.h"
+#include "set.h" // set code provided by Eugene on Piazza
 #include "shell.h"
 
 #include <inttypes.h>
@@ -28,6 +28,7 @@ void print_bubble(uint32_t *A, uint32_t n, uint32_t p) {
         }
         printf("\n");
     }
+    return;
 }
 
 void print_shell(uint32_t *A, uint32_t n, uint32_t p) {
@@ -46,6 +47,45 @@ void print_shell(uint32_t *A, uint32_t n, uint32_t p) {
         }
         printf("\n");
     }
+    return;
+}
+
+void print_quick_stack(uint32_t *A, uint32_t n, uint32_t p) {
+    shell_sort(A, n);
+    printf("Shell Sort\n");
+    printf(
+        "%" PRIu32 " elements, %" PRIu32 " moves, %" PRIu32 " compares\n", n, s_moves, s_compares);
+    uint32_t i = 0;
+    while (i < p && i < n) {
+        for (int j = 0; j < 5; j++) {
+            printf("%13" PRIu32, A[i]);
+            i++;
+            if (i >= p || i >= n) {
+                break;
+            }
+        }
+        printf("\n");
+    }
+    return;
+}
+
+void print_quick_queue(uint32_t *A, uint32_t n, uint32_t p) {
+    shell_sort(A, n);
+    printf("Shell Sort\n");
+    printf(
+        "%" PRIu32 " elements, %" PRIu32 " moves, %" PRIu32 " compares\n", n, s_moves, s_compares);
+    uint32_t i = 0;
+    while (i < p && i < n) {
+        for (int j = 0; j < 5; j++) {
+            printf("%13" PRIu32, A[i]);
+            i++;
+            if (i >= p || i >= n) {
+                break;
+            }
+        }
+        printf("\n");
+    }
+    return;
 }
 
 int main(int argc, char **argv) {
@@ -71,24 +111,33 @@ int main(int argc, char **argv) {
         case 'p': elem = strtol(optarg, NULL, 10); break;
         }
     }
-    srandom(seed);
-    uint32_t arr_b[size], arr_s[size];
-    for (int i = 0; i < size; i++) {
-        arr_b[i] = random();
-    }
-    for (int i = 0; i < size; i++) {
-        arr_s[i] = arr_b[i];
-    }
+    uint32_t arr[size];
     if (set_member(opt_set, b)) {
-        print_bubble(arr_b, size, elem);
+        srandom(seed);
+        for (int i = 0; i < size; i++) {
+            arr[i] = random();
+        }
+        print_bubble(arr, size, elem);
     }
     if (set_member(opt_set, s)) {
-        print_shell(arr_s, size, elem);
+        srandom(seed);
+        for (int i = 0; i < size; i++) {
+            arr[i] = random();
+        }
+        print_shell(arr, size, elem);
     }
     if (set_member(opt_set, q)) {
+        srandom(seed);
+        for (int i = 0; i < size; i++) {
+            arr[i] = random();
+        }
         //		print_quick_stack();
     }
     if (set_member(opt_set, Q)) {
+        srandom(seed);
+        for (int i = 0; i < size; i++) {
+            arr[i] = random();
+        }
         //		print_quick_queue();
     }
     return 0;
