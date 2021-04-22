@@ -1,6 +1,7 @@
 #include "bubble.h"
 #include "quick.h"
 #include "shell.h"
+#include "set.h"
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -94,15 +95,18 @@ int main(int argc, char **argv) {
         }
     }
     srandom(seed);
-    uint32_t arr[size];
+    uint32_t arr_b[size], arr_s[size];
     for (int i = 0; i < size; i++) {
-        arr[i] = random();
+        arr_b[i] = random();
+    }
+    for (int i = 0; i < size; i++) {
+        arr_s[i] = arr_b[i];
     }
     if (bubble) {
-        print_bubble(arr, size, elem);
+        print_bubble(arr_b, size, elem);
     }
     if (shell) {
-        print_shell(arr, size, elem);
+        print_shell(arr_s, size, elem);
     }
     if (quick_stack) {
         //		print_quick_stack();
