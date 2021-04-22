@@ -2,6 +2,7 @@
 #include "quick.h"
 #include "set.h" // set code provided by Eugene on Piazza
 #include "shell.h"
+#include "stack.h"
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -51,8 +52,8 @@ void print_shell(uint32_t *A, uint32_t n, uint32_t p) {
 }
 
 void print_quick_stack(uint32_t *A, uint32_t n, uint32_t p) {
-    shell_sort(A, n);
-    printf("Shell Sort\n");
+    quick_sort_stack(A, n);
+    printf("Quick Sort (Stack)\n");
     printf(
         "%" PRIu32 " elements, %" PRIu32 " moves, %" PRIu32 " compares\n", n, s_moves, s_compares);
     uint32_t i = 0;
@@ -131,7 +132,7 @@ int main(int argc, char **argv) {
         for (int i = 0; i < size; i++) {
             arr[i] = random();
         }
-        //		print_quick_stack();
+        print_quick_stack(arr, size, elem);
     }
     if (set_member(opt_set, Q)) {
         srandom(seed);
