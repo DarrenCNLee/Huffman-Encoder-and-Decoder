@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -Werror -Wpedantic
 all:		sorting
 
 sorting:	sorting.o bubble.o shell.o set.o
-		$(CC) -o sorting sorting.o bubble.o shell.o
+		$(CC) -o sorting sorting.o bubble.o shell.o set.o
 
 sorting.o:	sorting.c
 		$(CC) $(CFLAGS) -c sorting.c

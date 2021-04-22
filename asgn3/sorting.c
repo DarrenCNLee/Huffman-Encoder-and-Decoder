@@ -49,46 +49,23 @@ void print_shell(uint32_t *A, uint32_t n, uint32_t p) {
 }
 
 int main(int argc, char **argv) {
+    enum opts { b, s, q, Q };
+    Set opt_set = set_empty();
     int opt = 0;
     uint32_t seed = 13371453;
     int64_t size = 100, elem = 100;
-    int bubble = 0, shell = 0, quick_stack = 0, quick_queue = 0;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'a':
-            if (!bubble) {
-                bubble = 1;
-            }
-            if (!shell) {
-                shell = 1;
-            }
-            if (!quick_stack) {
-                quick_stack = 1;
-            }
-            if (!quick_queue) {
-                quick_queue = 1;
-            }
+            opt_set = set_insert(opt_set, b);
+            opt_set = set_insert(opt_set, s);
+            opt_set = set_insert(opt_set, q);
+            opt_set = set_insert(opt_set, Q);
             break;
-        case 'b':
-            if (!bubble) {
-                bubble = 1;
-            }
-            break;
-        case 's':
-            if (!shell) {
-                shell = 1;
-            }
-            break;
-        case 'q':
-            if (!quick_stack) {
-                quick_stack = 1;
-            }
-            break;
-        case 'Q':
-            if (!quick_queue) {
-                quick_queue = 1;
-            }
-            break;
+        case 'b': opt_set = set_insert(opt_set, b); break;
+        case 's': opt_set = set_insert(opt_set, s); break;
+        case 'q': opt_set = set_insert(opt_set, q); break;
+        case 'Q': opt_set = set_insert(opt_set, Q); break;
         case 'r': seed = strtol(optarg, NULL, 10); break;
         case 'n': size = strtol(optarg, NULL, 10); break;
         case 'p': elem = strtol(optarg, NULL, 10); break;
@@ -102,16 +79,16 @@ int main(int argc, char **argv) {
     for (int i = 0; i < size; i++) {
         arr_s[i] = arr_b[i];
     }
-    if (bubble) {
+    if (set_member(opt_set, b)) {
         print_bubble(arr_b, size, elem);
     }
-    if (shell) {
+    if (set_member(opt_set, s)) {
         print_shell(arr_s, size, elem);
     }
-    if (quick_stack) {
+    if (set_member(opt_set, q)) {
         //		print_quick_stack();
     }
-    if (quick_queue) {
+    if (set_member(opt_set, Q)) {
         //		print_quick_queue();
     }
     return 0;
