@@ -1,7 +1,7 @@
 #include "bubble.h"
 #include "quick.h"
-#include "shell.h"
 #include "set.h"
+#include "shell.h"
 
 #include <inttypes.h>
 #include <stdio.h>
