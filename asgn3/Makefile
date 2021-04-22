@@ -15,6 +15,9 @@ bubble.o:	bubble.c
 shell.o:	shell.c
 		$(CC) $(CFLAGS) -c shell.c
 
+format:
+		clang-format -i -style=file *.c *.h
+
 clean:
 		rm -f sorting sorting.o bubble.o shell.o 
 

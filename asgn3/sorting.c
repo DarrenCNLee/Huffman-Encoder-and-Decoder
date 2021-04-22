@@ -11,31 +11,37 @@
 
 extern uint32_t b_moves, b_compares, s_moves, s_compares;
 
-void print_bubble(uint32_t *A, uint32_t n) {
+void print_bubble(uint32_t *A, uint32_t n, uint32_t p) {
     bubble_sort(A, n);
     printf("Bubble Sort\n");
     printf(
         "%" PRIu32 " elements, %" PRIu32 " moves, %" PRIu32 " compares\n", n, b_moves, b_compares);
     uint32_t i = 0;
-    while (i < n) {
+    while (i < p && i < n) {
         for (int j = 0; j < 5; j++) {
             printf("%13" PRIu32, A[i]);
             i++;
+            if (i >= p || i >= n) {
+                break;
+            }
         }
         printf("\n");
     }
 }
 
-void print_shell(uint32_t *A, uint32_t n) {
+void print_shell(uint32_t *A, uint32_t n, uint32_t p) {
     shell_sort(A, n);
     printf("Shell Sort\n");
     printf(
         "%" PRIu32 " elements, %" PRIu32 " moves, %" PRIu32 " compares\n", n, s_moves, s_compares);
     uint32_t i = 0;
-    while (i < n) {
+    while (i < p && i < n) {
         for (int j = 0; j < 5; j++) {
             printf("%13" PRIu32, A[i]);
             i++;
+            if (i >= p || i >= n) {
+                break;
+            }
         }
         printf("\n");
     }
@@ -93,10 +99,10 @@ int main(int argc, char **argv) {
         arr[i] = random();
     }
     if (bubble) {
-        print_bubble(arr, elem);
+        print_bubble(arr, size, elem);
     }
     if (shell) {
-        print_shell(arr, elem);
+        print_shell(arr, size, elem);
     }
     if (quick_stack) {
         //		print_quick_stack();
