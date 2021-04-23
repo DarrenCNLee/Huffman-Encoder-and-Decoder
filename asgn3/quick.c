@@ -6,7 +6,8 @@
 #include <math.h>
 #include <stdlib.h>
 
-int64_t partition(uint32_t *A, int64_t lo, int64_t hi) {
+// Python pseudocode for partition function provided by Professor Long in assignment pdf, also influenced by Eugene's lab section on 4/22
+static int64_t partition(uint32_t *A, int64_t lo, int64_t hi) {
     uint32_t pivot = A[lo + ((hi - lo) / 2)];
     int64_t i = lo - 1, temp;
     int64_t j = hi + 1;
@@ -27,6 +28,7 @@ int64_t partition(uint32_t *A, int64_t lo, int64_t hi) {
     return j;
 }
 
+// Python pseudocode provided by Professor Long in assignment pdf
 void quick_sort_stack(uint32_t *A, uint32_t n) {
     int64_t lo = 0;
     int64_t hi = n - 1;
