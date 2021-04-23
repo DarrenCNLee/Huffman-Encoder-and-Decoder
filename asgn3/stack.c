@@ -40,10 +40,12 @@ void stack_delete(Stack **s) {
     return;
 }
 
+// code provided by Professor Long in lecture 11 slides
 bool stack_empty(Stack *s) {
     return !(s->top);
 }
 
+// code provided by Professor Long in Lecture 11 slides
 bool stack_full(Stack *s) {
     return s->top == s->capacity;
 }
@@ -52,6 +54,7 @@ uint32_t stack_size(Stack *s) {
     return s->top;
 }
 
+// code inspired by Eugene's lab section on 4/22
 bool stack_push(Stack *s, int64_t x) {
     if (stack_full(s)) {
         return false;
@@ -62,6 +65,7 @@ bool stack_push(Stack *s, int64_t x) {
     }
 }
 
+// code inspired by Eugene's lab section on 4/22
 bool stack_pop(Stack *s, int64_t *x) {
     if (stack_empty(s)) {
         return false;
@@ -78,15 +82,3 @@ void stack_print(Stack *s) {
     }
     return;
 }
-
-// main function code provided by Professor Long in assignment pdf
-//int main(void) {
-//    int64_t y;
-//    int64_t *x = &y;
-//    printf("empty?: %d\n", stack_empty(s));
-//    printf("full?: %d\n", stack_full(s));
-//    printf("x: %" PRId64 "\n", *x);
-//    stack_delete(&s);
-//    assert(s == NULL);
-//    return 0;
-//}
