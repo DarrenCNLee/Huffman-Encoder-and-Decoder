@@ -11,7 +11,7 @@
 
 #define OPTIONS "absqQr:n:p:"
 
-extern uint32_t b_moves, b_compares, s_moves, s_compares;
+extern uint32_t b_moves, b_compares, s_moves, s_compares, q_stack_moves, q_stack_compares;
 
 void print_bubble(uint32_t *A, uint32_t n, uint32_t p) {
     bubble_sort(A, n);
@@ -54,8 +54,8 @@ void print_shell(uint32_t *A, uint32_t n, uint32_t p) {
 void print_quick_stack(uint32_t *A, uint32_t n, uint32_t p) {
     quick_sort_stack(A, n);
     printf("Quick Sort (Stack)\n");
-    printf(
-        "%" PRIu32 " elements, %" PRIu32 " moves, %" PRIu32 " compares\n", n, s_moves, s_compares);
+    printf("%" PRIu32 " elements, %" PRIu32 " moves, %" PRIu32 " compares\n", n, q_stack_moves,
+        q_stack_compares);
     uint32_t i = 0;
     while (i < p && i < n) {
         for (int j = 0; j < 5; j++) {
