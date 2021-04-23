@@ -12,6 +12,7 @@ static int64_t partition(uint32_t *A, int64_t lo, int64_t hi) {
     int64_t i = lo - 1, temp;
     int64_t j = hi + 1;
     do {
+        i += 1;
         while (A[i] < pivot) {
             i += 1;
         }
