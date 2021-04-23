@@ -11,16 +11,19 @@ void shell_sort(uint32_t *A, uint32_t n) {
     for (uint32_t k = 0; k < sizeof(gaps) / sizeof(uint32_t); k++) {
         for (uint32_t i = gaps[k]; i < n; i++) {
             j = i;
-            s_compares++;
             temp = A[i];
+            s_moves++;
             while (j >= gaps[k] && temp < A[j - gaps[k]]) {
-                A[j] = A[j - gaps[k]];
-                j -= gaps[k];
                 s_compares++;
+                A[j] = A[j - gaps[k]];
                 s_moves++;
+                j -= gaps[k];
+            }
+            if (j >= gaps[k]) { // comparison count code influenced by Eugene's 4/22 section
+                s_compares++;
             }
             A[j] = temp;
-            s_moves += 2;
+            s_moves++;
         }
     }
 }

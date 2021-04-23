@@ -107,9 +107,9 @@ int main(int argc, char **argv) {
         case 's': opt_set = set_insert(opt_set, s); break;
         case 'q': opt_set = set_insert(opt_set, q); break;
         case 'Q': opt_set = set_insert(opt_set, Q); break;
-        case 'r': seed = strtol(optarg, NULL, 10); break;
-        case 'n': size = strtol(optarg, NULL, 10); break;
-        case 'p': elem = strtol(optarg, NULL, 10); break;
+        case 'r': seed = strtoul(optarg, NULL, 10); break;
+        case 'n': size = strtoul(optarg, NULL, 10); break;
+        case 'p': elem = strtoul(optarg, NULL, 10); break;
         }
     }
     uint32_t arr[size];
