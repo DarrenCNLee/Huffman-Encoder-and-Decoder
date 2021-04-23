@@ -41,7 +41,7 @@ void stack_delete(Stack **s) {
 }
 
 bool stack_empty(Stack *s) {
-    return !(s->items);
+    return !(s->top);
 }
 
 bool stack_full(Stack *s) {
@@ -49,15 +49,15 @@ bool stack_full(Stack *s) {
 }
 
 uint32_t stack_size(Stack *s) {
-    return sizeof(s);
+    return s->top;
 }
 
 bool stack_push(Stack *s, int64_t x) {
     if (stack_full(s)) {
         return false;
     } else {
-        s->top++;
         (s->items)[s->top] = x;
+        s->top++;
         return true;
     }
 }
@@ -66,16 +66,15 @@ bool stack_pop(Stack *s, int64_t *x) {
     if (stack_empty(s)) {
         return false;
     } else {
-        *x = s->items[s->top]; // code provided by Professor Long in assignment pdf
-        //        free(s->top);
         s->top--;
+        *x = s->items[s->top]; // code provided by Professor Long in assignment pdf
         return true;
     }
 }
 
 void stack_print(Stack *s) {
-    for (uint32_t i = 0; i < sizeof(s); i++) {
-        printf(" %" PRId64 "\n", s->items[i]);
+    for (uint32_t i = 0; i < s->top; i++) {
+        printf("%" PRId64 " ", s->items[i]);
     }
     return;
 }
@@ -84,20 +83,9 @@ void stack_print(Stack *s) {
 //int main(void) {
 //    int64_t y;
 //    int64_t *x = &y;
-//    Stack *s = stack_create(80);
-//    stack_push(s, 5);
-//    stack_push(s, 4);
-//    stack_push(s, 3);
-//    stack_push(s, 2);
-//    stack_push(s, 2);
-//    stack_push(s, 2);
-//   stack_push(s, 2);
-//    stack_push(s, 2);
 //    printf("empty?: %d\n", stack_empty(s));
 //    printf("full?: %d\n", stack_full(s));
-//  stack_print(s);
-//    stack_pop(s, x);
-//   stack_print(s);
+//    printf("x: %" PRId64 "\n", *x);
 //    stack_delete(&s);
 //    assert(s == NULL);
 //    return 0;
