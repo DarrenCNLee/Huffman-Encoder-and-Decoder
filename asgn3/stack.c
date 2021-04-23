@@ -45,7 +45,7 @@ bool stack_empty(Stack *s) {
 }
 
 bool stack_full(Stack *s) {
-    return sizeof(s) == s->capacity;
+    return s->top == s->capacity;
 }
 
 uint32_t stack_size(Stack *s) {
@@ -67,6 +67,7 @@ bool stack_pop(Stack *s, int64_t *x) {
         return false;
     } else {
         *x = s->items[s->top]; // code provided by Professor Long in assignment pdf
+        //        free(s->top);
         s->top--;
         return true;
     }
@@ -80,25 +81,24 @@ void stack_print(Stack *s) {
 }
 
 // main function code provided by Professor Long in assignment pdf
-int main(void) {
-	int64_t y;
-    int64_t *x=&y;
-    Stack *s = stack_create(80);
-    stack_push(s, 5);
-    stack_push(s, 4);
-    stack_push(s, 3);
-    stack_push(s, 2);
-    stack_push(s, 2);
-    stack_push(s, 2);
-    stack_push(s, 2);
-    stack_push(s, 2);
-    printf("empty?: %d\n",stack_empty(s));
-    printf("full?: %d\n",stack_full(s));
-
-    stack_print(s);
-    stack_pop(s, x);
-    stack_print(s);
-    stack_delete(&s);
-    assert(s == NULL);
-    return 0;
-}
+//int main(void) {
+//    int64_t y;
+//    int64_t *x = &y;
+//    Stack *s = stack_create(80);
+//    stack_push(s, 5);
+//    stack_push(s, 4);
+//    stack_push(s, 3);
+//    stack_push(s, 2);
+//    stack_push(s, 2);
+//    stack_push(s, 2);
+//   stack_push(s, 2);
+//    stack_push(s, 2);
+//    printf("empty?: %d\n", stack_empty(s));
+//    printf("full?: %d\n", stack_full(s));
+//  stack_print(s);
+//    stack_pop(s, x);
+//   stack_print(s);
+//    stack_delete(&s);
+//    assert(s == NULL);
+//    return 0;
+//}
