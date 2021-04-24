@@ -1,3 +1,9 @@
+// Darren Lee
+// CSE13S Spring 2021
+// This program implements two Quick Sorts.
+// One uses a stack ADT and the other uses
+// a queue ADT.
+
 #include "quick.h"
 
 #include "queue.h"
@@ -5,7 +11,7 @@
 
 #include <stdlib.h>
 
-uint32_t q_moves = 0, q_compares = 0;
+uint32_t q_moves = 0, q_compares = 0; // counts for moves and comparisons
 
 // comparison function inspired by Eugene's lab section on 4/22
 bool q_less_than_counter(uint32_t *A, int64_t x, uint32_t p) {

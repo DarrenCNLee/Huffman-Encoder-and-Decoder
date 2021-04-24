@@ -1,3 +1,8 @@
+// Darren Lee
+// CSE13S Spring 2021
+// This program implements the queue abstract
+// data type used by one of the Quick Sorts.
+
 #include "queue.h"
 
 #include <inttypes.h>
@@ -13,6 +18,7 @@ struct Queue {
     int64_t *items;
 };
 
+// code influenced by stack constructor code provided by Professor Long in assignment pdf
 Queue *queue_create(uint32_t capacity) {
     Queue *q = (Queue *) malloc(sizeof(Queue));
     if (q) {
@@ -29,6 +35,7 @@ Queue *queue_create(uint32_t capacity) {
     return q;
 }
 
+// code influenced by stack destructor code provided by Professor Long in assignment pdf
 void queue_delete(Queue **q) {
     if (*q && (*q)->items) {
         free((*q)->items);
@@ -50,6 +57,7 @@ uint32_t queue_size(Queue *q) {
     return q->tail - q->head;
 }
 
+// code influenced by Eugene's 4/22 lab section
 bool enqueue(Queue *q, int64_t x) {
     if (queue_full(q)) {
         return false;
@@ -61,6 +69,7 @@ bool enqueue(Queue *q, int64_t x) {
     }
 }
 
+// code influenced by Eugene's 4/22 lab section
 bool dequeue(Queue *q, int64_t *x) {
     if (queue_empty(q)) {
         return false;
@@ -79,40 +88,3 @@ void queue_print(Queue *q) {
     printf("\n");
     return;
 }
-/*
-int main(void) {
-    int64_t y;
-    int64_t *x = &y;
-    Queue *q = queue_create(5);
-    printf("queue full? %d\n", queue_full(q));
-    enqueue(q, 13);
-    enqueue(q, 1);
-    enqueue(q, 1);
-    enqueue(q, 50);
-    queue_print(q);
-    printf("queue full? %d\n", queue_full(q));
-    dequeue(q, x);
-    dequeue(q, x);
-    dequeue(q, x);
-    dequeue(q, x);
-    dequeue(q, x);
-    dequeue(q, x);
-    printf("x=%" PRId64 "\n", *x);
-    queue_print(q);
-    printf("queue empty? %d\n", queue_empty(q));
-    enqueue(q, 11);
-    enqueue(q, 13);
-    enqueue(q, 13);
-    enqueue(q, 20);
-    queue_print(q);
-    printf("queue full? %d\n", queue_full(q));
-    printf("queue empty? %d\n", queue_empty(q));
-    dequeue(q, x);
-    dequeue(q, x);
-    dequeue(q, x);
-    dequeue(q, x);
-    dequeue(q, x);
-    printf("x=%" PRId64 "\n", *x);
-    queue_print(q);
-    printf("queue empty? %d\n", queue_empty(q));
-}*/

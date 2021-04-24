@@ -1,6 +1,10 @@
+// Darren Lee
+// CSE13S Spring 2021
+// This program implements Bubble Sort.
+
 #include "bubble.h"
 
-uint32_t b_moves = 0, b_compares = 0;
+uint32_t b_moves = 0, b_compares = 0; // counts for moves and comparisons
 
 // Pseudocode provided by Professor Long in assignment pdf
 void bubble_sort(uint32_t *A, uint32_t n) {

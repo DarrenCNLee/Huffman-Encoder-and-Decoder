@@ -15,6 +15,7 @@
 extern uint32_t b_moves, b_compares, s_moves, s_compares, q_moves, q_compares;
 
 void print_bubble(uint32_t *A, uint32_t n, uint32_t p) {
+    b_moves = b_compares = 0;
     bubble_sort(A, n);
     printf("Bubble Sort\n");
     // code for formatting print statement provided by Professor Long in assignment pdf
@@ -35,6 +36,7 @@ void print_bubble(uint32_t *A, uint32_t n, uint32_t p) {
 }
 
 void print_shell(uint32_t *A, uint32_t n, uint32_t p) {
+    s_moves = s_compares = 0;
     shell_sort(A, n);
     printf("Shell Sort\n");
     // code for formatting print statement provided by Professor Long in assignment pdf
@@ -55,6 +57,7 @@ void print_shell(uint32_t *A, uint32_t n, uint32_t p) {
 }
 
 void print_quick_stack(uint32_t *A, uint32_t n, uint32_t p) {
+    q_moves = q_compares = 0;
     quick_sort_stack(A, n);
     printf("Quick Sort (Stack)\n");
     // code for formatting print statement provided by Professor Long in assignment pdf
@@ -75,6 +78,7 @@ void print_quick_stack(uint32_t *A, uint32_t n, uint32_t p) {
 }
 
 void print_quick_queue(uint32_t *A, uint32_t n, uint32_t p) {
+    q_moves = q_compares = 0;
     quick_sort_queue(A, n);
     printf("Quick Sort (Queue)\n");
     // code for formatting print statement provided by Professor Long in assignment pdf
@@ -95,7 +99,7 @@ void print_quick_queue(uint32_t *A, uint32_t n, uint32_t p) {
 }
 
 int main(int argc, char **argv) {
-    enum opts { b, s, q, Q };
+    enum opts { b, s, q, Q, d };
     Set opt_set = set_empty();
     int opt = 0;
     uint32_t seed = 13371453;
@@ -126,6 +130,7 @@ int main(int argc, char **argv) {
             break;
         case 'p': elem = strtoul(optarg, NULL, 10); break;
         default:
+            opt_set = set_insert(opt_set, d);
             printf("Select at least one sort to perform.\n");
             printf("SYNOPSIS\n");
             printf("    A collection of comparison-based sorting algorithms.\n");
@@ -174,7 +179,7 @@ int main(int argc, char **argv) {
         print_quick_queue(arr, size, elem);
     }
     if (!set_member(opt_set, b) && !set_member(opt_set, s) && !set_member(opt_set, q)
-        && !set_member(opt_set, Q)) {
+        && !set_member(opt_set, Q) && !set_member(opt_set, d)) {
         printf("Select at least one sort to perform.\n");
         printf("SYNOPSIS\n");
         printf("    A collection of comparison-based sorting algorithms.\n");

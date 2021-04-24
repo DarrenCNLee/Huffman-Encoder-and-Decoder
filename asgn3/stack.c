@@ -1,3 +1,8 @@
+// Darren Lee
+// CSE13S Spring 2021
+// This program implements the stack abstract
+// data type used by one of the Quick Sorts.
+
 #include "stack.h"
 
 #include <assert.h>
