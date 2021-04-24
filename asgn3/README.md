@@ -66,4 +66,10 @@ The other Quick Sort uses a queue abstract data type implemented in queue.c.
 		Contains C code for stack abstract data type
 
 	stack.h 
-		Contains prototypes for stack	
+		Contains prototypes for stack
+
+	set.c
+		Contains C code for set abstract data type
+
+	set.h
+		Contains prototypes for set	
