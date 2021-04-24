@@ -106,7 +106,10 @@ void print_quick_queue(uint32_t *A, uint32_t n, uint32_t p) {
 }
 
 int main(int argc, char **argv) {
-    enum opts { b, s, q, Q };
+    void (*sort_functions[4])(
+        uint32_t * A, uint32_t n, uint32_t p) // code inspired by Eugene's lab section on 4/22
+        = { print_bubble, print_shell, print_quick_stack, print_quick_queue };
+    typedef enum opts { b, s, q, Q } opts; // code inspired by Eugene's lab section on 4/22
     Set opt_set = set_empty();
     int opt = 0;
     uint32_t seed = 13371453; // default seed
@@ -156,33 +159,14 @@ int main(int argc, char **argv) {
         }
     }
     uint32_t arr[size];
-    if (set_member(opt_set, b)) { // create array for Bubble Sort
-        srandom(seed);
-        for (int i = 0; i < size; i++) {
-            arr[i] = random();
+    for (opts i = b; i <= Q; i++) { // code inspired by Eugene's lab section on 4/22
+        if (set_member(opt_set, i)) {
+            srandom(seed);
+            for (int i = 0; i < size; i++) {
+                arr[i] = random();
+            }
+            sort_functions[i](arr, size, elem);
         }
-        print_bubble(arr, size, elem);
-    }
-    if (set_member(opt_set, s)) { // create array for Shell Sort
-        srandom(seed);
-        for (int i = 0; i < size; i++) {
-            arr[i] = random();
-        }
-        print_shell(arr, size, elem);
-    }
-    if (set_member(opt_set, q)) { // create array for stack Quick Sort
-        srandom(seed);
-        for (int i = 0; i < size; i++) {
-            arr[i] = random();
-        }
-        print_quick_stack(arr, size, elem);
-    }
-    if (set_member(opt_set, Q)) { // create array for queue Quick Sort
-        srandom(seed);
-        for (int i = 0; i < size; i++) {
-            arr[i] = random();
-        }
-        print_quick_queue(arr, size, elem);
     }
     if (!set_member(opt_set, b) && !set_member(opt_set, s) && !set_member(opt_set, q)
         && !set_member(opt_set, Q)) { // print instructions if no options are selected
