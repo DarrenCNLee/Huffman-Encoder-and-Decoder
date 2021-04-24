@@ -5,13 +5,13 @@ CruzID: danalee
 Spring 2021
 # Assignment 3: Putting your affairs in order
 This program implements 4 sorting algorithms and a test harness.
-The sorting algortihms are in bubble.c, shell.c, and quick.c.
+The sorting algorithms are in bubble.c, shell.c, and quick.c.
 The test harness is implemented in sorting.c and sorts a random array
 with the different sorts.
 
 Thee sorts are Bubble Sort, Shell Sort, and two iterative Quick Sorts. 
-One of the Quick Sorts uses a stack abstract data type implmeneted in stack.c
-The other Quick Sort uses a queue abstract data type implmented in queue.c.
+One of the Quick Sorts uses a stack abstract data type implemented in stack.c
+The other Quick Sort uses a queue abstract data type implemented in queue.c.
 
 ## Build
 	$ make
@@ -51,7 +51,7 @@ The other Quick Sort uses a queue abstract data type implmented in queue.c.
 		Contains function prototypes for queue
 
 	quick.c
-		Contians C code for the two Quick Sorts
+		Contains C code for the two Quick Sorts
 
 	shell.c
 		Contains C code for Shell Sort
