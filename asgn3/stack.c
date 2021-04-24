@@ -10,8 +10,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern uint32_t max_stack_size;
-
 // struct definition code provided by Professor Long in assignment pdf
 struct Stack {
     uint32_t top;
