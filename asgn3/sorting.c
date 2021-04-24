@@ -106,7 +106,7 @@ void print_quick_queue(uint32_t *A, uint32_t n, uint32_t p) {
 }
 
 int main(int argc, char **argv) {
-    enum opts { b, s, q, Q, d };
+    enum opts { b, s, q, Q };
     Set opt_set = set_empty();
     int opt = 0;
     uint32_t seed = 13371453; // default seed
@@ -137,7 +137,6 @@ int main(int argc, char **argv) {
             break;
         case 'p': elem = strtoul(optarg, NULL, 10); break;
         default: // print usage guide if no valid options are selected
-            opt_set = set_insert(opt_set, d);
             printf("Select at least one sort to perform.\n");
             printf("SYNOPSIS\n");
             printf("    A collection of comparison-based sorting algorithms.\n");
