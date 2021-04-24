@@ -2,7 +2,6 @@
 
 #include <assert.h>
 #include <inttypes.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -78,7 +77,7 @@ bool stack_pop(Stack *s, int64_t *x) {
 
 void stack_print(Stack *s) {
     for (uint32_t i = 0; i < s->top; i++) {
-        printf("%" PRId64 " ", s->items[i]);
+        printf("% " PRId64, s->items[i]);
     }
     return;
 }

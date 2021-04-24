@@ -3,8 +3,8 @@ CFLAGS = -Wall -Wextra -Werror -Wpedantic
 
 all:		sorting
 
-sorting:	sorting.o bubble.o shell.o quick.o stack.o set.o 
-		$(CC) -o sorting sorting.o bubble.o shell.o quick.o stack.o set.o
+sorting:	sorting.o bubble.o shell.o quick.o set.o stack.o queue.o
+		$(CC) -o sorting sorting.o bubble.o shell.o quick.o set.o stack.o queue.o
 
 sorting.o:	sorting.c
 		$(CC) $(CFLAGS) -c sorting.c
@@ -24,11 +24,14 @@ set.o:		set.c
 stack.o:	stack.c
 		$(CC) $(CFLAGS) -c stack.c
 
+queue.o:	queue.c
+		$(CC) $(CFLAGS) -c queue.c
+
 format:
 		clang-format -i -style=file *.c *.h
 
 clean:
-		rm -f sorting sorting.o bubble.o shell.o quick.o set.o stack.o
+		rm -f sorting sorting.o bubble.o shell.o quick.o set.o stack.o queue.o
 
 scan-build:	clean
 		scan-build make
