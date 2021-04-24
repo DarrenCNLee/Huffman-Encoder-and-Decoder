@@ -1,3 +1,8 @@
+// Darren Lee
+// CSE13S Spring 2021
+// This program implements the test harness for the
+// Bubble Sort, Shell Sort, and two Quick Sorts.
+
 #include "bubble.h"
 #include "queue.h"
 #include "quick.h"
@@ -102,34 +107,34 @@ int main(int argc, char **argv) {
     enum opts { b, s, q, Q, d };
     Set opt_set = set_empty();
     int opt = 0;
-    uint32_t seed = 13371453;
-    int64_t size = 100, elem = 100;
+    uint32_t seed = 13371453; // default seed
+    int64_t size = 100, elem = 100; // default size and number of elements to print
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
-        case 'a':
+        case 'a': // add all sorts to option set
             opt_set = set_insert(opt_set, b);
             opt_set = set_insert(opt_set, s);
             opt_set = set_insert(opt_set, q);
             opt_set = set_insert(opt_set, Q);
             break;
-        case 'b': opt_set = set_insert(opt_set, b); break;
-        case 's': opt_set = set_insert(opt_set, s); break;
-        case 'q': opt_set = set_insert(opt_set, q); break;
-        case 'Q': opt_set = set_insert(opt_set, Q); break;
+        case 'b': opt_set = set_insert(opt_set, b); break; // add bubble sort to option set
+        case 's': opt_set = set_insert(opt_set, s); break; // add Shell Sort to option set
+        case 'q': opt_set = set_insert(opt_set, q); break; // add stack Quick Sort to option set
+        case 'Q': opt_set = set_insert(opt_set, Q); break; // add queue Quick Sort to option set
         case 'r': seed = strtoul(optarg, NULL, 10); break;
         case 'n':
             size = strtoul(optarg, NULL, 10);
-            if (size == 0) {
+            if (size == 0) { // handle error when size = 0
                 fprintf(stderr, "Invalid array length.\n");
                 return 1;
             }
-            if (size < 0) {
+            if (size < 0) { // handle error when size is negative
                 fprintf(stderr, "Failed to allocate array to sort.\n");
                 return 1;
             }
             break;
         case 'p': elem = strtoul(optarg, NULL, 10); break;
-        default:
+        default: // print usage guide if no valid options are selected
             opt_set = set_insert(opt_set, d);
             printf("Select at least one sort to perform.\n");
             printf("SYNOPSIS\n");
@@ -150,35 +155,35 @@ int main(int argc, char **argv) {
         }
     }
     uint32_t arr[size];
-    if (set_member(opt_set, b)) {
+    if (set_member(opt_set, b)) { // create array for Bubble Sort
         srandom(seed);
         for (int i = 0; i < size; i++) {
             arr[i] = random();
         }
         print_bubble(arr, size, elem);
     }
-    if (set_member(opt_set, s)) {
+    if (set_member(opt_set, s)) { // create array for Shell Sort
         srandom(seed);
         for (int i = 0; i < size; i++) {
             arr[i] = random();
         }
         print_shell(arr, size, elem);
     }
-    if (set_member(opt_set, q)) {
+    if (set_member(opt_set, q)) { // create array for stack Quick Sort
         srandom(seed);
         for (int i = 0; i < size; i++) {
             arr[i] = random();
         }
         print_quick_stack(arr, size, elem);
     }
-    if (set_member(opt_set, Q)) {
+    if (set_member(opt_set, Q)) { // create array for queue Quick Sort
         srandom(seed);
         for (int i = 0; i < size; i++) {
             arr[i] = random();
         }
         print_quick_queue(arr, size, elem);
     }
-    if (!set_member(opt_set, b) && !set_member(opt_set, s) && !set_member(opt_set, q)
+    if (!set_member(opt_set, b) && !set_member(opt_set, s) && !set_member(opt_set, q) // print instructions if no options are selected
         && !set_member(opt_set, Q) && !set_member(opt_set, d)) {
         printf("Select at least one sort to perform.\n");
         printf("SYNOPSIS\n");
