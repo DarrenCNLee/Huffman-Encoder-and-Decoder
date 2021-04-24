@@ -1,10 +1,12 @@
 CC = clang
 CFLAGS = -Wall -Wextra -Werror -Wpedantic
 
+# all target
 all: sorting
 
+# sorting target
 sorting: sorting.o bubble.o shell.o quick.o set.o stack.o queue.o
-	$(CC) $(CLAGS) -o sorting sorting.o bubble.o shell.o quick.o set.o stack.o queue.o
+	$(CC) -o sorting sorting.o bubble.o shell.o quick.o set.o stack.o queue.o
 
 sorting.o: sorting.c
 	$(CC) $(CFLAGS) -c sorting.c
@@ -27,9 +29,11 @@ stack.o: stack.c
 queue.o: queue.c
 	$(CC) $(CFLAGS) -c queue.c
 
+# format target
 format:
 	clang-format -i -style=file *.c *.h
 
+# clean target
 clean:
 	rm -f sorting sorting.o bubble.o shell.o quick.o set.o stack.o queue.o
 
