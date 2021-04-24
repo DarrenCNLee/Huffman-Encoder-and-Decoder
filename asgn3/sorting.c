@@ -153,7 +153,7 @@ int main(int argc, char **argv) {
             printf("   -n length       Specify number of array elements.\n");
             printf("   -p elements     Specify number of elements to print.\n");
             printf("   -r seed         Specify random seed.\n");
-	    return 1;
+            return 1;
         }
     }
     uint32_t arr[size];
@@ -185,8 +185,8 @@ int main(int argc, char **argv) {
         }
         print_quick_queue(arr, size, elem);
     }
-    if (!set_member(opt_set, b) && !set_member(opt_set, s)
-        && !set_member(opt_set, q) && !set_member(opt_set, Q)) { // print instructions if no options are selected
+    if (!set_member(opt_set, b) && !set_member(opt_set, s) && !set_member(opt_set, q)
+        && !set_member(opt_set, Q)) { // print instructions if no options are selected
         printf("Select at least one sort to perform.\n");
         printf("SYNOPSIS\n");
         printf("    A collection of comparison-based sorting algorithms.\n");
@@ -202,7 +202,7 @@ int main(int argc, char **argv) {
         printf("   -n length       Specify number of array elements.\n");
         printf("   -p elements     Specify number of elements to print.\n");
         printf("   -r seed         Specify random seed.\n");
-	return 1;
+        return 1;
     }
     return 0;
 }
