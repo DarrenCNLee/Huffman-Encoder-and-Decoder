@@ -1,9 +1,8 @@
+
 CC = clang
 CFLAGS = -Wall -Wextra -Werror -Wpedantic
 
 all: sorting
-
-make: all
 
 sorting: sorting.o bubble.o shell.o quick.o set.o stack.o queue.o
 	$(CC) -o sorting sorting.o bubble.o shell.o quick.o set.o stack.o queue.o
@@ -37,3 +36,4 @@ clean:
 
 scan-build: clean
 	scan-build make
+
