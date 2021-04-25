@@ -82,5 +82,6 @@ void stack_print(Stack *s) {
     for (uint32_t i = 0; i < s->top; i++) {
         printf("% " PRId64, s->items[i]);
     }
+    printf("\n");
     return;
 }

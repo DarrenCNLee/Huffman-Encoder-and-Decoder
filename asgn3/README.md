@@ -23,9 +23,9 @@ The other Quick Sort uses a queue abstract data type implemented in queue.c.
 	-s options runs Shell Sort
 	-q option runs Quick Sort that uses stack
 	-Q option runs Quick Sort that uses queue
-	-n length option specifies the number of elements in the array
-	-p elements option specifies the number of elements to print
-	-r seed option specifies the random seed for the pseudorandom numbers in the array
+	-n length option specifies the number of elements in the array, default length is 100
+	-p elements option specifies the number of elements to print, default number of elements is 100
+	-r seed option specifies the random seed for the pseudorandom numbers in the array, defualt seed is 13371453
 ## Cleaning
  	$ make clean
 ## Files
@@ -39,7 +39,7 @@ The other Quick Sort uses a queue abstract data type implemented in queue.c.
 		Contains C code for Bubble Sort 
 
 	bubble.h
-		Contains function prototypes for Bubble Sort
+		Contains function prototypes and moves and comparison variables for Bubble Sort
 
 	gaps.h
 		Contains Pratt gap sequence for Shell Sort
@@ -51,13 +51,16 @@ The other Quick Sort uses a queue abstract data type implemented in queue.c.
 		Contains function prototypes for queue
 
 	quick.c
-		Contains C code for the two Quick Sorts
+		Contains C code for the two Quick Sortsi
+
+	quick.h
+		Contains function prototypes and moves and comparison variables for Quick Sort
 
 	shell.c
 		Contains C code for Shell Sort
 
 	shell.h
-		Contains function prototypes for Shell Sort
+		Contains function prototypesi and moves and comparison variables for Shell Sort
 
 	sorting.c
 		Contains C code for test harness for sorting algorithms
@@ -72,4 +75,4 @@ The other Quick Sort uses a queue abstract data type implemented in queue.c.
 		Contains C code for set abstract data type
 
 	set.h
-		Contains prototypes for set	
+		Contains prototypes for set

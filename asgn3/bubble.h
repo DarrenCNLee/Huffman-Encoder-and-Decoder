@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+uint32_t b_moves, b_compares; // counts for moves and comparisons
+
 void bubble_sort(uint32_t *A, uint32_t n);
 
 #endif

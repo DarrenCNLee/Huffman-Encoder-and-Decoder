@@ -11,8 +11,7 @@
 
 #include <stdlib.h>
 
-uint32_t q_moves = 0, q_compares = 0; // counts for moves and comparisons
-uint32_t max_stack_size = 0, max_queue_size = 0; // counts for max stack and queue sizes
+uint32_t max_queue_size, max_stack_size;
 
 // comparison function inspired by Eugene's lab section on 4/22
 bool q_less_than_counter(uint32_t *A, int64_t x, uint32_t p) {

@@ -17,8 +17,6 @@
 
 #define OPTIONS "absqQr:n:p:"
 
-extern uint32_t b_moves, b_compares, s_moves, s_compares, q_moves, q_compares;
-
 void print_bubble(uint32_t *A, uint32_t n, uint32_t p) {
     b_moves = b_compares = 0;
     bubble_sort(A, n);
@@ -126,8 +124,8 @@ int main(int argc, char **argv) {
         case 's': opt_set = set_insert(opt_set, s); break; // add Shell Sort to option set
         case 'q': opt_set = set_insert(opt_set, q); break; // add stack Quick Sort to option set
         case 'Q': opt_set = set_insert(opt_set, Q); break; // add queue Quick Sort to option set
-        case 'r': seed = strtoul(optarg, NULL, 10); break;
-        case 'n':
+        case 'r': seed = strtoul(optarg, NULL, 10); break; // specify random seed
+        case 'n': // specify array size
             size = strtoul(optarg, NULL, 10);
             if (size == 0) { // handle error when size = 0
                 fprintf(stderr, "Invalid array length.\n");
@@ -138,9 +136,8 @@ int main(int argc, char **argv) {
                 return 1;
             }
             break;
-        case 'p': elem = strtoul(optarg, NULL, 10); break;
+        case 'p': elem = strtoul(optarg, NULL, 10); break; // specify number of elements to print
         default: // print usage guide if no valid options are selected
-            printf("Select at least one sort to perform.\n");
             printf("SYNOPSIS\n");
             printf("    A collection of comparison-based sorting algorithms.\n");
             printf("\n");
@@ -160,12 +157,12 @@ int main(int argc, char **argv) {
     }
     uint32_t arr[size];
     for (opts i = b; i <= Q; i++) { // code inspired by Eugene's lab section on 4/22
-        if (set_member(opt_set, i)) {
+        if (set_member(opt_set, i)) { // check set for each command line option
             srandom(seed);
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < size; i++) { // create random array
                 arr[i] = random();
             }
-            sort_functions[i](arr, size, elem);
+            sort_functions[i](arr, size, elem); // run sorting print functions
         }
     }
     if (!set_member(opt_set, b) && !set_member(opt_set, s) && !set_member(opt_set, q)

@@ -6,8 +6,6 @@
 
 #include "gaps.h"
 
-uint32_t s_moves = 0, s_compares = 0; // counts for moves and comparisons
-
 // Pseudocode in Python provided by Professor Long in assignment pdf
 void shell_sort(uint32_t *A, uint32_t n) {
     uint32_t j, temp;

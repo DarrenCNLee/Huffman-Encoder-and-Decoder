@@ -54,7 +54,7 @@ bool queue_full(Queue *q) {
 }
 
 uint32_t queue_size(Queue *q) {
-    return q->tail - q->head;
+    return q->size;
 }
 
 // code influenced by Eugene's 4/22 lab section
