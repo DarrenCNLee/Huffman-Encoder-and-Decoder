@@ -23,7 +23,7 @@ void print_bubble(uint32_t *A, uint32_t n, uint32_t p) {
     printf("Bubble Sort\n");
     // code for formatting print statement provided by Professor Long in assignment pdf
     printf(
-        "%" PRIu32 " elements, %" PRIu32 " moves, %" PRIu32 " compares\n", n, b_moves, b_compares);
+        "%" PRIu32 " elements, %" PRId64 " moves, %" PRId64 " compares\n", n, b_moves, b_compares);
     uint32_t i = 0;
     while (i < p && i < n) {
         for (int j = 0; j < 5; j++) {
@@ -44,7 +44,7 @@ void print_shell(uint32_t *A, uint32_t n, uint32_t p) {
     printf("Shell Sort\n");
     // code for formatting print statement provided by Professor Long in assignment pdf
     printf(
-        "%" PRIu32 " elements, %" PRIu32 " moves, %" PRIu32 " compares\n", n, s_moves, s_compares);
+        "%" PRIu32 " elements, %" PRId64 " moves, %" PRId64 " compares\n", n, s_moves, s_compares);
     uint32_t i = 0;
     while (i < p && i < n) {
         for (int j = 0; j < 5; j++) {
@@ -65,7 +65,7 @@ void print_quick_stack(uint32_t *A, uint32_t n, uint32_t p) {
     printf("Quick Sort (Stack)\n");
     // code for formatting print statement provided by Professor Long in assignment pdf
     printf(
-        "%" PRIu32 " elements, %" PRIu32 " moves, %" PRIu32 " compares\n", n, q_moves, q_compares);
+        "%" PRIu32 " elements, %" PRId64 " moves, %" PRId64 " compares\n", n, q_moves, q_compares);
     printf("Max stack size: %" PRIu32 "\n", max_stack_size);
     uint32_t i = 0;
     while (i < p && i < n) {
@@ -87,7 +87,7 @@ void print_quick_queue(uint32_t *A, uint32_t n, uint32_t p) {
     printf("Quick Sort (Queue)\n");
     // code for formatting print statement provided by Professor Long in assignment pdf
     printf(
-        "%" PRIu32 " elements, %" PRIu32 " moves, %" PRIu32 " compares\n", n, q_moves, q_compares);
+        "%" PRIu32 " elements, %" PRId64 " moves, %" PRId64 " compares\n", n, q_moves, q_compares);
     printf("Max queue size: %" PRIu32 "\n", max_queue_size);
     uint32_t i = 0;
     while (i < p && i < n) {

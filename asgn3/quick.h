@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-uint32_t q_moves, q_compares; // counts for moves and comparisons
+int64_t q_moves, q_compares; // counts for moves and comparisons
 extern uint32_t max_stack_size;
 extern uint32_t max_queue_size;
 
