@@ -2,6 +2,9 @@
 
 #include "vertices.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 struct Graph {
     uint32_t vertices;
     bool undirected;
@@ -10,10 +13,10 @@ struct Graph {
 };
 
 Graph *graph_create(uint32_t vertices, bool undirected) {
-    Graph *G = (Graph *) malloc(Sizeof(*Graph));
+    Graph *G = (Graph *) malloc(sizeof(Graph));
     if (G) {
         G->undirected = undirected;
-        G->vertices = (uint32_t *) calloc(vertices, sizeof(uint32_t));
+        G->vertices = (uint32_t) calloc(vertices, sizeof(uint32_t));
         if (!G->vertices) {
             free(G);
             G = NULL;
