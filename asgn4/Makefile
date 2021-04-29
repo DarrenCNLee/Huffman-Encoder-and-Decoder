@@ -21,5 +21,9 @@ path.o:		path.c
 format:		
 		clang-format -i -style=file *.c *.h
 
+clean:		
+		rm -f tsp tsp.o graph.o stack.o path.o
+
+
 scan-build:	clean
 		scan-build make
