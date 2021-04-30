@@ -14,10 +14,8 @@ struct Path {
 
 Path *path_create(void) {
     Path *p = (Path *) malloc(sizeof(Path));
-    if (p) {
-        p->vertices = stack_create(VERTICES);
-        p->length = 0;
-    }
+    p->vertices = stack_create(VERTICES);
+    p->length = 0;
     return p;
 }
 
@@ -59,7 +57,7 @@ uint32_t path_length(Path *p) {
 
 void path_copy(Path *dst, Path *src) {
     if (dst) {
-        dst->vertices = src->vertices;
+        stack_copy(dst->vertices, src->vertices);
         dst->length = src->length;
     }
 }
@@ -67,30 +65,3 @@ void path_copy(Path *dst, Path *src) {
 void path_print(Path *p, FILE *outfile, char *cities[]) {
     stack_print(p->vertices, outfile, cities);
 }
-
-//int main(void) {
-//    char *cities[] = { "Asgard", "Elysium", "Olympus", "Shangri-La" };
-//    Path *p = path_create();
-//    Graph *G = graph_create(4, false);
-//   graph_add_edge(G, 0, 3, 5);
-//    graph_add_edge(G, 3, 2, 4);
-//   graph_add_edge(G, 2, 1, 10);
-//    graph_add_edge(G, 1, 0, 2);
-//    graph_print(G);
-//    path_push_vertex(p, 0, G);
-//    path_push_vertex(p, 3, G);
-//    path_push_vertex(p, 2, G);
-//    path_push_vertex(p, 1, G);
-//    path_push_vertex(p, 0, G);
-//    printf("path length: "
-//           "%" PRIu32 "\n",
-//        path_length(p));
-//    printf("path vertices: "
-//           "%" PRIu32 "\n",
-//        path_vertices(p));
-//    printf("graph vertices: "
-//           "%" PRIu32 "\n",
-//        graph_vertices(G));
-//    path_print(p, stdout, cities);
-//    return 0;
-//}

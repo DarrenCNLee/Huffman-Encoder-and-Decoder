@@ -20,16 +20,17 @@ void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE 
     path_push_vertex(curr, v, G);
     for (uint32_t w = 0; w < graph_vertices(G);
          w++) { // pseudocode for dfs given by Professor Long in assignment pdf
+        if ((path_vertices(curr) == graph_vertices(G)) && (!path_length(shortest))) {
+            path_push_vertex(curr, START_VERTEX, G);
+            path_copy(shortest, curr);
+        }
+        if ((path_vertices(curr) == graph_vertices(G))
+            && (path_length(curr) < path_length(shortest))) {
+            path_push_vertex(curr, START_VERTEX, G);
+            path_copy(shortest, curr);
+        }
         if (graph_has_edge(G, v, w) && !graph_visited(G, w)) {
             dfs(G, w, curr, shortest, cities, outfile);
-        }
-        if (path_vertices(curr) == graph_vertices(G) && !path_length(shortest)) {
-            //       path_push_vertex(curr, START_VERTEX, G);
-            path_copy(shortest, curr);
-        }
-        if (path_vertices(curr) == graph_vertices(G) && path_length(curr) < path_length(shortest)) {
-            //        path_push_vertex(curr, START_VERTEX, G);
-            path_copy(shortest, curr);
         }
     }
     path_pop_vertex(curr, &v, G);
@@ -40,8 +41,7 @@ int main(int argc, char **argv) {
     char buffer[BLOCK]; // code influenced by Eugene's lab section on 4/27
     FILE *infile = stdin, *outfile = stdout;
     uint32_t help = 0, verbose = 0, undirect = 0;
-    uint32_t n;
-    int opt, c, i, j, k;
+    int opt, c, i, j, k, n;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'h':
@@ -71,9 +71,9 @@ int main(int argc, char **argv) {
         fprintf(stderr, "failed to open outfile");
         return 1;
     }
-    fscanf(infile, "%" PRIu32, &n);
+    fscanf(infile, "%d", &n);
     char *cities[n];
-    for (uint32_t i = 1; i <= n + 1; i++) {
+    for (int i = 0; i <= n; i++) {
         fgets(buffer, BLOCK, infile); // code influenced by Eugene's lab section on 4/27
         cities[i] = strdup(buffer);
     }
@@ -91,12 +91,12 @@ int main(int argc, char **argv) {
     dfs(G, START_VERTEX, curr, shortest, cities, outfile);
     printf("Path length: %" PRIu32 "\n", path_length(shortest));
     printf("Path: ");
-    path_print(shortest, outfile, cities);
+    path_print(shortest, stdout, cities);
     printf("Total recursive calls: %" PRIu32 "\n", calls);
-    //    for (uint32_t i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
-    //        free(cities[i]);
-    //    }
-    //    path_delete(&curr);
-    //    path_delete(&shortest);
+    for (int i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
+        free(cities[i]);
+    }
+    path_delete(&curr);
+    path_delete(&shortest);
     return 0;
 }

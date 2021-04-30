@@ -15,7 +15,7 @@ graph.o:	graph.c
 stack.o: 	stack.c
 		$(CC) $(CFLAGS) -c stack.c
 
-path.o:		path.c
+path.o:		path.c 
 		$(CC) $(CFLAGS) -c path.c
 
 format:		
