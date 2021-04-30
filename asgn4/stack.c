@@ -72,7 +72,9 @@ bool stack_pop(Stack *s, uint32_t *x) {
 
 void stack_copy(Stack *dst, Stack *src) {
     if (dst) {
-        dst->items = src->items;
+        for (uint32_t i = 0; i < stack_size(src); i++) {
+            dst->items[i] = src->items[i];
+        }
         dst->top = src->top;
     }
 }
@@ -85,7 +87,7 @@ void stack_print(Stack *s, FILE *outfile, char *cities[]) {
             printf(" -> ");
         }
     }
-    fprintf(outfile, "\n");
+    //    fprintf(outfile, "\n");
 }
 
 //int main(void) {

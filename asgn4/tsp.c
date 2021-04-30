@@ -18,17 +18,18 @@ void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE 
     calls++;
     graph_mark_visited(G, v);
     path_push_vertex(curr, v, G);
+    if ((path_vertices(curr) == graph_vertices(G)) && (graph_has_edge(G, v, START_VERTEX))
+        && (!path_length(shortest))) {
+        path_push_vertex(curr, START_VERTEX, G);
+        path_copy(shortest, curr);
+    }
+    if ((path_vertices(curr) == graph_vertices(G)) && (graph_has_edge(G, v, START_VERTEX))
+        && (path_length(curr) < path_length(shortest))) {
+        path_push_vertex(curr, START_VERTEX, G);
+        path_copy(shortest, curr);
+    }
     for (uint32_t w = 0; w < graph_vertices(G);
          w++) { // pseudocode for dfs given by Professor Long in assignment pdf
-        if ((path_vertices(curr) == graph_vertices(G)) && (!path_length(shortest))) {
-            path_push_vertex(curr, START_VERTEX, G);
-            path_copy(shortest, curr);
-        }
-        if ((path_vertices(curr) == graph_vertices(G))
-            && (path_length(curr) < path_length(shortest))) {
-            path_push_vertex(curr, START_VERTEX, G);
-            path_copy(shortest, curr);
-        }
         if (graph_has_edge(G, v, w) && !graph_visited(G, w)) {
             dfs(G, w, curr, shortest, cities, outfile);
         }
@@ -72,23 +73,32 @@ int main(int argc, char **argv) {
         return 1;
     }
     fscanf(infile, "%d", &n);
+    if (n <= 0) {
+        fprintf(stderr, "There's nowhere to go.\n");
+        return 1;
+    }
     char *cities[n];
     for (int i = 0; i <= n; i++) {
         fgets(buffer, BLOCK, infile); // code influenced by Eugene's lab section on 4/27
+        strtok(buffer, "\n");
         cities[i] = strdup(buffer);
     }
     Graph *G = graph_create(n, undirect);
     // code influenced by Eugene's lab section on 4/27
     while ((c = fscanf(infile, "%d %d %d \n", &i, &j, &k)) != EOF) {
         if (c != 3) { // code influenced by Eugene's lab section on 4/27
-            printf("malformed line\n");
-            break;
+            printf("Error: malformed edge.\n");
+            return 1;
         }
         graph_add_edge(G, i, j, k);
     }
     Path *curr = path_create();
     Path *shortest = path_create();
     dfs(G, START_VERTEX, curr, shortest, cities, outfile);
+    if (path_length(shortest) == 0) {
+        fprintf(stderr, "There's nowhere to go.\n");
+        return 1;
+    }
     printf("Path length: %" PRIu32 "\n", path_length(shortest));
     printf("Path: ");
     path_print(shortest, stdout, cities);

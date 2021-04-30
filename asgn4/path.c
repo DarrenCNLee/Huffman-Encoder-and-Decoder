@@ -30,20 +30,26 @@ void path_delete(Path **p) {
 bool path_push_vertex(Path *p, uint32_t v, Graph *G) {
     uint32_t x;
     stack_peek(p->vertices, &x);
-    if (stack_push(p->vertices, v)) {
-        p->length += graph_edge_weight(G, x, v);
-        return true;
+    if (stack_full(p->vertices)) {
+        return false;
     }
+
+    stack_push(p->vertices, v);
+    p->length += graph_edge_weight(G, x, v);
+    return true;
     return false;
 }
 
 bool path_pop_vertex(Path *p, uint32_t *v, Graph *G) {
     uint32_t x;
     stack_peek(p->vertices, &x);
-    if (stack_pop(p->vertices, v)) {
-        p->length -= graph_edge_weight(G, x, *v);
-        return true;
+    if (stack_empty(p->vertices)) {
+        return false;
     }
+    stack_pop(p->vertices, v);
+    p->length -= graph_edge_weight(G, x, *v);
+    return true;
+
     return false;
 }
 
