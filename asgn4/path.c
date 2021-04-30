@@ -4,8 +4,8 @@
 #include "stack.h"
 #include "vertices.h"
 
-#include <stdlib.h>
 #include <inttypes.h>
+#include <stdlib.h>
 
 struct Path {
     Stack *vertices;
