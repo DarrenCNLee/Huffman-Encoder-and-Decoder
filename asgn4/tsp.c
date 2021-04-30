@@ -17,7 +17,8 @@ uint32_t calls = 0;
 void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE *outfile) {
     calls++;
     graph_mark_visited(G, v);
-    for (uint32_t w = v; w < graph_vertices(G); w++) {
+    for (uint32_t w = v; w < graph_vertices(G);
+         w++) { // pseudocode for dfs given by Professor Long in assignment pdf
         if (graph_has_edge(G, v, w) && !graph_visited(G, w)) {
             dfs(G, w, curr, shortest, cities, outfile);
         }
@@ -34,7 +35,8 @@ void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE 
 int main(int argc, char **argv) {
     char buffer[BLOCK]; // code influenced by Eugene's lab section on 4/27
     FILE *infile = stdin, *outfile = stdout;
-    uint32_t help, verbose, undirect, n;
+    uint32_t help = 0, verbose = 0, undirect = 0;
+    uint32_t n;
     int opt, c, i, j, k;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
@@ -58,28 +60,27 @@ int main(int argc, char **argv) {
         }
     }
     if (infile == NULL) {
-        fprintf(stderr, "failed to open");
+        fprintf(stderr, "failed to open infile");
+        return 1;
+    }
+    if (outfile == NULL) {
+        fprintf(stderr, "failed to open outfile");
         return 1;
     }
     fscanf(infile, "%" PRIu32, &n);
     char *cities[n];
-    for (uint32_t i = 0; i < n; i++) {
+    for (uint32_t i = 1; i <= n + 1; i++) {
         fgets(buffer, BLOCK, infile); // code influenced by Eugene's lab section on 4/27
         cities[i] = strdup(buffer);
     }
-    fputs(buffer, outfile);
-
     Graph *G = graph_create(n, undirect);
     // code influenced by Eugene's lab section on 4/27
     while ((c = fscanf(infile, "%d %d %d \n", &i, &j, &k)) != EOF) {
-        if (c != 3) {
+        if (c != 3) { // code influenced by Eugene's lab section on 4/27
             printf("malformed line\n");
-            return 1;
+            break;
         }
         graph_add_edge(G, i, j, k);
-        //        fprintf(outfile, "i=%d\n", i);
-        //        fprintf(outfile, "j=%d\n", j);
-        //        fprintf(outfile, "k=%d\n", k);
     }
     Path *curr = path_create();
     Path *shortest = path_create();
@@ -88,6 +89,9 @@ int main(int argc, char **argv) {
     printf("Path: ");
     path_print(shortest, outfile, cities);
     printf("\n");
-    printf("Total recursive calls: %" PRIu32, calls);
+    printf("Total recursive calls: %" PRIu32 "\n", calls);
+    for (uint32_t i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
+        free(cities[i]);
+    }
     return 0;
 }

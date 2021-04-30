@@ -2,6 +2,7 @@
 
 #include "vertices.h"
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -16,14 +17,14 @@ Graph *graph_create(uint32_t vertices, bool undirected) {
     Graph *G = (Graph *) malloc(sizeof(Graph));
     if (G) {
         G->undirected = undirected;
-        G->vertices = (uint32_t) calloc(vertices, sizeof(uint32_t));
+        G->vertices = vertices;
         if (!G->vertices) {
             free(G);
             G = NULL;
         }
-        for (uint32_t i = 0; i < G->vertices; i++) {
+        for (uint32_t i = 0; i < vertices; i++) {
             G->visited[i] = false;
-            for (uint32_t j = 0; j < G->vertices; j++) {
+            for (uint32_t j = 0; j < vertices; j++) {
                 G->matrix[i][j] = 0;
             }
         }
@@ -33,14 +34,14 @@ Graph *graph_create(uint32_t vertices, bool undirected) {
 
 void graph_delete(Graph **G) {
     if (*G && (*G)->vertices) {
-        for (uint32_t i = 0; i < G->vertices; i++) {
-            for (uint32_t j = 0; j < G->vertices; j++) {
-                free((*G)->matrix[i][j]);
-            }
-        }
-        free((*G)->undirected);
-        free((*G)->visited);
-        free((*G)->vertices);
+        //        for (uint32_t i = 0; i < (*G)->vertices; i++) {
+        //            for (uint32_t j = 0; j < (*G)->vertices; j++) {
+        //                free((*G)->matrix[i][j]);
+        //            }
+        //        }
+        //       free((*G)->undirected);
+        //       free((*G)->visited);
+        //        free((*G)->vertices);
         free(*G);
         *G = NULL;
     }
@@ -61,6 +62,12 @@ bool graph_add_edge(Graph *G, uint32_t i, uint32_t j, uint32_t k) {
     return true;
 }
 
+bool graph_has_edge(Graph *G, uint32_t i, uint32_t j) {
+    if (i < G->vertices && j < G->vertices && G->matrix[i][j])
+        return true;
+    return false;
+}
+
 uint32_t graph_edge_weight(Graph *G, uint32_t i, uint32_t j) {
     if (!(i < G->vertices) || !(j < G->vertices) || !G->matrix[i][j]) {
         return 0;
@@ -78,12 +85,31 @@ void graph_mark_visited(Graph *G, uint32_t v) {
     }
 }
 
+void graph_mark_unvisited(Graph *G, uint32_t v) {
+    if (v < G->vertices) {
+        G->visited[v] = false;
+    }
+}
+
 void graph_print(Graph *G) {
     for (uint32_t i = 0; i < G->vertices; i++) {
         for (uint32_t j = 0; j < G->vertices; j++) {
             if (G->matrix[i][j]) {
-                printf("%" PRIu32 "\n", G->matrix[i][j]);
+                printf("%" PRIu32 " "
+                       "%" PRIu32 " "
+                       "%" PRIu32 "\n",
+                    i, j, G->matrix[i][j]);
             }
         }
     }
 }
+
+//int main(void) {
+//    Graph *G = graph_create(4, false);
+//    graph_add_edge(G, 0, 2, 5);
+//    graph_add_edge(G, 2, 3, 4);
+//    graph_add_edge(G, 3, 1, 2);
+//    graph_add_edge(G, 1, 3, 9);
+//    graph_print(G);
+//    return 0;
+//}

@@ -1,5 +1,8 @@
 #include "stack.h"
 
+#include <inttypes.h>
+#include <stdlib.h>
+
 struct Stack {
     uint32_t top;
     uint32_t capacity;
@@ -11,7 +14,7 @@ Stack *stack_create(uint32_t capacity) {
     if (s) {
         s->top = 0;
         s->capacity = capacity;
-        s->items = (uint32_t) calloc(capacity, sizeof(uint32_t));
+        s->items = (uint32_t *) calloc(capacity, sizeof(uint32_t));
         if (!s->items) {
             free(s);
             s = NULL;
@@ -40,7 +43,7 @@ uint32_t stack_size(Stack *s) {
     return s->top;
 }
 
-bool stack_push(Stack *s, x) {
+bool stack_push(Stack *s, uint32_t x) {
     if (stack_full(s)) {
         return false;
     }
@@ -49,15 +52,15 @@ bool stack_push(Stack *s, x) {
     return true;
 }
 
-bool stack_peek(Stack *s, *x) {
+bool stack_peek(Stack *s, uint32_t *x) {
     if (stack_pop(s, x)) {
-        stack_push(s, x);
+        stack_push(s, *x);
         return true;
     }
     return false;
 }
 
-bool stack_pop(Stack *s, *x) {
+bool stack_pop(Stack *s, uint32_t *x) {
     if (stack_empty(s)) {
         return false;
     }
@@ -73,12 +76,32 @@ void stack_copy(Stack *dst, Stack *src) {
     }
 }
 
-stack_print(Stack *s, FILE *outfile; char *cities[]) {
-    for (uint32_t i = 0, i < s->top; i++) {
-        fprintf(outfile, "%" PRId32, cities[s->items[i]]);
+// code provided by Professor Long in assignment pdf
+void stack_print(Stack *s, FILE *outfile, char *cities[]) {
+    for (uint32_t i = 0; i < s->top; i++) {
+        fprintf(outfile, "%s", cities[s->items[i]]);
         if (i + 1 != s->top) {
             fprintf(outfile, " -> ");
         }
     }
     fprintf(outfile, "\n");
+}
+
+int main(void){
+    char *cities[] = { "march town", "june", "april", "disneyland" };
+	uint32_t y;
+	uint32_t *x=&y;
+	Stack *s=stack_create(5);
+	Stack *d=stack_create(5);
+	stack_push(s,3);
+	stack_push(s,1);
+	stack_push(s,2);
+	stack_push(s,0);
+	stack_push(s,1);
+	stack_peek(s,x);
+	printf("x=%"PRIu32"\n",*x);
+	stack_print(s,stdout,cities);
+	stack_copy(d,s);
+	stack_print(d,stdout,cities);
+	return 0;
 }
