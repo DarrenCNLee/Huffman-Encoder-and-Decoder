@@ -30,20 +30,21 @@ void path_delete(Path **p) {
 }
 
 bool path_push_vertex(Path *p, uint32_t v, Graph *G) {
-    uint32_t y;
-    uint32_t *x = &y;
+    uint32_t x;
+    stack_peek(p->vertices, &x);
     if (stack_push(p->vertices, v)) {
-        p->length += graph_edge_weight(G, stack_peek(p->vertices, x), v);
+        p->length += graph_edge_weight(G, x, v);
         return true;
     }
     return false;
 }
 
 bool path_pop_vertex(Path *p, uint32_t *v, Graph *G) {
-    uint32_t y;
-    uint32_t *x = &y;
+    uint32_t x;
+    stack_peek(p->vertices, &x);
     if (stack_pop(p->vertices, v)) {
-        p->length -= graph_edge_weight(G, stack_peek(p->vertices, x), *v);
+        p->length -= graph_edge_weight(G, x, *v);
+        return true;
     }
     return false;
 }
@@ -68,19 +69,28 @@ void path_print(Path *p, FILE *outfile, char *cities[]) {
 }
 
 //int main(void) {
-//    char *cities[] = { "march town", "june", "april", "disneyland" };
+//    char *cities[] = { "Asgard", "Elysium", "Olympus", "Shangri-La" };
 //    Path *p = path_create();
 //    Graph *G = graph_create(4, false);
-//    graph_add_edge(G, 0, 2, 5);
-//    graph_add_edge(G, 2, 3, 4);
-//    graph_add_edge(G, 3, 1, 2);
-//    graph_add_edge(G, 1, 3, 9);
+//   graph_add_edge(G, 0, 3, 5);
+//    graph_add_edge(G, 3, 2, 4);
+//   graph_add_edge(G, 2, 1, 10);
+//    graph_add_edge(G, 1, 0, 2);
 //    graph_print(G);
-//    printf("%" PRIu32 "\n", p->length);
 //    path_push_vertex(p, 0, G);
-//    path_push_vertex(p, 1, G);
-//    printf("%" PRIu32 "\n", p->length);
 //    path_push_vertex(p, 3, G);
+//    path_push_vertex(p, 2, G);
+//    path_push_vertex(p, 1, G);
+//    path_push_vertex(p, 0, G);
+//    printf("path length: "
+//           "%" PRIu32 "\n",
+//        path_length(p));
+//    printf("path vertices: "
+//           "%" PRIu32 "\n",
+//        path_vertices(p));
+//    printf("graph vertices: "
+//           "%" PRIu32 "\n",
+//        graph_vertices(G));
 //    path_print(p, stdout, cities);
 //    return 0;
 //}

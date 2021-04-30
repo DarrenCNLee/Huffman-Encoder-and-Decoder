@@ -17,18 +17,22 @@ uint32_t calls = 0;
 void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE *outfile) {
     calls++;
     graph_mark_visited(G, v);
-    for (uint32_t w = v; w < graph_vertices(G);
+    path_push_vertex(curr, v, G);
+    for (uint32_t w = 0; w < graph_vertices(G);
          w++) { // pseudocode for dfs given by Professor Long in assignment pdf
         if (graph_has_edge(G, v, w) && !graph_visited(G, w)) {
             dfs(G, w, curr, shortest, cities, outfile);
         }
         if (path_vertices(curr) == graph_vertices(G) && !path_length(shortest)) {
+            //       path_push_vertex(curr, START_VERTEX, G);
             path_copy(shortest, curr);
         }
         if (path_vertices(curr) == graph_vertices(G) && path_length(curr) < path_length(shortest)) {
+            //        path_push_vertex(curr, START_VERTEX, G);
             path_copy(shortest, curr);
         }
     }
+    path_pop_vertex(curr, &v, G);
     graph_mark_unvisited(G, v);
 }
 
@@ -88,10 +92,11 @@ int main(int argc, char **argv) {
     printf("Path length: %" PRIu32 "\n", path_length(shortest));
     printf("Path: ");
     path_print(shortest, outfile, cities);
-    printf("\n");
     printf("Total recursive calls: %" PRIu32 "\n", calls);
-    for (uint32_t i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
-        free(cities[i]);
-    }
+    //    for (uint32_t i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
+    //        free(cities[i]);
+    //    }
+    //    path_delete(&curr);
+    //    path_delete(&shortest);
     return 0;
 }

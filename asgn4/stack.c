@@ -87,21 +87,21 @@ void stack_print(Stack *s, FILE *outfile, char *cities[]) {
     fprintf(outfile, "\n");
 }
 
-int main(void) {
-    char *cities[] = { "march town", "june", "april", "disneyland" };
-    uint32_t y;
-    uint32_t *x = &y;
-    Stack *s = stack_create(5);
-    Stack *d = stack_create(5);
-    stack_push(s, 3);
-    stack_push(s, 1);
-    stack_push(s, 2);
-    stack_push(s, 0);
-    stack_push(s, 1);
-    stack_peek(s, x);
-    printf("x=%" PRIu32 "\n", *x);
-    stack_print(s, stdout, cities);
-    stack_copy(d, s);
-    stack_print(d, stdout, cities);
-    return 0;
-}
+//int main(void) {
+//    char *cities[] = { "march town", "june", "april", "disneyland" };
+//   uint32_t x;
+//    Stack *s = stack_create(5);
+//    Stack *d = stack_create(5);
+//    stack_push(s, 3);
+//    stack_push(s, 1);
+//    stack_push(s, 2);
+//    stack_push(s, 0);
+//    stack_push(s, 3);
+//    stack_peek(s, &x);
+//    printf("x=%" PRIu32 "\n", x);
+//    stack_print(s, stdout, cities);
+//    stack_copy(d, s);
+//    stack_print(d, stdout, cities);
+//    stack_print(s, stdout, cities);
+//    return 0;
+//}
