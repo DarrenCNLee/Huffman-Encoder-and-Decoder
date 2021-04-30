@@ -14,25 +14,28 @@
 
 uint32_t calls = 0;
 
+// pseudocode for dfs given by Professor Long in assignment pdf
 void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE *outfile) {
     calls++;
     graph_mark_visited(G, v);
     path_push_vertex(curr, v, G);
-    if ((path_vertices(curr) == graph_vertices(G)) && (graph_has_edge(G, v, START_VERTEX))
-        && (!path_length(shortest))) {
-        path_push_vertex(curr, START_VERTEX, G);
-        path_copy(shortest, curr);
-    }
-    if ((path_vertices(curr) == graph_vertices(G)) && (graph_has_edge(G, v, START_VERTEX))
-        && (path_length(curr) < path_length(shortest))) {
-        path_push_vertex(curr, START_VERTEX, G);
-        path_copy(shortest, curr);
-    }
-    for (uint32_t w = 0; w < graph_vertices(G);
-         w++) { // pseudocode for dfs given by Professor Long in assignment pdf
+    for (uint32_t w = 0; w < graph_vertices(G); w++) {
         if (graph_has_edge(G, v, w) && !graph_visited(G, w)) {
             dfs(G, w, curr, shortest, cities, outfile);
         }
+        if ((path_vertices(curr) == graph_vertices(G)) && (graph_has_edge(G, v, START_VERTEX))
+            && (path_length(shortest) == 0)) {
+            path_push_vertex(curr, START_VERTEX, G);
+            path_copy(shortest, curr);
+        }
+        if ((path_vertices(curr) == graph_vertices(G)) && (graph_has_edge(G, v, START_VERTEX))
+            && (path_length(curr) < path_length(shortest))) {
+            path_push_vertex(curr, START_VERTEX, G);
+            path_copy(shortest, curr);
+        }
+        //        if (path_length(curr) > path_length(shortest)) {
+        //            break;
+        //        }
     }
     path_pop_vertex(curr, &v, G);
     graph_mark_unvisited(G, v);
@@ -65,20 +68,25 @@ int main(int argc, char **argv) {
         }
     }
     if (infile == NULL) {
-        fprintf(stderr, "failed to open infile");
+        fprintf(stderr, "Failed to open infile\n");
         return 1;
     }
     if (outfile == NULL) {
-        fprintf(stderr, "failed to open outfile");
+        fprintf(stderr, "Failed to open outfile\n");
         return 1;
     }
     fscanf(infile, "%d", &n);
+    if (n > VERTICES) {
+        fprintf(stderr, "Too many vertices\n");
+        return 1;
+    }
     if (n <= 0) {
         fprintf(stderr, "There's nowhere to go.\n");
         return 1;
     }
     char *cities[n];
-    for (int i = 0; i <= n; i++) {
+    fgets(buffer, BLOCK, infile); // code influenced by Eugene's lab section on 4/27
+    for (int i = 0, j = 1; j <= n; i++, j++) {
         fgets(buffer, BLOCK, infile); // code influenced by Eugene's lab section on 4/27
         strtok(buffer, "\n");
         cities[i] = strdup(buffer);

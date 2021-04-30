@@ -87,7 +87,7 @@ void stack_print(Stack *s, FILE *outfile, char *cities[]) {
             printf(" -> ");
         }
     }
-    //    fprintf(outfile, "\n");
+    fprintf(outfile, "\n");
 }
 
 //int main(void) {

@@ -67,3 +67,25 @@ void path_copy(Path *dst, Path *src) {
 void path_print(Path *p, FILE *outfile, char *cities[]) {
     stack_print(p->vertices, outfile, cities);
 }
+
+//int main(void) {
+//    uint32_t x;
+//    Graph *G = graph_create(4, false);
+//    Path *p = path_create();
+//    char *cities[4] = { "Asgard", "Elysium", "Olympus", "Shangri-La" };
+//    graph_add_edge(G, 0, 3, 5);
+//    graph_add_edge(G, 3, 2, 4);
+//    graph_add_edge(G, 2, 1, 10);
+//    graph_add_edge(G, 1, 0, 2);
+//    path_push_vertex(p, 0, G);
+//    path_push_vertex(p, 3, G);
+//    path_push_vertex(p, 2, G);
+//    path_push_vertex(p, 1, G);
+//    path_push_vertex(p, 0, G);
+//    printf("path length: %" PRIu32 "\n", path_length(p));
+//    path_print(p, stdout, cities);
+//    path_pop_vertex(p, &x, G);
+//    printf("x = %" PRIu32 "\n", x);
+//    path_print(p, stdout, cities);
+//    return 0;
+//}
