@@ -17,16 +17,13 @@ Path *path_create(void) {
     if (p) {
         p->vertices = stack_create(VERTICES);
         p->length = 0;
-        if (stack_empty(p->vertices)) {
-            free(p);
-            p = NULL;
-        }
     }
     return p;
 }
 
 void path_delete(Path **p) {
     if (*p && (*p)->vertices) {
+        stack_delete(&((*p)->vertices));
         free((*p)->vertices);
         free(*p);
         *p = NULL;
@@ -34,10 +31,10 @@ void path_delete(Path **p) {
 }
 
 bool path_push_vertex(Path *p, uint32_t v, Graph *G) {
-    uint32_t x;
     if (stack_full(p->vertices)) {
         return false;
     }
+    uint32_t x;
     stack_peek(p->vertices, &x);
     stack_push(p->vertices, v);
     p->length += graph_edge_weight(G, x, v);
@@ -45,10 +42,10 @@ bool path_push_vertex(Path *p, uint32_t v, Graph *G) {
 }
 
 bool path_pop_vertex(Path *p, uint32_t *v, Graph *G) {
-    uint32_t x;
     if (stack_empty(p->vertices)) {
         return false;
     }
+    uint32_t x;
     stack_pop(p->vertices, v);
     stack_peek(p->vertices, &x);
     p->length -= graph_edge_weight(G, x, *v);
@@ -64,10 +61,10 @@ uint32_t path_length(Path *p) {
 }
 
 void path_copy(Path *dst, Path *src) {
-    if (dst) {
-        stack_copy(dst->vertices, src->vertices);
-        dst->length = src->length;
-    }
+    //  if (dst) {
+    stack_copy(dst->vertices, src->vertices);
+    dst->length = src->length;
+    //    }
 }
 
 void path_print(Path *p, FILE *outfile, char *cities[]) {
@@ -91,8 +88,11 @@ void path_print(Path *p, FILE *outfile, char *cities[]) {
 //    path_print(p, stdout, cities);
 //    printf("path length: %" PRIu32 "\n", path_length(p));
 //    path_pop_vertex(p, &x, G);
-//    printf("x = %" PRIu32 "\n", x);
+//   printf("x = %" PRIu32 "\n", x);
 //    path_print(p, stdout, cities);
+
+//   printf("path vertices: %" PRIu32 "\n", path_vertices(p));
+//    printf("graph vertices: %" PRIu32 "\n", graph_vertices(G));
 //    printf("path length: %" PRIu32 "\n", path_length(p));
 //    return 0;
 //}

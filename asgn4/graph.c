@@ -15,18 +15,16 @@ struct Graph {
 
 Graph *graph_create(uint32_t vertices, bool undirected) {
     Graph *G = (Graph *) malloc(sizeof(Graph));
-    if (G) {
-        G->undirected = undirected;
-        G->vertices = vertices;
-        if (!G->vertices) {
-            free(G);
-            G = NULL;
-        }
-        for (uint32_t i = 0; i < vertices; i++) {
-            G->visited[i] = false;
-            for (uint32_t j = 0; j < vertices; j++) {
-                G->matrix[i][j] = 0;
-            }
+    G->undirected = undirected;
+    G->vertices = vertices;
+    if (!G->vertices) {
+        free(G);
+        G = NULL;
+    }
+    for (uint32_t i = 0; i < vertices; i++) {
+        G->visited[i] = false;
+        for (uint32_t j = 0; j < vertices; j++) {
+            G->matrix[i][j] = 0;
         }
     }
     return G;
@@ -112,5 +110,9 @@ void graph_print(Graph *G) {
 //    graph_add_edge(G, 3, 1, 2);
 //    graph_add_edge(G, 1, 3, 9);
 //    graph_print(G);
+//    graph_mark_visited(G, 0);
+//    printf("visited %d? %d\n", 0,graph_visited(G,0));
+//	graph_mark_unvisited(G,0);
+//   printf("visited %d? %d\n", 0,graph_visited(G,0));
 //    return 0;
 //}

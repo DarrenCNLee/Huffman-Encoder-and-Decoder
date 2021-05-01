@@ -14,35 +14,35 @@
 
 uint32_t calls = 0;
 
+//            if (path_length(curr) > path_length(shortest)) {
+//                continue;
+//            }
+//    path_pop_vertex(curr, &v, G);
+
 // pseudocode for dfs given by Professor Long in assignment pdf
 void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE *outfile) {
-    //    uint32_t x;
+    uint32_t x;
     calls++;
     graph_mark_visited(G, v);
-    path_push_vertex(curr, v, G);
     for (uint32_t w = 0; w < graph_vertices(G); w++) {
         if (graph_has_edge(G, v, w) && !graph_visited(G, w)) {
-            //path_push_vertex(curr, w, G);
+            path_push_vertex(curr, w, G);
             dfs(G, w, curr, shortest, cities, outfile);
-            //  path_pop_vertex(curr, &x, G);
-            //            if (path_length(curr) > path_length(shortest)) {
-            //                continue;
-            //            }
+            path_pop_vertex(curr, &x, G);
         }
-        if ((path_vertices(curr) == graph_vertices(G)) && (graph_has_edge(G, v, START_VERTEX))
+        if ((path_vertices(curr) == graph_vertices(G) - 1) && (graph_has_edge(G, v, START_VERTEX))
             && (path_length(shortest) == 0)) {
             path_push_vertex(curr, START_VERTEX, G);
             path_copy(shortest, curr);
-            path_pop_vertex(curr, &v, G);
+            path_pop_vertex(curr, &x, G);
         }
-        if ((path_vertices(curr) == graph_vertices(G)) && (graph_has_edge(G, v, START_VERTEX))
+        if ((path_vertices(curr) == graph_vertices(G) - 1) && (graph_has_edge(G, v, START_VERTEX))
             && (path_length(curr) < path_length(shortest))) {
             path_push_vertex(curr, START_VERTEX, G);
             path_copy(shortest, curr);
-            path_pop_vertex(curr, &v, G);
+            path_pop_vertex(curr, &x, G);
         }
     }
-    path_pop_vertex(curr, &v, G);
     graph_mark_unvisited(G, v);
 }
 
@@ -83,10 +83,12 @@ int main(int argc, char **argv) {
     fscanf(infile, "%d", &n);
     if (n > VERTICES) {
         fprintf(stderr, "Too many vertices\n");
+        fclose(infile);
         return 1;
     }
     if (n <= 0) {
         fprintf(stderr, "There's nowhere to go.\n");
+        fclose(infile);
         return 1;
     }
     char *cities[n];
@@ -100,7 +102,11 @@ int main(int argc, char **argv) {
     // code influenced by Eugene's lab section on 4/27
     while ((c = fscanf(infile, "%d %d %d \n", &i, &j, &k)) != EOF) {
         if (c != 3) { // code influenced by Eugene's lab section on 4/27
-            printf("Error: malformed edge.\n");
+            fprintf(stderr, "Error: malformed edge.\n");
+            fclose(infile);
+            for (int i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
+                free(cities[i]);
+            }
             return 1;
         }
         graph_add_edge(G, i, j, k);
@@ -110,10 +116,17 @@ int main(int argc, char **argv) {
     dfs(G, START_VERTEX, curr, shortest, cities, outfile);
     if (path_length(shortest) == 0) {
         fprintf(stderr, "There's nowhere to go.\n");
+        fclose(infile);
+        for (int i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
+            free(cities[i]);
+        }
+        path_delete(&curr);
+        path_delete(&shortest);
+        graph_delete(&G);
         return 1;
     }
     printf("Path length: %" PRIu32 "\n", path_length(shortest));
-    printf("Path: ");
+    printf("Path: %s -> ", cities[START_VERTEX]);
     path_print(shortest, stdout, cities);
     printf("Total recursive calls: %" PRIu32 "\n", calls);
     for (int i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
