@@ -85,26 +85,10 @@ void graph_mark_unvisited(Graph *G, uint32_t v) {
 void graph_print(Graph *G) {
     for (uint32_t i = 0; i < G->vertices; i++) {
         for (uint32_t j = 0; j < G->vertices; j++) {
-            if (G->matrix[i][j]) {
-                printf("%" PRIu32 " "
-                       "%" PRIu32 " "
-                       "%" PRIu32 "\n",
-                    i, j, G->matrix[i][j]);
-            }
+            printf("%" PRIu32 " "
+                   "%" PRIu32 " "
+                   "%" PRIu32 "\n",
+                i, j, G->matrix[i][j]);
         }
     }
 }
-
-//int main(void) {
-//    Graph *G = graph_create(4, false);
-//    graph_add_edge(G, 0, 2, 5);
-//    graph_add_edge(G, 2, 3, 4);
-//    graph_add_edge(G, 3, 1, 2);
-//    graph_add_edge(G, 1, 3, 9);
-//    graph_print(G);
-//    graph_mark_visited(G, 0);
-//    printf("visited %d? %d\n", 0,graph_visited(G,0));
-//	graph_mark_unvisited(G,0);
-//   printf("visited %d? %d\n", 0,graph_visited(G,0));
-//    return 0;
-//}

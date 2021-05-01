@@ -70,12 +70,12 @@ bool stack_pop(Stack *s, uint32_t *x) {
 }
 
 void stack_copy(Stack *dst, Stack *src) {
-    if (dst) {
-        for (uint32_t i = 0; i < stack_size(src); i++) {
-            dst->items[i] = src->items[i];
-        }
-        dst->top = src->top;
+    //    if (dst) {
+    for (uint32_t i = 0; i < stack_size(src); i++) {
+        dst->items[i] = src->items[i];
     }
+    dst->top = src->top;
+    //    }
 }
 
 // code provided by Professor Long in assignment pdf
@@ -88,23 +88,3 @@ void stack_print(Stack *s, FILE *outfile, char *cities[]) {
     }
     fprintf(outfile, "\n");
 }
-
-//int main(void) {
-//    char *cities[] = { "march town", "june", "april", "disneyland" };
-//    uint32_t y;
-//    Stack *s = stack_create(5);
-//    Stack *d = stack_create(5);
-//    stack_push(s, 3);
-//    stack_push(s, 1);
-//    stack_push(s, 2);
-//   stack_push(s, 2);
-//    stack_push(s, 3);
-//    stack_print(s, stdout, cities);
-//    stack_peek(s, &y);
-//    printf("x=%" PRIu32 "\n", y);
-//    stack_print(s, stdout, cities);
-//    stack_copy(d, s);
-//    stack_print(d, stdout, cities);
-//    stack_print(s, stdout, cities);
-//    return 0;
-//}
