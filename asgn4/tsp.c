@@ -12,26 +12,30 @@
 #define BLOCK   4096 // code inspired by Eugene's lab section on 4/27
 #define OPTIONS "hvui:o:"
 
-uint32_t calls = 0, verbose = 0;
+// calls is number of calls
+// verbose is a flag for verbose printing
+// hamiltonian is a flag for whether or not a Hamiltonian path has been found
+uint32_t calls = 0, verbose = 0, hamiltonian = 0; 
 
 // pseudocode for dfs given by Professor Long in assignment pdf
 void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE *outfile) {
     calls++;
-    uint32_t x;
+    uint32_t x; // used for popping vertices
     graph_mark_visited(G, v);
     path_push_vertex(curr, v, G);
     for (uint32_t w = 0; w < graph_vertices(G); w++) {
         if ((path_length(curr) >= path_length(shortest)) && (path_length(shortest) != 0)) {
-            continue;
+            continue; // skip paths that are longer than shortest path
         }
         if (graph_has_edge(G, v, w) && !graph_visited(G, w)) {
             dfs(G, w, curr, shortest, cities, outfile);
         }
         if ((path_vertices(curr) == graph_vertices(G)) && (graph_has_edge(G, v, START_VERTEX))) {
             path_push_vertex(curr, START_VERTEX, G);
+            hamiltonian = 1; // set hamiltonian flag to 1 if a Hamiltonian path is found
             if ((path_length(shortest) == 0) || (path_length(curr) < path_length(shortest))) {
                 path_copy(shortest, curr);
-                if (verbose) {
+                if (verbose) { // print out each path if verbose mode is on
                     fprintf(outfile, "Path length: %" PRIu32 "\n", path_length(shortest));
                     fprintf(outfile, "Path: ");
                     path_print(shortest, outfile, cities);
@@ -46,36 +50,36 @@ void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE 
 
 int main(int argc, char **argv) {
     char buffer[BLOCK]; // code influenced by Eugene's lab section on 4/27
-    FILE *infile = stdin, *outfile = stdout;
+    FILE *infile = stdin, *outfile = stdout; // defaults for infile and outfile
     uint32_t help = 0, undirect = 0;
     int opt, c, i, j, k, n;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'h':
             if (!help) {
-                help = 1;
+                help = 1; // flag to print help message
             }
             break;
         case 'v':
             if (!verbose) {
-                verbose = 1;
+                verbose = 1; // flag to use verbose mode
             }
             break;
         case 'u':
             if (!undirect) {
-                undirect = 1;
+                undirect = 1; // undirected value for graph_create
             }
             break;
-        case 'i': infile = fopen(optarg, "r"); break;
-        case 'o': outfile = fopen(optarg, "w"); break;
+        case 'i': infile = fopen(optarg, "r"); break; // open infile
+        case 'o': outfile = fopen(optarg, "w"); break; // open outfile
         }
     }
     if (infile == NULL) {
-        fprintf(stderr, "Error: failed to open infile.\n");
+        fprintf(stderr, "Error: failed to open infile.\n"); // print error message if opening infile failed
         return 1;
     }
     if (outfile == NULL) {
-        fprintf(stderr, "Error: failed to open outfile.\n");
+        fprintf(stderr, "Error: failed to open outfile.\n"); // print error message if opening outfile failed
         return 1;
     }
     if (help) { // code for help message inspired by resources repository message
@@ -93,31 +97,31 @@ int main(int argc, char **argv) {
         fprintf(outfile, "  -o outfile     Output of computed path (default: stdout)\n");
         return 0;
     }
-    fscanf(infile, "%d", &n);
-    if (n > VERTICES) {
+    fscanf(infile, "%d", &n); // read number of vertices
+    if (n > VERTICES) { // print error if number of vertices is too large
         fprintf(outfile, "Error: malformed number of vertices.\n");
         fclose(infile);
         fclose(outfile);
         return 1;
     }
-    if (n <= 0) {
+    if (n <= 1) { // if there is <= 1 vertex, there is nowhere to go
         fprintf(outfile, "There's nowhere to go.\n");
         fclose(infile);
         fclose(outfile);
         return 1;
     }
     char *cities[n];
-    fgets(buffer, BLOCK, infile); // code influenced by Eugene's lab section on 4/27
+    fgets(buffer, BLOCK, infile); // go to next line in input file
     for (int i = 0, j = 1; j <= n; i++, j++) {
         fgets(buffer, BLOCK, infile); // code influenced by Eugene's lab section on 4/27
-        strtok(buffer, "\n");
-        cities[i] = strdup(buffer);
+        strtok(buffer, "\n"); // remove new line character from city names
+        cities[i] = strdup(buffer); // initialize the names in the cities array
     }
     Graph *G = graph_create(n, undirect);
     // code influenced by Eugene's lab section on 4/27
-    while ((c = fscanf(infile, "%d %d %d \n", &i, &j, &k)) != EOF) {
+    while ((c = fscanf(infile, "%d %d %d \n", &i, &j, &k)) != EOF) { // read the rest of the file
         if (c != 3) { // code influenced by Eugene's lab section on 4/27
-            fprintf(stderr, "Error: malformed edge.\n");
+            fprintf(stderr, "Error: malformed edge.\n"); // print error message 
             fclose(infile);
             fclose(outfile);
             for (int i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
@@ -130,7 +134,7 @@ int main(int argc, char **argv) {
     Path *curr = path_create();
     Path *shortest = path_create();
     dfs(G, START_VERTEX, curr, shortest, cities, outfile);
-    if (path_length(shortest) == 0) {
+    if (!hamiltonian) {
         fprintf(stderr, "No Hamiltonian path found\n");
         fprintf(outfile, "Total recursive calls: %" PRIu32 "\n", calls);
         fclose(infile);
