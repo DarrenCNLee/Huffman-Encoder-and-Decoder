@@ -12,7 +12,7 @@
 #define BLOCK   4096 // code inspired by Eugene's lab section on 4/27
 #define OPTIONS "hvui:p:"
 
-uint32_t calls = 0;
+uint32_t calls = 0, verbose = 0;
 
 // pseudocode for dfs given by Professor Long in assignment pdf
 void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE *outfile) {
@@ -21,7 +21,7 @@ void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE 
     path_push_vertex(curr, v, G);
     graph_mark_visited(G, v);
     for (uint32_t w = 0; w < graph_vertices(G); w++) {
-        if ((path_length(curr) > path_length(shortest)) && (path_length(shortest) != 0)) {
+        if ((path_length(curr) >= path_length(shortest)) && (path_length(shortest) != 0)) {
             continue;
         }
         if (graph_has_edge(G, v, w) && !graph_visited(G, w)) {
@@ -31,6 +31,11 @@ void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE 
             path_push_vertex(curr, START_VERTEX, G);
             if ((path_length(shortest) == 0) || (path_length(curr) < path_length(shortest))) {
                 path_copy(shortest, curr);
+                if (verbose) {
+                    fprintf(outfile, "Path length: %" PRIu32 "\n", path_length(shortest));
+                    fprintf(outfile, "Path: ");
+                    path_print(shortest, outfile, cities);
+                }
             }
             path_pop_vertex(curr, &x, G);
         }
@@ -42,7 +47,7 @@ void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE 
 int main(int argc, char **argv) {
     char buffer[BLOCK]; // code influenced by Eugene's lab section on 4/27
     FILE *infile = stdin, *outfile = stdout;
-    uint32_t help = 0, verbose = 0, undirect = 0;
+    uint32_t help = 0, undirect = 0;
     int opt, c, i, j, k, n;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
@@ -65,12 +70,27 @@ int main(int argc, char **argv) {
         case 'o': outfile = fopen(optarg, "w"); break;
         }
     }
+    if (help) { // code for help message inspired by resources repository message
+        fprintf(outfile, "SYNOPSIS\n");
+        fprintf(outfile, "  Traveling Salesman Problem using DFS.\n");
+        fprintf(outfile, "\n");
+        fprintf(outfile, "USAGE\n");
+        fprintf(outfile, "  ./tsp [-u] [-v] [-h] [-i infile] [-o outfile]\n");
+        fprintf(outfile, "\n");
+        fprintf(outfile, "OPTIONS\n");
+        fprintf(outfile, "  -u             Use undirected graph.\n");
+        fprintf(outfile, "  -v             Enable verbose printing.\n");
+        fprintf(outfile, "  -h             Program usage and help.\n");
+        fprintf(outfile, "  -i infile      Input containing graph (default: stdin)\n");
+        fprintf(outfile, "  -o outfile     Output of computed path (default: stdout)\n");
+        return 0;
+    }
     if (infile == NULL) {
-        fprintf(stderr, "Failed to open infile\n");
+        fprintf(stderr, "Error: failed to open infile.\n");
         return 1;
     }
     if (outfile == NULL) {
-        fprintf(stderr, "Failed to open outfile\n");
+        fprintf(stderr, "Error: failed to open outfile.\n");
         return 1;
     }
     fscanf(infile, "%d", &n);
@@ -118,11 +138,10 @@ int main(int argc, char **argv) {
         graph_delete(&G);
         return 1;
     }
-    printf("Path length: %" PRIu32 "\n", path_length(shortest));
-    //    printf("Path: %s -> ", cities[START_VERTEX]);
-    printf("Path: ");
-    path_print(shortest, stdout, cities);
-    printf("Total recursive calls: %" PRIu32 "\n", calls);
+    fprintf(outfile, "Path length: %" PRIu32 "\n", path_length(shortest));
+    fprintf(outfile, "Path: ");
+    path_print(shortest, outfile, cities);
+    fprintf(outfile, "Total recursive calls: %" PRIu32 "\n", calls);
     for (int i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
         free(cities[i]);
     }
