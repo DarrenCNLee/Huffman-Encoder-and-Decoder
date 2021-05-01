@@ -32,7 +32,7 @@ void stack_delete(Stack **s) {
 }
 
 bool stack_empty(Stack *s) {
-    return !(s->top);
+    return s->top == 0;
 }
 
 bool stack_full(Stack *s) {
@@ -56,8 +56,7 @@ bool stack_peek(Stack *s, uint32_t *x) {
     if (stack_empty(s)) {
         return false;
     }
-    stack_pop(s, x);
-    stack_push(s, *x);
+    *x = s->items[s->top - 1];
     return true;
 }
 
@@ -92,16 +91,17 @@ void stack_print(Stack *s, FILE *outfile, char *cities[]) {
 
 //int main(void) {
 //    char *cities[] = { "march town", "june", "april", "disneyland" };
-//   uint32_t x;
+//    uint32_t y;
 //    Stack *s = stack_create(5);
 //    Stack *d = stack_create(5);
 //    stack_push(s, 3);
 //    stack_push(s, 1);
 //    stack_push(s, 2);
-//    stack_push(s, 0);
+//   stack_push(s, 2);
 //    stack_push(s, 3);
-//    stack_peek(s, &x);
-//    printf("x=%" PRIu32 "\n", x);
+//    stack_print(s, stdout, cities);
+//    stack_peek(s, &y);
+//    printf("x=%" PRIu32 "\n", y);
 //    stack_print(s, stdout, cities);
 //    stack_copy(d, s);
 //    stack_print(d, stdout, cities);

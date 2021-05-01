@@ -16,26 +16,31 @@ uint32_t calls = 0;
 
 // pseudocode for dfs given by Professor Long in assignment pdf
 void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE *outfile) {
+    //    uint32_t x;
     calls++;
     graph_mark_visited(G, v);
     path_push_vertex(curr, v, G);
     for (uint32_t w = 0; w < graph_vertices(G); w++) {
         if (graph_has_edge(G, v, w) && !graph_visited(G, w)) {
+            //path_push_vertex(curr, w, G);
             dfs(G, w, curr, shortest, cities, outfile);
+            //  path_pop_vertex(curr, &x, G);
+            //            if (path_length(curr) > path_length(shortest)) {
+            //                continue;
+            //            }
         }
         if ((path_vertices(curr) == graph_vertices(G)) && (graph_has_edge(G, v, START_VERTEX))
             && (path_length(shortest) == 0)) {
             path_push_vertex(curr, START_VERTEX, G);
             path_copy(shortest, curr);
+            path_pop_vertex(curr, &v, G);
         }
         if ((path_vertices(curr) == graph_vertices(G)) && (graph_has_edge(G, v, START_VERTEX))
             && (path_length(curr) < path_length(shortest))) {
             path_push_vertex(curr, START_VERTEX, G);
             path_copy(shortest, curr);
+            path_pop_vertex(curr, &v, G);
         }
-        //        if (path_length(curr) > path_length(shortest)) {
-        //            break;
-        //        }
     }
     path_pop_vertex(curr, &v, G);
     graph_mark_unvisited(G, v);
@@ -116,5 +121,6 @@ int main(int argc, char **argv) {
     }
     path_delete(&curr);
     path_delete(&shortest);
+    graph_delete(&G);
     return 0;
 }

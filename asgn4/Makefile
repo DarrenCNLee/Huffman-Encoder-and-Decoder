@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -Werror -Wpedantic
 
 all:		tsp
 
-tsp:		tsp.o graph.o stack.o path.o
+tsp:		tsp.o graph.o stack.o path.o 
 		$(CC) -o tsp tsp.o graph.o stack.o path.o
 
 tsp.o:		tsp.c
