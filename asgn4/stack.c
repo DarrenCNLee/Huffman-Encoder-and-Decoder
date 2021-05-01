@@ -70,12 +70,12 @@ bool stack_pop(Stack *s, uint32_t *x) {
 }
 
 void stack_copy(Stack *dst, Stack *src) {
-    //    if (dst) {
-    for (uint32_t i = 0; i < stack_size(src); i++) {
-        dst->items[i] = src->items[i];
+    if (dst) {
+        for (uint32_t i = 0; i < stack_size(src); i++) {
+            dst->items[i] = src->items[i];
+        }
+        dst->top = src->top;
     }
-    dst->top = src->top;
-    //    }
 }
 
 // code provided by Professor Long in assignment pdf
