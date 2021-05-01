@@ -31,13 +31,7 @@ void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE 
             path_pop_vertex(curr, &x, G);
         }
         if ((path_vertices(curr) == graph_vertices(G) - 1) && (graph_has_edge(G, v, START_VERTEX))
-            && (path_length(shortest) == 0)) {
-            path_push_vertex(curr, START_VERTEX, G);
-            path_copy(shortest, curr);
-            path_pop_vertex(curr, &x, G);
-        }
-        if ((path_vertices(curr) == graph_vertices(G) - 1) && (graph_has_edge(G, v, START_VERTEX))
-            && (path_length(curr) < path_length(shortest))) {
+            && ((path_length(shortest) == 0) || (path_length(curr) < path_length(shortest)))) {
             path_push_vertex(curr, START_VERTEX, G);
             path_copy(shortest, curr);
             path_pop_vertex(curr, &x, G);

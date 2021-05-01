@@ -32,14 +32,6 @@ Graph *graph_create(uint32_t vertices, bool undirected) {
 
 void graph_delete(Graph **G) {
     if (*G && (*G)->vertices) {
-        //        for (uint32_t i = 0; i < (*G)->vertices; i++) {
-        //            for (uint32_t j = 0; j < (*G)->vertices; j++) {
-        //                free((*G)->matrix[i][j]);
-        //            }
-        //        }
-        //       free((*G)->undirected);
-        //       free((*G)->visited);
-        //        free((*G)->vertices);
         free(*G);
         *G = NULL;
     }
