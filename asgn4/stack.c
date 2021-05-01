@@ -83,7 +83,7 @@ void stack_print(Stack *s, FILE *outfile, char *cities[]) {
     for (uint32_t i = 0; i < s->top; i++) {
         fprintf(outfile, "%s", cities[s->items[i]]);
         if (i + 1 != s->top) {
-            printf(" -> ");
+            fprintf(outfile, " -> ");
         }
     }
     fprintf(outfile, "\n");

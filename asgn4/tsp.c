@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 #define BLOCK   4096 // code inspired by Eugene's lab section on 4/27
-#define OPTIONS "hvui:p:"
+#define OPTIONS "hvui:o:"
 
 uint32_t calls = 0, verbose = 0;
 
@@ -18,8 +18,8 @@ uint32_t calls = 0, verbose = 0;
 void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE *outfile) {
     calls++;
     uint32_t x;
-    path_push_vertex(curr, v, G);
     graph_mark_visited(G, v);
+    path_push_vertex(curr, v, G);
     for (uint32_t w = 0; w < graph_vertices(G); w++) {
         if ((path_length(curr) >= path_length(shortest)) && (path_length(shortest) != 0)) {
             continue;
@@ -40,8 +40,8 @@ void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE 
             path_pop_vertex(curr, &x, G);
         }
     }
-    graph_mark_unvisited(G, v);
     path_pop_vertex(curr, &v, G);
+    graph_mark_unvisited(G, v);
 }
 
 int main(int argc, char **argv) {
@@ -70,6 +70,14 @@ int main(int argc, char **argv) {
         case 'o': outfile = fopen(optarg, "w"); break;
         }
     }
+    if (infile == NULL) {
+        fprintf(stderr, "Error: failed to open infile.\n");
+        return 1;
+    }
+    if (outfile == NULL) {
+        fprintf(stderr, "Error: failed to open outfile.\n");
+        return 1;
+    }
     if (help) { // code for help message inspired by resources repository message
         fprintf(outfile, "SYNOPSIS\n");
         fprintf(outfile, "  Traveling Salesman Problem using DFS.\n");
@@ -85,23 +93,17 @@ int main(int argc, char **argv) {
         fprintf(outfile, "  -o outfile     Output of computed path (default: stdout)\n");
         return 0;
     }
-    if (infile == NULL) {
-        fprintf(stderr, "Error: failed to open infile.\n");
-        return 1;
-    }
-    if (outfile == NULL) {
-        fprintf(stderr, "Error: failed to open outfile.\n");
-        return 1;
-    }
     fscanf(infile, "%d", &n);
     if (n > VERTICES) {
-        fprintf(stderr, "Too many vertices\n");
+        fprintf(outfile, "Error: malformed number of vertices.\n");
         fclose(infile);
+        fclose(outfile);
         return 1;
     }
     if (n <= 0) {
-        fprintf(stderr, "There's nowhere to go.\n");
+        fprintf(outfile, "There's nowhere to go.\n");
         fclose(infile);
+        fclose(outfile);
         return 1;
     }
     char *cities[n];
@@ -117,6 +119,7 @@ int main(int argc, char **argv) {
         if (c != 3) { // code influenced by Eugene's lab section on 4/27
             fprintf(stderr, "Error: malformed edge.\n");
             fclose(infile);
+            fclose(outfile);
             for (int i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
                 free(cities[i]);
             }
@@ -128,8 +131,10 @@ int main(int argc, char **argv) {
     Path *shortest = path_create();
     dfs(G, START_VERTEX, curr, shortest, cities, outfile);
     if (path_length(shortest) == 0) {
-        fprintf(stderr, "There's nowhere to go.\n");
+        fprintf(stderr, "No Hamiltonian path found\n");
+        fprintf(outfile, "Total recursive calls: %" PRIu32 "\n", calls);
         fclose(infile);
+        fclose(outfile);
         for (int i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
             free(cities[i]);
         }
@@ -145,6 +150,8 @@ int main(int argc, char **argv) {
     for (int i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
         free(cities[i]);
     }
+    fclose(infile);
+    fclose(outfile);
     path_delete(&curr);
     path_delete(&shortest);
     graph_delete(&G);
