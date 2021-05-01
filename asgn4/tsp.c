@@ -15,7 +15,7 @@
 // calls is number of calls
 // verbose is a flag for verbose printing
 // hamiltonian is a flag for whether or not a Hamiltonian path has been found
-uint32_t calls = 0, verbose = 0, hamiltonian = 0; 
+uint32_t calls = 0, verbose = 0, hamiltonian = 0;
 
 // pseudocode for dfs given by Professor Long in assignment pdf
 void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE *outfile) {
@@ -75,11 +75,13 @@ int main(int argc, char **argv) {
         }
     }
     if (infile == NULL) {
-        fprintf(stderr, "Error: failed to open infile.\n"); // print error message if opening infile failed
+        fprintf(stderr,
+            "Error: failed to open infile.\n"); // print error message if opening infile failed
         return 1;
     }
     if (outfile == NULL) {
-        fprintf(stderr, "Error: failed to open outfile.\n"); // print error message if opening outfile failed
+        fprintf(stderr,
+            "Error: failed to open outfile.\n"); // print error message if opening outfile failed
         return 1;
     }
     if (help) { // code for help message inspired by resources repository message
@@ -121,7 +123,7 @@ int main(int argc, char **argv) {
     // code influenced by Eugene's lab section on 4/27
     while ((c = fscanf(infile, "%d %d %d \n", &i, &j, &k)) != EOF) { // read the rest of the file
         if (c != 3) { // code influenced by Eugene's lab section on 4/27
-            fprintf(stderr, "Error: malformed edge.\n"); // print error message 
+            fprintf(stderr, "Error: malformed edge.\n"); // print error message
             fclose(infile);
             fclose(outfile);
             for (int i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
