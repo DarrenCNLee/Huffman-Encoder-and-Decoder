@@ -1,3 +1,11 @@
+// Darren Lee
+// CSE13S Spring 2021
+// This program implements the solution to the traveling salesman problem
+// and a depth-first search function used to solve the problem.
+// Specify an input file (default is stdin) and output file (default is stdout).
+// There is also the -u option for an undirected graph and the -v option for
+// printing all shortest Hamiltonian paths found throughout the dfs search.
+
 #include "graph.h"
 #include "path.h"
 #include "stack.h"
@@ -20,9 +28,9 @@ uint32_t calls = 0, verbose = 0, hamiltonian = 0;
 // pseudocode for dfs given by Professor Long in assignment pdf
 void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE *outfile) {
     calls++;
-    uint32_t x; // used for popping vertices
-    graph_mark_visited(G, v);
+    uint32_t x = 0; // used for popping vertices
     path_push_vertex(curr, v, G);
+    graph_mark_visited(G, v);
     for (uint32_t w = 0; w < graph_vertices(G); w++) {
         if ((path_length(curr) >= path_length(shortest)) && (path_length(shortest) != 0)) {
             continue; // skip paths that are longer than shortest path
@@ -53,6 +61,7 @@ int main(int argc, char **argv) {
     FILE *infile = stdin, *outfile = stdout; // defaults for infile and outfile
     uint32_t help = 0, undirect = 0;
     int opt, c, i, j, k, n;
+    char *read;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'h':
@@ -101,7 +110,7 @@ int main(int argc, char **argv) {
     }
     fscanf(infile, "%d", &n); // read number of vertices
     if (n > VERTICES) { // print error if number of vertices is too large
-        fprintf(outfile, "Error: malformed number of vertices.\n");
+        fprintf(stderr, "Error: malformed number of vertices.\n");
         fclose(infile);
         fclose(outfile);
         return 1;
@@ -115,15 +124,23 @@ int main(int argc, char **argv) {
     char *cities[n];
     fgets(buffer, BLOCK, infile); // go to next line in input file
     for (int i = 0, j = 1; j <= n; i++, j++) {
-        fgets(buffer, BLOCK, infile); // code influenced by Eugene's lab section on 4/27
+        read = fgets(buffer, BLOCK, infile); // code influenced by Eugene's lab section on 4/27
         strtok(buffer, "\n"); // remove new line character from city names
+        if (read == NULL) {
+            fprintf(stderr,
+                "Error: malformed city name.\n"); // print error message if a malformed city name is read
+            fclose(infile);
+            fclose(outfile);
+            return 1;
+        }
         cities[i] = strdup(buffer); // initialize the names in the cities array
     }
     Graph *G = graph_create(n, undirect);
     // code influenced by Eugene's lab section on 4/27
     while ((c = fscanf(infile, "%d %d %d \n", &i, &j, &k)) != EOF) { // read the rest of the file
         if (c != 3) { // code influenced by Eugene's lab section on 4/27
-            fprintf(stderr, "Error: malformed edge.\n"); // print error message
+            fprintf(stderr,
+                "Error: malformed edge.\n"); // print error message if a malformed edge is read
             fclose(infile);
             fclose(outfile);
             for (int i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
@@ -131,16 +148,17 @@ int main(int argc, char **argv) {
             }
             return 1;
         }
-        graph_add_edge(G, i, j, k);
+        graph_add_edge(G, i, j, k); // add edges to the graph
     }
     Path *curr = path_create();
     Path *shortest = path_create();
-    dfs(G, START_VERTEX, curr, shortest, cities, outfile);
-    if (!hamiltonian) {
-        fprintf(stderr, "No Hamiltonian path found\n");
+    dfs(G, START_VERTEX, curr, shortest, cities, outfile); // perform dfs on graph
+    if (!hamiltonian) { // if there is no Hamiltonian path found, print a message and the number of calls
+        fprintf(outfile, "No Hamiltonian path found.\n");
         fprintf(outfile, "Total recursive calls: %" PRIu32 "\n", calls);
         fclose(infile);
         fclose(outfile);
+        // free allocated memory
         for (int i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
             free(cities[i]);
         }
@@ -153,6 +171,7 @@ int main(int argc, char **argv) {
     fprintf(outfile, "Path: ");
     path_print(shortest, outfile, cities);
     fprintf(outfile, "Total recursive calls: %" PRIu32 "\n", calls);
+    // free allocated memory
     for (int i = 0; i < n; i++) { // code influenced by Eugene's lab section on 4/27
         free(cities[i]);
     }
