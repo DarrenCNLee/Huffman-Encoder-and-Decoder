@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// code for graph struct provided by Professor Long in assignment pdf
 struct Graph {
     uint32_t vertices;
     bool undirected;

@@ -11,6 +11,7 @@
 #include <inttypes.h>
 #include <stdlib.h>
 
+// code for path struct provided by Professor Long in assignment pdf
 struct Path {
     Stack *vertices;
     uint32_t length;

@@ -12,7 +12,7 @@ of 26 vertices for a graph.
 ## Build
 	$ make
 ## Running
-	$ ./tsp [-hvu] [-i infile] [-o outfile]
+	$ ./tsp [-uvh] [-i infile] [-o outfile]
 	
 	-u Specifies that the graph is undirected
 	-v Enables verbose printing so all successively shortest 
@@ -41,7 +41,7 @@ of 26 vertices for a graph.
 	vertices.h - Contains definitions for the START_VERTEX and VERTICES
 	macros
 
-	tsp.c - Contains program code for the dfs function and the solution
+	tsp.c - Contains program code for the dfs and main functions and the solution
 	to the Traveling Salesman Problem
 
 	Makefile - Contains directives for building and cleaning the tsp program

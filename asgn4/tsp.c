@@ -132,8 +132,8 @@ int main(int argc, char **argv) {
                 "Error: malformed city name.\n"); // print error message if a malformed city name is read
             fclose(infile);
             fclose(outfile);
-            for (int j = 0; j < num_cities; j++) {
-                free(cities[j]);
+            for (int k = 0; k < num_cities; k++) {
+                free(cities[k]);
             }
             return 1;
         }

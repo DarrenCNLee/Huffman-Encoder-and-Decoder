@@ -7,12 +7,14 @@
 #include <inttypes.h>
 #include <stdlib.h>
 
+// code for stack struct provided by Professor Long in assignment 3 pdf
 struct Stack {
     uint32_t top;
     uint32_t capacity;
     uint32_t *items;
 };
 
+// code for stack_create provided by Professor Long in assignment 3 pdf
 Stack *stack_create(uint32_t capacity) {
     Stack *s = (Stack *) malloc(sizeof(Stack));
     if (s) {
@@ -27,6 +29,7 @@ Stack *stack_create(uint32_t capacity) {
     return s;
 }
 
+// code for stack_delete provided by Professor Long in assignment 3 pdf
 void stack_delete(Stack **s) {
     if (*s && (*s)->items) {
         free((*s)->items); // free the stack's items
@@ -60,8 +63,6 @@ bool stack_peek(Stack *s, uint32_t *x) {
     if (stack_empty(s)) { // return false if the stack is empty
         return false;
     }
-    //    stack_pop(s, x);
-    //    stack_push(s, *x);
     *x = s->items[s->top - 1]; // pass last added item to x
     return true;
 }
