@@ -62,6 +62,7 @@ int main(int argc, char **argv) {
     uint32_t help = 0, undirect = 0;
     int opt, c, i, j, k, n;
     char *read;
+    int num_cities = 0;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'h':
@@ -131,8 +132,12 @@ int main(int argc, char **argv) {
                 "Error: malformed city name.\n"); // print error message if a malformed city name is read
             fclose(infile);
             fclose(outfile);
+            for (int j = 0; j < num_cities; j++) {
+                free(cities[j]);
+            }
             return 1;
         }
+        num_cities++;
         cities[i] = strdup(buffer); // initialize the names in the cities array
     }
     Graph *G = graph_create(n, undirect);
