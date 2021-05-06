@@ -3,6 +3,7 @@
 #include "bv.h"
 
 #include <assert.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,7 +22,7 @@ BitMatrix *bm_create(uint32_t rows, uint32_t cols) {
         return NULL;
     }
     for (uint32_t i = 0; i < rows * cols; i++) {
-        m->vector[i] = 0;
+        bv_clr_bit(m->vector, i);
     }
     return m;
 }
@@ -53,38 +54,45 @@ uint8_t bm_get_bit(BitMatrix *m, uint32_t r, uint32_t c) {
 
 BitMatrix *bm_from_data(uint8_t byte, uint32_t length) {
     assert(length <= BYTE_SIZE);
-    BitMatrix *b = bm_create(1, BYTE_SIZE);
     BitMatrix *m = bm_create(1, length);
     for (uint32_t i = 0; i < length; i++) {
-        if (bm_get_bit(b, 1, i)) {
+        if (byte & (1 << i)) {
             bm_set_bit(m, 1, i);
+        } else {
+            bm_clr_bit(m, 1, i);
         }
     }
     return m;
 }
 
 uint8_t bm_to_data(BitMatrix *m) {
-    return m >> (m->rows * m->cols - BYTE_SIZE);
+    uint8_t byte = 0;
+    for (int i = 0; i < BYTE_SIZE; i++) {
+        if (bm_get_bit(m, 1, i)) {
+            byte &= (1 << i);
+        }
+    }
+    return byte >> (m->rows * m->cols - BYTE_SIZE);
 }
 
 BitMatrix *bm_multiply(BitMatrix *A, BitMatrix *B) {
+    uint32_t c[A->rows * B->cols];
     BitMatrix *m = bm_create(A->rows, B->cols);
-    for (uint32_t k = 0; k < A->rows * b->cols; k++) {
+    for (uint32_t k = 0; k < A->rows * B->cols; k++) {
         for (uint32_t i = 0; i < A->cols; i++) {
             for (uint32_t j = 0; j < B->rows; j++) {
-                m->vector[k] += bm_get_bit(A, i, j) * bm_get_bit(B, j, i);
+                c[k] += bm_get_bit(A, i, j) * bm_get_bit(B, j, i);
             }
         }
-        m->vector[k] %= 2;
+        if (c[k] % 2) {
+            bv_set_bit(m->vector, k);
+        } else {
+            bv_clr_bit(m->vector, k);
+        }
     }
     return m;
 }
 
 void bm_print(BitMatrix *m) {
-    for (uint32_t i = 0; i < m->rows; i++) {
-        for (uint32_t j = 0; j < m->cols; j++) {
-            printf("%" PRIu32, m->vector(i * m->rows + j));
-        }
-        printf("\n");
-    }
+    bv_print(m->vector);
 }

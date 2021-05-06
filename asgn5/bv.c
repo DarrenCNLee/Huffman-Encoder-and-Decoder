@@ -50,6 +50,7 @@ void bv_xor_bit(BitVector *v, uint32_t i, uint8_t bit) {
 
 void bv_print(BitVector *v) {
     for (uint32_t i = 0; i < bv_length(v); i++) {
-        printf("%" PRIu32 "\n", v->vector[i]);
+        printf("%" PRIu32, v->vector[i]);
     }
+    printf("\n");
 }
