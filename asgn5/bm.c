@@ -18,6 +18,9 @@ struct BitMatrix {
 
 BitMatrix *bm_create(uint32_t rows, uint32_t cols) {
     BitMatrix *m = (BitMatrix *) malloc(sizeof(BitMatrix));
+    m->vector = bv_create(rows * cols);
+    m->rows = rows;
+    m->cols = cols;
     if (!m) {
         return NULL;
     }
@@ -77,6 +80,9 @@ uint8_t bm_to_data(BitMatrix *m) {
 
 BitMatrix *bm_multiply(BitMatrix *A, BitMatrix *B) {
     uint32_t c[A->rows * B->cols];
+    for (uint32_t l = 0; l < A->rows * B->cols; l++) {
+        c[l] = 0;
+    }
     BitMatrix *m = bm_create(A->rows, B->cols);
     for (uint32_t k = 0; k < A->rows * B->cols; k++) {
         for (uint32_t i = 0; i < A->cols; i++) {
@@ -95,4 +101,27 @@ BitMatrix *bm_multiply(BitMatrix *A, BitMatrix *B) {
 
 void bm_print(BitMatrix *m) {
     bv_print(m->vector);
+}
+
+int main(void) {
+
+    BitMatrix *G = bm_create(4, 8);
+    bm_set_bit(G, 0, 0);
+    bm_set_bit(G, 0, 5);
+    bm_set_bit(G, 0, 6);
+    bm_set_bit(G, 0, 7);
+    bm_set_bit(G, 1, 1);
+    bm_set_bit(G, 1, 4);
+    bm_set_bit(G, 1, 6);
+    bm_set_bit(G, 1, 7);
+    bm_set_bit(G, 2, 2);
+    bm_set_bit(G, 2, 4);
+    bm_set_bit(G, 2, 5);
+    bm_set_bit(G, 2, 7);
+    bm_set_bit(G, 3, 3);
+    bm_set_bit(G, 3, 4);
+    bm_set_bit(G, 3, 5);
+    bm_set_bit(G, 3, 6);
+    bm_print(G);
+    return 0;
 }

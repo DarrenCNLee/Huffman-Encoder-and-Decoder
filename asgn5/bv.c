@@ -12,7 +12,10 @@ struct BitVector {
 
 BitVector *bv_create(uint32_t length) {
     BitVector *v = (BitVector *) malloc(sizeof(BitVector));
-    if (!v) {
+    v->vector = (uint8_t *) calloc(length, sizeof(uint8_t));
+    v->length = length;
+    if (!v->vector) {
+        free(v);
         return NULL;
     }
     for (uint32_t i = 0; i < length; i++) {
@@ -50,7 +53,15 @@ void bv_xor_bit(BitVector *v, uint32_t i, uint8_t bit) {
 
 void bv_print(BitVector *v) {
     for (uint32_t i = 0; i < bv_length(v); i++) {
-        printf("%" PRIu32, v->vector[i]);
+        printf("%" PRIu8 " ", v->vector[i]);
     }
     printf("\n");
+}
+
+int main(void) {
+    BitVector *v = bv_create(4);
+    bv_set_bit(v, 2);
+    bv_set_bit(v, 3);
+    bv_print(v);
+    return 0;
 }
