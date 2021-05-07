@@ -31,6 +31,7 @@ BitMatrix *bm_create(uint32_t rows, uint32_t cols) {
 }
 
 void bm_delete(BitMatrix **m) {
+    bv_delete(&(*m)->vector);
     free(*m);
     *m = NULL;
 }
@@ -44,15 +45,15 @@ uint32_t bm_cols(BitMatrix *m) {
 }
 
 void bm_set_bit(BitMatrix *m, uint32_t r, uint32_t c) {
-    bv_set_bit(m->vector, r * m->rows + c);
+    bv_set_bit(m->vector, r * bm_cols(m) + c);
 }
 
 void bm_clr_bit(BitMatrix *m, uint32_t r, uint32_t c) {
-    bv_clr_bit(m->vector, r * m->rows + c);
+    bv_clr_bit(m->vector, r * bm_cols(m) + c);
 }
 
 uint8_t bm_get_bit(BitMatrix *m, uint32_t r, uint32_t c) {
-    return bv_get_bit(m->vector, r * m->rows + c);
+    return bv_get_bit(m->vector, r * bm_cols(m) + c);
 }
 
 BitMatrix *bm_from_data(uint8_t byte, uint32_t length) {
@@ -79,49 +80,35 @@ uint8_t bm_to_data(BitMatrix *m) {
 }
 
 BitMatrix *bm_multiply(BitMatrix *A, BitMatrix *B) {
-    uint32_t c[A->rows * B->cols];
+    uint8_t c[A->rows * B->cols];
     for (uint32_t l = 0; l < A->rows * B->cols; l++) {
         c[l] = 0;
     }
     BitMatrix *m = bm_create(A->rows, B->cols);
-    for (uint32_t k = 0; k < A->rows * B->cols; k++) {
-        for (uint32_t i = 0; i < A->cols; i++) {
-            for (uint32_t j = 0; j < B->rows; j++) {
-                c[k] += bm_get_bit(A, i, j) * bm_get_bit(B, j, i);
+    for (uint32_t i = 0; i < A->rows; i++) {
+        for (uint32_t j = 0; j < B->cols; j++) {
+            for (uint32_t k = 0; k < A->cols; k++) {
+                c[i * B->cols + j] += (bm_get_bit(A, i, k) * bm_get_bit(B, k, j));
             }
         }
-        if (c[k] % 2) {
-            bv_set_bit(m->vector, k);
+    }
+    for (uint32_t l = 0; l < A->rows * B->cols; l++) {
+        if (c[l] % 2) {
+            bv_set_bit(m->vector, l);
         } else {
-            bv_clr_bit(m->vector, k);
+            bv_clr_bit(m->vector, l);
         }
     }
     return m;
 }
 
 void bm_print(BitMatrix *m) {
-    bv_print(m->vector);
-}
-
-int main(void) {
-
-    BitMatrix *G = bm_create(4, 8);
-    bm_set_bit(G, 0, 0);
-    bm_set_bit(G, 0, 5);
-    bm_set_bit(G, 0, 6);
-    bm_set_bit(G, 0, 7);
-    bm_set_bit(G, 1, 1);
-    bm_set_bit(G, 1, 4);
-    bm_set_bit(G, 1, 6);
-    bm_set_bit(G, 1, 7);
-    bm_set_bit(G, 2, 2);
-    bm_set_bit(G, 2, 4);
-    bm_set_bit(G, 2, 5);
-    bm_set_bit(G, 2, 7);
-    bm_set_bit(G, 3, 3);
-    bm_set_bit(G, 3, 4);
-    bm_set_bit(G, 3, 5);
-    bm_set_bit(G, 3, 6);
-    bm_print(G);
-    return 0;
+    for (uint32_t j = 0; j < bm_rows(m); j++) {
+        for (uint32_t i = 0; i < bm_cols(m); i++) {
+            printf("%" PRIu8 " ", bm_get_bit(m, j, i));
+            if (i == bm_cols(m) - 1) {
+                printf("\n");
+            }
+        }
+    }
 }

@@ -13,7 +13,7 @@ error:		error.o
 		$(CC) -o error error.o
 
 entropy:	entropy.o
-		$(CC) -o entropy entropy.o
+		$(CC) -o entropy entropy.o -lm
 
 encode.o:	encode.c
 		$(CC) $(CFLAGS) -c encode.c

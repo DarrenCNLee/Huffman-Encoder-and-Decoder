@@ -44,24 +44,20 @@ void bv_clr_bit(BitVector *v, uint32_t i) {
 }
 
 uint8_t bv_get_bit(BitVector *v, uint32_t i) {
-    return (v->vector[i / 8] % 8) >> (i & 1);
+    return (v->vector[i / 8] & (1 << (i % 8))) >> (i % 8);
 }
 
 void bv_xor_bit(BitVector *v, uint32_t i, uint8_t bit) {
-    bv_set_bit(v, bv_get_bit(v, i) ^ bit);
+    if (bv_get_bit(v, i) ^ bit) {
+        bv_set_bit(v, i);
+    } else {
+        bv_clr_bit(v, i);
+    }
 }
 
 void bv_print(BitVector *v) {
     for (uint32_t i = 0; i < bv_length(v); i++) {
-        printf("%" PRIu8 " ", v->vector[i]);
+        printf("%" PRIu8 " ", bv_get_bit(v, i));
     }
     printf("\n");
-}
-
-int main(void) {
-    BitVector *v = bv_create(4);
-    bv_set_bit(v, 2);
-    bv_set_bit(v, 3);
-    bv_print(v);
-    return 0;
 }
