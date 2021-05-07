@@ -60,10 +60,8 @@ BitMatrix *bm_from_data(uint8_t byte, uint32_t length) {
     assert(length <= BYTE_SIZE);
     BitMatrix *m = bm_create(1, length);
     for (uint32_t i = 0; i < length; i++) {
-        if (byte & (1 << i)) {
-            bm_set_bit(m, 1, i);
-        } else {
-            bm_clr_bit(m, 1, i);
+        if ((byte >> i) & 1) {
+            bm_set_bit(m, 0, i);
         }
     }
     return m;
@@ -71,32 +69,26 @@ BitMatrix *bm_from_data(uint8_t byte, uint32_t length) {
 
 uint8_t bm_to_data(BitMatrix *m) {
     uint8_t byte = 0;
-    for (int i = 0; i < BYTE_SIZE; i++) {
-        if (bm_get_bit(m, 1, i)) {
-            byte &= (1 << i);
+    for (uint32_t i = 0; i < BYTE_SIZE; i++) {
+        if (bm_get_bit(m, 0, i)) {
+            byte |= (1 << i);
         }
     }
-    return byte >> (m->rows * m->cols - BYTE_SIZE);
+    return byte;
 }
 
 BitMatrix *bm_multiply(BitMatrix *A, BitMatrix *B) {
-    uint8_t c[A->rows * B->cols];
-    for (uint32_t l = 0; l < A->rows * B->cols; l++) {
-        c[l] = 0;
-    }
+    uint8_t c = 0;
     BitMatrix *m = bm_create(A->rows, B->cols);
     for (uint32_t i = 0; i < A->rows; i++) {
         for (uint32_t j = 0; j < B->cols; j++) {
             for (uint32_t k = 0; k < A->cols; k++) {
-                c[i * B->cols + j] += (bm_get_bit(A, i, k) * bm_get_bit(B, k, j));
+                c += (bm_get_bit(A, i, k) * bm_get_bit(B, k, j));
             }
-        }
-    }
-    for (uint32_t l = 0; l < A->rows * B->cols; l++) {
-        if (c[l] % 2) {
-            bv_set_bit(m->vector, l);
-        } else {
-            bv_clr_bit(m->vector, l);
+            if (c % 2) {
+                bm_set_bit(m, i, j);
+            }
+            c = 0;
         }
     }
     return m;
