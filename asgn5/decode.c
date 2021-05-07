@@ -30,7 +30,7 @@ int main(int arc, char **argv) {
     while ((opt = getopt(arc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'h': break;
-        case 'i': fopen(optarg, "r"); break;
+        case 'i': fopen(optarg, "r+"); break;
         case 'o': fopen(optarg, "w"); break;
         case 'v': break;
         }
@@ -53,11 +53,12 @@ int main(int arc, char **argv) {
     bm_set_bit(Ht, 6, 2);
     bm_set_bit(Ht, 7, 3);
     while ((c = fgetc(infile)) != EOF) {
-        uint8_t code_low = lower_nibble(c);
-        uint8_t code_high = upper_nibble(c);
-        ham_decode(Ht, code_low, &msg_low);
-        ham_decode(Ht, code_high, &msg_high);
+        ham_decode(Ht, lower_nibble(c), &msg_low);
+        ham_decode(Ht, upper_nibble(c), &msg_high);
         fputc(pack_byte(msg_high, msg_low), outfile);
     }
+    fclose(infile);
+    fclose(outfile);
+    bm_delete(&Ht);
     return 0;
 }

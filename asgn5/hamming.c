@@ -29,9 +29,11 @@ HAM_STATUS ham_decode(BitMatrix *Ht, uint8_t code, uint8_t *msg) {
     BitMatrix *e = bm_multiply(c, Ht);
     uint8_t err = bm_to_data(e);
     if (err == 0) {
+        *msg = lower(bm_to_data(c));
         return HAM_OK;
     }
     if (lookup[err] == HAM_ERR) {
+        *msg = lower(bm_to_data(c));
         return HAM_ERR;
     } else {
         if (bm_get_bit(c, 0, lookup[err])) {
@@ -42,4 +44,29 @@ HAM_STATUS ham_decode(BitMatrix *Ht, uint8_t code, uint8_t *msg) {
         *msg = lower(bm_to_data(c));
         return HAM_CORRECT;
     }
+}
+int main(void) {
+    uint8_t x;
+    uint8_t *msg = &x;
+    BitMatrix *Ht = bm_create(8, 4);
+    bm_set_bit(Ht, 0, 1);
+    bm_set_bit(Ht, 0, 2);
+    bm_set_bit(Ht, 0, 3);
+    bm_set_bit(Ht, 1, 0);
+    bm_set_bit(Ht, 1, 2);
+    bm_set_bit(Ht, 1, 3);
+    bm_set_bit(Ht, 2, 0);
+    bm_set_bit(Ht, 2, 1);
+    bm_set_bit(Ht, 2, 3);
+    bm_set_bit(Ht, 3, 0);
+    bm_set_bit(Ht, 3, 1);
+    bm_set_bit(Ht, 3, 2);
+    bm_set_bit(Ht, 4, 0);
+    bm_set_bit(Ht, 5, 1);
+    bm_set_bit(Ht, 6, 2);
+    bm_set_bit(Ht, 7, 3);
+    uint8_t code = 204;
+    ham_decode(Ht, code, msg);
+    printf("%" PRIu8 "\n", *msg);
+    return 0;
 }

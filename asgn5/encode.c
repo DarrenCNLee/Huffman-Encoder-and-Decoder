@@ -50,13 +50,11 @@ int main(int argc, char **argv) {
     bm_set_bit(G, 3, 5);
     bm_set_bit(G, 3, 6);
     while ((c = fgetc(infile)) != EOF) {
-        uint8_t msg_low = lower_nibble(c);
-        uint8_t msg_high = upper_nibble(c);
-        uint8_t code_low = ham_encode(G, msg_low);
-        uint8_t code_high = ham_encode(G, msg_high);
-        fputc(code_low, outfile);
-        fputc(code_high, outfile);
+        fputc(ham_encode(G, lower_nibble(c)), outfile);
+        fputc(ham_encode(G, upper_nibble(c)), outfile);
     }
+    fclose(infile);
+    fclose(outfile);
     bm_delete(&G);
     return 0;
 }
