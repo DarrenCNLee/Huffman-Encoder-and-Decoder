@@ -30,7 +30,7 @@ int main(int arc, char **argv) {
     while ((opt = getopt(arc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'h': break;
-        case 'i': fopen(optarg, "r+"); break;
+        case 'i': fopen(optarg, "r"); break;
         case 'o': fopen(optarg, "w"); break;
         case 'v': break;
         }

@@ -18,7 +18,10 @@ uint8_t lower(uint8_t val) {
 uint8_t ham_encode(BitMatrix *G, uint8_t msg) {
     BitMatrix *m = bm_from_data(msg, NIBBLE_SIZE);
     BitMatrix *c = bm_multiply(m, G);
-    return bm_to_data(c);
+    uint8_t code = bm_to_data(c);
+    bm_delete(&m);
+    bm_delete(&c);
+    return code;
 }
 
 // code influenced by Eugene's lab section on 5/4
@@ -28,12 +31,15 @@ HAM_STATUS ham_decode(BitMatrix *Ht, uint8_t code, uint8_t *msg) {
     BitMatrix *c = bm_from_data(code, BYTE_SIZE);
     BitMatrix *e = bm_multiply(c, Ht);
     uint8_t err = bm_to_data(e);
+    bm_delete(&e);
     if (err == 0) {
         *msg = lower(bm_to_data(c));
+        bm_delete(&c);
         return HAM_OK;
     }
     if (lookup[err] == HAM_ERR) {
         *msg = lower(bm_to_data(c));
+        bm_delete(&c);
         return HAM_ERR;
     } else {
         if (bm_get_bit(c, 0, lookup[err])) {
@@ -42,6 +48,7 @@ HAM_STATUS ham_decode(BitMatrix *Ht, uint8_t code, uint8_t *msg) {
             bm_set_bit(c, 0, lookup[err]);
         }
         *msg = lower(bm_to_data(c));
+        bm_delete(&c);
         return HAM_CORRECT;
     }
 }

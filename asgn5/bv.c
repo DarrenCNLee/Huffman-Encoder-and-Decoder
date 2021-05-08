@@ -25,6 +25,7 @@ BitVector *bv_create(uint32_t length) {
 }
 
 void bv_delete(BitVector **v) {
+    free((*v)->vector);
     free(*v);
     (*v) = NULL;
 }
