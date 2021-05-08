@@ -53,8 +53,10 @@ int main(int arc, char **argv) {
     bm_set_bit(Ht, 6, 2);
     bm_set_bit(Ht, 7, 3);
     while ((c = fgetc(infile)) != EOF) {
-        ham_decode(Ht, lower_nibble(c), &msg_low);
-        ham_decode(Ht, upper_nibble(c), &msg_high);
+        int c_low = lower_nibble(fgetc(infile));
+        int c_high = upper_nibble(fgetc(infile));
+        ham_decode(Ht, (c_low), &msg_low);
+        ham_decode(Ht, (c_high), &msg_high);
         fputc(pack_byte(msg_high, msg_low), outfile);
     }
     fclose(infile);
