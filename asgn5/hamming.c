@@ -33,12 +33,12 @@ HAM_STATUS ham_decode(BitMatrix *Ht, uint8_t code, uint8_t *msg) {
     uint8_t err = bm_to_data(e);
     bm_delete(&e);
     if (err == 0) {
-        *msg = bm_to_data(c);
+        *msg = lower(bm_to_data(c));
         bm_delete(&c);
         return HAM_OK;
     }
     if (lookup[err] == HAM_ERR) {
-        *msg = bm_to_data(c);
+        *msg = lower(bm_to_data(c));
         bm_delete(&c);
         return HAM_ERR;
     } else {
@@ -47,7 +47,7 @@ HAM_STATUS ham_decode(BitMatrix *Ht, uint8_t code, uint8_t *msg) {
         } else {
             bm_set_bit(c, 0, lookup[err]);
         }
-        *msg = bm_to_data(c);
+        *msg = lower(bm_to_data(c));
         bm_delete(&c);
         return HAM_CORRECT;
     }
