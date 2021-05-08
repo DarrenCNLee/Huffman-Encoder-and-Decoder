@@ -24,8 +24,8 @@ uint8_t pack_byte(uint8_t upper, uint8_t lower) {
 }
 
 int main(int arc, char **argv) {
-    int opt, c;
-    uint8_t msg_low, msg_high;
+    int opt, c = 0;
+    uint8_t msg_low = 0, msg_high = 0;
     FILE *infile = stdin, *outfile = stdout;
     while ((opt = getopt(arc, argv, OPTIONS)) != -1) {
         switch (opt) {

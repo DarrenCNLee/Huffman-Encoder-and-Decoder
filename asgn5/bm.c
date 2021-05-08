@@ -78,17 +78,16 @@ uint8_t bm_to_data(BitMatrix *m) {
 }
 
 BitMatrix *bm_multiply(BitMatrix *A, BitMatrix *B) {
-    uint8_t c = 0;
     BitMatrix *m = bm_create(A->rows, B->cols);
     for (uint32_t i = 0; i < A->rows; i++) {
         for (uint32_t j = 0; j < B->cols; j++) {
+            uint8_t sum = 0;
             for (uint32_t k = 0; k < A->cols; k++) {
-                c += (bm_get_bit(A, i, k) * bm_get_bit(B, k, j));
+                sum ^= (bm_get_bit(A, i, k) & bm_get_bit(B, k, j));
             }
-            if (c % 2) {
+            if (sum) {
                 bm_set_bit(m, i, j);
             }
-            c = 0;
         }
     }
     return m;
