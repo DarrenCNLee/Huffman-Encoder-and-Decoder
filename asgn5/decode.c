@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Total bytes processed: %" PRIu32 "\n", bytes_processed);
         fprintf(stderr, "Uncorrected errors: %" PRIu32 "\n", uncorrected_errors);
         fprintf(stderr, "Corrected errors: %" PRIu32 "\n", corrected_errors);
-        fprintf(stderr, "Error rate: %f\n", (float) uncorrected_errors / (float) bytes_processed);
+        fprintf(stderr, "Error rate: %f\n", (double) uncorrected_errors / (double) bytes_processed);
     }
     fclose(infile); // close infile
     fclose(outfile); // close outfile
