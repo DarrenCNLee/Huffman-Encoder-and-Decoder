@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define BYTE_SIZE 8
+
 // struct code provided by Professor Long in assignment pdf
 struct BitVector {
     uint32_t length;
@@ -19,13 +21,13 @@ BitVector *bv_create(uint32_t length) {
     BitVector *v = (BitVector *) malloc(sizeof(BitVector));
     if (v) {
         uint32_t offset; // offset is 0 if the length is divisible by 8 and 1 if not divisible by 8
-        if (length % 8 == 0) {
+        if (length % BYTE_SIZE == 0) {
             offset = 0;
         } else {
             offset = 1;
         }
         v->vector = (uint8_t *) calloc(
-            length / 8 + offset, sizeof(uint8_t)); // allocate memory for vector
+            length / BYTE_SIZE + offset, sizeof(uint8_t)); // allocate memory for vector
         v->length = length;
         return v;
     } else { // if sufficient memory cannot be allocated, return NULL
@@ -45,18 +47,19 @@ uint32_t bv_length(BitVector *v) {
 
 // code inspired by Eugene's lab section on 5/4
 void bv_set_bit(BitVector *v, uint32_t i) {
-    v->vector[i / 8] |= (1 << (i % 8)); // OR the byte i is in with 1 left-shifted by i % 8
+    v->vector[i / BYTE_SIZE]
+        |= (1 << (i % BYTE_SIZE)); // OR the byte i is in with 1 left-shifted by i % 8
 }
 
 // code inspired by Eugene's lab section on 5/4
 void bv_clr_bit(BitVector *v, uint32_t i) {
     // AND the byte i is in with the NOT of 1 left-shifted by i % 8
-    v->vector[i / 8] &= ~(1 << (i % 8));
+    v->vector[i / BYTE_SIZE] &= ~(1 << (i % BYTE_SIZE));
 }
 
 uint8_t bv_get_bit(BitVector *v, uint32_t i) {
     // AND the byte i is in with 1 left-shifted by 1 % 8, then shift back to the right by i % 8
-    return (v->vector[i / 8] & (1 << (i % 8))) >> (i % 8);
+    return (v->vector[i / BYTE_SIZE] & (1 << (i % BYTE_SIZE))) >> (i % BYTE_SIZE);
 }
 
 void bv_xor_bit(BitVector *v, uint32_t i, uint8_t bit) {

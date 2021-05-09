@@ -8,6 +8,7 @@
 
 #include <inttypes.h>
 #include <stdio.h>
+
 #define TABLE_SIZE  16
 #define NIBBLE_SIZE 4
 #define BYTE_SIZE   8

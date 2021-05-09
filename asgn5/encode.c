@@ -5,7 +5,9 @@
 #include "hamming.h"
 
 #include <stdio.h>
+#include <sys/stat.h>
 #include <unistd.h>
+
 #define OPTIONS "hi:o:"
 
 // helper function provided by Professor Long in assignment pdf
@@ -21,6 +23,8 @@ uint8_t upper_nibble(uint8_t val) {
 }
 
 int main(int argc, char **argv) {
+    // statbuf for file permissions; code provided by Professor Long in assigment pdf
+    struct stat statbuf;
     int opt, c; // opt is for getopt, c is for fgetc
     FILE *infile = stdin, *outfile = stdout; // defaults for infile and outfile
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
@@ -54,6 +58,10 @@ int main(int argc, char **argv) {
             return 0;
         }
     }
+    // get the file permissions from infile; code from Professor Long in assignment pdf
+    fstat(fileno(infile), &statbuf);
+    // set the file permissions for outfile; code from Professor Long in assigment pdf
+    fchmod(fileno(outfile), statbuf.st_mode);
     BitMatrix *G = bm_create(4, 8); // create generator matrix
     bm_set_bit(G, 0, 0);
     bm_set_bit(G, 0, 5);

@@ -7,7 +7,9 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 #include <unistd.h>
+
 #define OPTIONS "hi:o:v"
 
 // helper function provided by Professor Long in assignment pdf
@@ -17,11 +19,12 @@ uint8_t pack_byte(uint8_t upper, uint8_t lower) {
 }
 
 int main(int argc, char **argv) {
+    // statbuf for file permissions; code provided by Professor Long in assigment pdf
+    struct stat statbuf;
     // initialize statistics
     uint32_t bytes_processed = 0, corrected_errors = 0, uncorrected_errors = 0;
-    int opt,
-        c_low = 0,
-        stat = 0; // opt is for getopt, c_low is for fgetc, stat is a flag for printing statistics
+    // opt is for getopt, c_low is for fgetc, stat is a flag for printing statistics
+    int opt, c_low = 0, stat = 0;
     uint8_t msg_low, msg_high; // for low and high message nibbles
     FILE *infile = stdin, *outfile = stdout; // defaults for infile and outfile
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
@@ -40,8 +43,8 @@ int main(int argc, char **argv) {
             fprintf(outfile, "  -i infile      Input data to decode.\n");
             fprintf(outfile, "  -o outfile     Output of decoded data.\n");
             return 0;
-        case 'i': infile = fopen(optarg, "r"); break; // if i option is specified, open the infile
-        case 'o': outfile = fopen(optarg, "w"); break; // if o option is specified, open the outfile
+        case 'i': infile = fopen(optarg, "rb"); break; // i option specifies infile
+        case 'o': outfile = fopen(optarg, "wb"); break; // o option specifies outfile
         case 'v': stat = 1; break;
         default: // if an invalid option is entered, print help message and exit program
             fprintf(outfile, "SYNOPSIS\n");
@@ -57,6 +60,10 @@ int main(int argc, char **argv) {
             return 0;
         }
     }
+    // get the file permissions from infile; code from Professor Long in assignment pdf
+    fstat(fileno(infile), &statbuf);
+    // set the file permissions for outfile; code from Professor Long in assigment pdf
+    fchmod(fileno(outfile), statbuf.st_mode);
     BitMatrix *Ht = bm_create(8, 4); // create H transpose matrix and set the bits
     bm_set_bit(Ht, 0, 1);
     bm_set_bit(Ht, 0, 2);
