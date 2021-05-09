@@ -20,12 +20,6 @@ uint8_t upper_nibble(uint8_t val) {
     return val >> 4;
 }
 
-// helper function provided by Professor Long in assignment pdf
-// Packs two nibbles into a byte
-uint8_t pack_byte(uint8_t upper, uint8_t lower) {
-    return (upper << 4) | (lower & 0xF);
-}
-
 int main(int argc, char **argv) {
     int opt, c; // opt is for getopt, c is for fgetc
     FILE *infile = stdin, *outfile = stdout; // defaults for infile and outfile
