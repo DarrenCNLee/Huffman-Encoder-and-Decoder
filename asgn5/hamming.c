@@ -38,7 +38,8 @@ HAM_STATUS ham_decode(BitMatrix *Ht, uint8_t code, uint8_t *msg) {
         return HAM_OK;
     }
     if (lookup[err] == HAM_ERR) {
-        *msg = lower(bm_to_data(c));
+        //        *msg = lower(bm_to_data(c));
+        lower(code);
         bm_delete(&c);
         return HAM_ERR;
     } else {

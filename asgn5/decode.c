@@ -1,3 +1,7 @@
+// Darren Lee
+// CSE13S
+// This program implements the Hamming Code decoder.
+
 #include "hamming.h"
 
 #include <inttypes.h>
@@ -13,18 +17,47 @@ uint8_t pack_byte(uint8_t upper, uint8_t lower) {
 }
 
 int main(int argc, char **argv) {
-    int opt, c_low = 0;
-    uint8_t msg_low, msg_high;
-    FILE *infile = stdin, *outfile = stdout;
+    uint32_t bytes_processed = 0;
+    uint32_t corrected_errors = 0;
+    uint32_t uncorrected_errors = 0;
+    int opt,
+        c_low = 0,
+        stat = 0; // opt is for getopt, c_low is for fgetc, stat is a flag for printing statistics
+    uint8_t msg_low, msg_high; // for low and high message nibbles
+    FILE *infile = stdin, *outfile = stdout; // defaults for infile and outfile
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
-        case 'h': break;
-        case 'i': fopen(optarg, "r"); break;
-        case 'o': fopen(optarg, "w"); break;
-        case 'v': break;
+        case 'h': // if h option is specified, print help message and exit program after
+            fprintf(outfile, "SYNOPSIS\n");
+            fprintf(outfile, "  A Hamming(8, 4) systematic code decoder.\n");
+            fprintf(outfile, "\n");
+            fprintf(outfile, "USAGE\n");
+            fprintf(outfile, "  ./decode [-h] [-v] [-i infile] [-o outfile]\n");
+            fprintf(outfile, "\n");
+            fprintf(outfile, "OPTIONS\n");
+            fprintf(outfile, "  -h             Program usage and help.\n");
+            fprintf(outfile, "  -v             Print statistics of decoding to stderr.\n");
+            fprintf(outfile, "  -i infile      Input data to decode.\n");
+            fprintf(outfile, "  -o outfile     Output of decoded data.\n");
+            return 0;
+        case 'i': infile = fopen(optarg, "r"); break; // if i option is specified, open the infile
+        case 'o': outfile = fopen(optarg, "w"); break; // if o option is specified, open the outfile
+        case 'v': stat = 1; break;
+        default: // if an invalid option is entered, print help message and exit program
+            fprintf(outfile, "SYNOPSIS\n");
+            fprintf(outfile, "  A Hamming(8, 4) systematic code decoder.\n");
+            fprintf(outfile, "\n");
+            fprintf(outfile, "USAGE\n");
+            fprintf(outfile, "  ./decode [-h] [-v] [-i infile] [-o outfile]\n");
+            fprintf(outfile, "\n");
+            fprintf(outfile, "OPTIONS\n");
+            fprintf(outfile, "  -h             Program usage and help.\n");
+            fprintf(outfile, "  -v             Print statistics of decoding to stderr.\n");
+            fprintf(outfile, "  -i infile      Input data to decode.\n");
+            return 0;
         }
     }
-    BitMatrix *Ht = bm_create(8, 4);
+    BitMatrix *Ht = bm_create(8, 4); // create H transpose matrix and set the bits
     bm_set_bit(Ht, 0, 1);
     bm_set_bit(Ht, 0, 2);
     bm_set_bit(Ht, 0, 3);
@@ -41,13 +74,35 @@ int main(int argc, char **argv) {
     bm_set_bit(Ht, 5, 1);
     bm_set_bit(Ht, 6, 2);
     bm_set_bit(Ht, 7, 3);
-    while ((c_low = fgetc(infile)) != EOF) {
-        ham_decode(Ht, c_low, &msg_low);
-        ham_decode(Ht, fgetc(infile), &msg_high);
-        fputc(pack_byte(msg_high, msg_low), outfile);
+    while ((c_low = fgetc(infile)) != EOF) { // read infile till end of file
+        HAM_STATUS status_low
+            = (ham_decode(Ht, c_low, &msg_low)); // decode the lower nibble of the message
+        if (status_low == HAM_CORRECT) {
+            corrected_errors++; // increment corrected_errors if an error has been corrected
+        }
+        if (status_low == HAM_ERR) {
+            uncorrected_errors++; // increment uncorrected_errors if an error cannot be corrected
+        }
+        HAM_STATUS status_high
+            = ham_decode(Ht, fgetc(infile), &msg_high); // decode the upper nibble of the message
+        if (status_high == HAM_CORRECT) {
+            corrected_errors++; // increment corrected_errors if an error has been corrected
+        }
+        if (status_low == HAM_ERR) {
+            uncorrected_errors++; // increment uncorrected_errors if an error cannot be corrected
+        }
+        fputc(pack_byte(msg_high, msg_low),
+            outfile); // print the upper and lower nibbles packed back into a byte to the outfile
+        bytes_processed++; // increment bytes_processed
     }
-    fclose(infile);
-    fclose(outfile);
-    bm_delete(&Ht);
+    if (stat) { // if stat flag is 1, print the statistics for the decoder
+        fprintf(outfile, "Total bytes processed: %" PRIu32 "\n", bytes_processed);
+        fprintf(outfile, "Uncorrected errors: %" PRIu32 "\n", uncorrected_errors);
+        fprintf(outfile, "Corrected errors: %" PRIu32 "\n", corrected_errors);
+        fprintf(outfile, "Error rate: %f\n", (float) uncorrected_errors / (float) bytes_processed);
+    }
+    fclose(infile); // close infile
+    fclose(outfile); // close outfile
+    bm_delete(&Ht); // free memory allocated for H transpose matrix
     return 0;
 }

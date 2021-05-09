@@ -1,3 +1,7 @@
+// Darren Lee
+// CSE13S
+// This program implements the Hamming Code encoder.
+
 #include "hamming.h"
 
 #include <stdio.h>
@@ -23,16 +27,39 @@ uint8_t pack_byte(uint8_t upper, uint8_t lower) {
 }
 
 int main(int argc, char **argv) {
-    int opt, c;
-    FILE *infile = stdin, *outfile = stdout;
+    int opt, c; // opt is for getopt, c is for fgetc
+    FILE *infile = stdin, *outfile = stdout; // defaults for infile and outfile
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
-        case 'h': break;
-        case 'i': infile = fopen(optarg, "r"); break;
-        case 'o': outfile = fopen(optarg, "w"); break;
+        case 'h': // if h option is selected, print out help message and exit program
+            fprintf(outfile, "SYNOPSIS\n");
+            fprintf(outfile, "  A Hamming(8, 4) systematic code generator.\n");
+            fprintf(outfile, "\n");
+            fprintf(outfile, "USAGE\n");
+            fprintf(outfile, "  ./encode [-h] [-i infile] [-o outfile]\n");
+            fprintf(outfile, "\n");
+            fprintf(outfile, "OPTIONS\n");
+            fprintf(outfile, "  -h             Program usage and help.\n");
+            fprintf(outfile, "  -i infile      Input data to encode.\n");
+            fprintf(outfile, "  -o outfile     Output of encoded data.\n");
+            return 0;
+        case 'i': infile = fopen(optarg, "r"); break; // i option specifies infile
+        case 'o': outfile = fopen(optarg, "w"); break; // o option specifies outfile
+        default: // print help message and exit the program if an invalid option is entered
+            fprintf(outfile, "SYNOPSIS\n");
+            fprintf(outfile, "  A Hamming(8, 4) systematic code generator.\n");
+            fprintf(outfile, "\n");
+            fprintf(outfile, "USAGE\n");
+            fprintf(outfile, "  ./encode [-h] [-i infile] [-o outfile]\n");
+            fprintf(outfile, "\n");
+            fprintf(outfile, "OPTIONS\n");
+            fprintf(outfile, "  -h             Program usage and help.\n");
+            fprintf(outfile, "  -i infile      Input data to encode.\n");
+            fprintf(outfile, "  -o outfile     Output of encoded data.\n");
+            return 0;
         }
     }
-    BitMatrix *G = bm_create(4, 8);
+    BitMatrix *G = bm_create(4, 8); // create generator matrix
     bm_set_bit(G, 0, 0);
     bm_set_bit(G, 0, 5);
     bm_set_bit(G, 0, 6);
@@ -49,12 +76,14 @@ int main(int argc, char **argv) {
     bm_set_bit(G, 3, 4);
     bm_set_bit(G, 3, 5);
     bm_set_bit(G, 3, 6);
-    while ((c = fgetc(infile)) != EOF) {
-        fputc(ham_encode(G, lower_nibble(c)), outfile);
-        fputc(ham_encode(G, upper_nibble(c)), outfile);
+    while ((c = fgetc(infile)) != EOF) { // read infile till end of file
+        fputc(ham_encode(G, lower_nibble(c)),
+            outfile); // encode the lower nibble and print it to the outfile
+        fputc(ham_encode(G, upper_nibble(c)),
+            outfile); // encode the upper nibble and print it to the outfile
     }
-    fclose(infile);
-    fclose(outfile);
-    bm_delete(&G);
+    fclose(infile); // close infile
+    fclose(outfile); // close outfile
+    bm_delete(&G); // free the memory for the generator matrix
     return 0;
 }
