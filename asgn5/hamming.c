@@ -4,7 +4,7 @@
 
 #include "hamming.h"
 
-#include "bm.h"
+#include "stat.h"
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -45,6 +45,7 @@ HAM_STATUS ham_decode(BitMatrix *Ht, uint8_t code, uint8_t *msg) {
     }
     if (lookup[err] == HAM_ERR) {
         // if there is more than one error, do not modify message and return HAM_ERR
+        uncorrected_errors++;
         bm_delete(&c);
         return HAM_ERR;
     } else { // otherwise, correct the message and return HAM_CORRECT

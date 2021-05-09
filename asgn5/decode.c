@@ -3,6 +3,7 @@
 // This program implements the Hamming Code decoder.
 
 #include "hamming.h"
+#include "stat.h"
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -22,7 +23,7 @@ int main(int argc, char **argv) {
     // statbuf for file permissions; code provided by Professor Long in assigment pdf
     struct stat statbuf;
     // initialize statistics
-    uint32_t bytes_processed = 0, corrected_errors = 0, uncorrected_errors = 0;
+    uint32_t bytes_processed = 0, corrected_errors = 0;
     // opt is for getopt, c_low is for fgetc, stat is a flag for printing statistics
     int opt, c_low = 0, stat = 0;
     uint8_t msg_low, msg_high; // for low and high message nibbles
@@ -87,17 +88,17 @@ int main(int argc, char **argv) {
         if (status_low == HAM_CORRECT) {
             corrected_errors++; // increment corrected_errors if an error has been corrected
         }
-        if (status_low == HAM_ERR) {
-            uncorrected_errors++; // increment uncorrected_errors if an error cannot be corrected
-        }
+        // if (status_low == HAM_ERR) {
+        //     uncorrected_errors++; // increment uncorrected_errors if an error cannot be corrected
+        // }
         HAM_STATUS status_high
             = ham_decode(Ht, fgetc(infile), &msg_high); // decode the upper nibble of the message
         if (status_high == HAM_CORRECT) {
             corrected_errors++;
         }
-        if (status_low == HAM_ERR) {
-            uncorrected_errors++;
-        }
+        //     if (status_low == HAM_ERR) {
+        //         uncorrected_errors++;
+        //    }
         bytes_processed += 2; // increment bytes_processed
         fputc(pack_byte(msg_high, msg_low), outfile); // print the packed byte to the outfile
     }

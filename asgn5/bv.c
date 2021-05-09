@@ -4,6 +4,7 @@
 
 #include "bv.h"
 
+#include <assert.h>
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,8 +27,8 @@ BitVector *bv_create(uint32_t length) {
         } else {
             offset = 1;
         }
-        v->vector = (uint8_t *) calloc(
-            length / BYTE_SIZE + offset, sizeof(uint8_t)); // allocate memory for vector
+        // allocate memory for vector
+        v->vector = (uint8_t *) calloc(length / BYTE_SIZE + offset, sizeof(uint8_t));
         v->length = length;
         return v;
     } else { // if sufficient memory cannot be allocated, return NULL
@@ -63,11 +64,9 @@ uint8_t bv_get_bit(BitVector *v, uint32_t i) {
 }
 
 void bv_xor_bit(BitVector *v, uint32_t i, uint8_t bit) {
-    if (bv_get_bit(v, i) ^ bit) {
-        bv_set_bit(v, i); // set the bit if XORing the bit gives 1
-    } else {
-        bv_clr_bit(v, i); // clear the bit if XORing the bit gives 0
-    }
+    assert(bit <= 1); // a bit is either 0 or 1
+    v->vector[i / BYTE_SIZE]
+        ^= (bit << (i % BYTE_SIZE)); // XOR the byte i is in with the bit left-shifted by i % 8
 }
 
 void bv_print(BitVector *v) {

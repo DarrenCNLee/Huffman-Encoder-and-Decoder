@@ -27,8 +27,8 @@ error.o: 	error.c
 entropy.o:	entropy.c
 		$(CC) $(CFLAGS) -c entropy.c
 
-hamming.o:	hamming.c  
-		$(CC) $(CFLAGS) -c hamming.c
+hamming.o:	hamming.c 
+		$(CC) $(CFLAGS) -c hamming.c 
 
 bm.o:		bm.c
 		$(CC) $(CFLAGS) -c bm.c
