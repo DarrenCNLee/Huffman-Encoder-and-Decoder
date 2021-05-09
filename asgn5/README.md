@@ -4,7 +4,7 @@ CruzID: danalee
 
 Spring 2021
 # Assignment 5: Hamming Codes
-This program implements a encoder and decoder that use the Hamming (8,4)
+This program implements an encoder and decoder that use the Hamming (8,4)
 systematic code to encode and decode messages. This allows one error to be
 corrected and multiple errors to be detected. If the program can correct the
 error, it does so and decodes the message. If there is no error, the message
@@ -55,4 +55,4 @@ program does not modify the message.
 
 	hamming.h - Contains the interface for the Hamming Code module
 
-	WRITEUP.pdf - Contains graphs showing the amount of entropy before and after encoding and analysis of the graphs.
+	WRITEUP.pdf - Contains graphs showing the amount of entropy before and after encoding and analysis of the graphs
