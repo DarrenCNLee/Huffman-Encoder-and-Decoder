@@ -27,6 +27,7 @@ int main(int argc, char **argv) {
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'h': // if h option is specified, print help message and exit program after
+            // error message inspired by program in resources repository
             fprintf(outfile, "SYNOPSIS\n");
             fprintf(outfile, "  A Hamming(8, 4) systematic code decoder.\n");
             fprintf(outfile, "\n");
@@ -85,14 +86,13 @@ int main(int argc, char **argv) {
         HAM_STATUS status_high
             = ham_decode(Ht, fgetc(infile), &msg_high); // decode the upper nibble of the message
         if (status_high == HAM_CORRECT) {
-            corrected_errors++; // increment corrected_errors if an error has been corrected
+            corrected_errors++;
         }
         if (status_low == HAM_ERR) {
-            uncorrected_errors++; // increment uncorrected_errors if an error cannot be corrected
+            uncorrected_errors++;
         }
         bytes_processed += 2; // increment bytes_processed
-        fputc(pack_byte(msg_high, msg_low),
-            outfile); // print the upper and lower nibbles packed back into a byte to the outfile
+        fputc(pack_byte(msg_high, msg_low), outfile); // print the packed byte to the outfile
     }
     if (stat) { // if stat flag is 1, print the statistics for the decoder to stderr
         fprintf(stderr, "Total bytes processed: %" PRIu32 "\n", bytes_processed);

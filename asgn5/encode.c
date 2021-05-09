@@ -26,6 +26,7 @@ int main(int argc, char **argv) {
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'h': // if h option is selected, print out help message and exit program
+            // error message inspired by program in resources repository
             fprintf(outfile, "SYNOPSIS\n");
             fprintf(outfile, "  A Hamming(8, 4) systematic code generator.\n");
             fprintf(outfile, "\n");
