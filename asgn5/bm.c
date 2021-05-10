@@ -26,6 +26,11 @@ BitMatrix *bm_create(uint32_t rows, uint32_t cols) {
         m->vector = bv_create(rows * cols);
         m->rows = rows;
         m->cols = cols;
+        if (!m->vector) {
+            bv_delete(&m->vector);
+            free(m);
+            m = NULL;
+        }
         return m;
     } else {
         return NULL; // return NULL if sufficient memory cannot be allocated
@@ -33,9 +38,11 @@ BitMatrix *bm_create(uint32_t rows, uint32_t cols) {
 }
 
 void bm_delete(BitMatrix **m) {
-    bv_delete(&(*m)->vector); // delete the bit vector
-    free(*m); // free the bit matrix
-    *m = NULL; // set the bit matrix pointer to NULL
+    if (*m && (*m)->vector) {
+        bv_delete(&(*m)->vector); // delete the bit vector
+        free(*m); // free the bit matrix
+        *m = NULL; // set the bit matrix pointer to NULL
+    }
 }
 
 uint32_t bm_rows(BitMatrix *m) {
@@ -85,8 +92,8 @@ BitMatrix *bm_multiply(BitMatrix *A, BitMatrix *B) {
         for (uint32_t j = 0; j < B->cols; j++) {
             uint8_t sum = 0;
             for (uint32_t k = 0; k < A->cols; k++) {
-                sum ^= (bm_get_bit(A, i, k)
-                        & bm_get_bit(B, k, j)); // get dot product of A's row and B's column
+                // get dot product of A's row and B's column
+                sum ^= (bm_get_bit(A, i, k) & bm_get_bit(B, k, j));
             }
             if (sum) { // if the sum is 1, set the bit in the product bit matrix
                 bm_set_bit(m, i, j);
@@ -97,10 +104,10 @@ BitMatrix *bm_multiply(BitMatrix *A, BitMatrix *B) {
 }
 
 void bm_print(BitMatrix *m) {
-    for (uint32_t j = 0; j < bm_rows(m); j++) {
-        for (uint32_t i = 0; i < bm_cols(m); i++) {
-            printf("%" PRIu8 " ", bm_get_bit(m, j, i));
-            if (i == bm_cols(m) - 1) { // print each row of the bit matrix
+    for (uint32_t i = 0; i < bm_rows(m); i++) {
+        for (uint32_t j = 0; j < bm_cols(m); j++) {
+            printf("%" PRIu8 " ", bm_get_bit(m, i, j));
+            if (j == bm_cols(m) - 1) { // print each row of the bit matrix
                 printf("\n");
             }
         }

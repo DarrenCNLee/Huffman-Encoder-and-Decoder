@@ -8,6 +8,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -44,8 +45,12 @@ int main(int argc, char **argv) {
             fprintf(outfile, "  -i infile      Input data to decode.\n");
             fprintf(outfile, "  -o outfile     Output of decoded data.\n");
             return 0;
-        case 'i': infile = fopen(optarg, "rb"); break; // i option specifies infile
-        case 'o': outfile = fopen(optarg, "wb"); break; // o option specifies outfile
+        case 'i': // i option specifies infile
+            infile = fopen(optarg, "rb");
+            break;
+        case 'o': // o option specifies outfile
+            outfile = fopen(optarg, "wb");
+            break;
         case 'v': stat = 1; break;
         default: // if an invalid option is entered, print help message and exit program
             fprintf(outfile, "SYNOPSIS\n");
@@ -58,8 +63,16 @@ int main(int argc, char **argv) {
             fprintf(outfile, "  -h             Program usage and help.\n");
             fprintf(outfile, "  -v             Print statistics of decoding to stderr.\n");
             fprintf(outfile, "  -i infile      Input data to decode.\n");
-            return 0;
+            return 1;
         }
+    }
+    if (infile == NULL) { // print error message if opening infile failed
+        fprintf(stderr, "Error: failed to open infile.\n");
+        return 1;
+    }
+    if (outfile == NULL) { // print error message if opening outfile failed
+        fprintf(stderr, "Error: failed to open outfile.\n");
+        return 1;
     }
     // get the file permissions from infile; code from Professor Long in assignment pdf
     fstat(fileno(infile), &statbuf);
@@ -83,22 +96,16 @@ int main(int argc, char **argv) {
     bm_set_bit(Ht, 6, 2);
     bm_set_bit(Ht, 7, 3);
     while ((c_low = fgetc(infile)) != EOF) { // read infile till end of file
-        HAM_STATUS status_low
-            = (ham_decode(Ht, c_low, &msg_low)); // decode the lower nibble of the message
+        // decode the lower nibble of the message
+        HAM_STATUS status_low = ham_decode(Ht, c_low, &msg_low);
         if (status_low == HAM_CORRECT) {
             corrected_errors++; // increment corrected_errors if an error has been corrected
         }
-        // if (status_low == HAM_ERR) {
-        //     uncorrected_errors++; // increment uncorrected_errors if an error cannot be corrected
-        // }
-        HAM_STATUS status_high
-            = ham_decode(Ht, fgetc(infile), &msg_high); // decode the upper nibble of the message
+        // decode the upper nibble of the message
+        HAM_STATUS status_high = ham_decode(Ht, fgetc(infile), &msg_high);
         if (status_high == HAM_CORRECT) {
             corrected_errors++;
         }
-        //     if (status_low == HAM_ERR) {
-        //         uncorrected_errors++;
-        //    }
         bytes_processed += 2; // increment bytes_processed
         fputc(pack_byte(msg_high, msg_low), outfile); // print the packed byte to the outfile
     }

@@ -5,6 +5,7 @@
 #include "hamming.h"
 
 #include <stdio.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -42,8 +43,12 @@ int main(int argc, char **argv) {
             fprintf(outfile, "  -i infile      Input data to encode.\n");
             fprintf(outfile, "  -o outfile     Output of encoded data.\n");
             return 0;
-        case 'i': infile = fopen(optarg, "r"); break; // i option specifies infile
-        case 'o': outfile = fopen(optarg, "w"); break; // o option specifies outfile
+        case 'i': // i option specifies infile
+            infile = fopen(optarg, "rb");
+            break;
+        case 'o': // o option specifies outfile
+            outfile = fopen(optarg, "wb");
+            break;
         default: // print help message and exit the program if an invalid option is entered
             fprintf(outfile, "SYNOPSIS\n");
             fprintf(outfile, "  A Hamming(8, 4) systematic code generator.\n");
@@ -55,8 +60,16 @@ int main(int argc, char **argv) {
             fprintf(outfile, "  -h             Program usage and help.\n");
             fprintf(outfile, "  -i infile      Input data to encode.\n");
             fprintf(outfile, "  -o outfile     Output of encoded data.\n");
-            return 0;
+            return 1;
         }
+    }
+    if (infile == NULL) { // print error message if opening infile failed
+        fprintf(stderr, "Error: failed to open infile.\n");
+        return 1;
+    }
+    if (outfile == NULL) { // print error message if opening outfile failed
+        fprintf(stderr, "Error: failed to open outfile.\n");
+        return 1;
     }
     // get the file permissions from infile; code from Professor Long in assignment pdf
     fstat(fileno(infile), &statbuf);
@@ -80,10 +93,10 @@ int main(int argc, char **argv) {
     bm_set_bit(G, 3, 5);
     bm_set_bit(G, 3, 6);
     while ((c = fgetc(infile)) != EOF) { // read infile till end of file
-        fputc(ham_encode(G, lower_nibble(c)),
-            outfile); // encode the lower nibble and print it to the outfile
-        fputc(ham_encode(G, upper_nibble(c)),
-            outfile); // encode the upper nibble and print it to the outfile
+        // encode the lower nibble and print it to the outfile
+        fputc(ham_encode(G, lower_nibble(c)), outfile);
+        // encode the upper nibble and print it to the outfile
+        fputc(ham_encode(G, upper_nibble(c)), outfile);
     }
     fclose(infile); // close infile
     fclose(outfile); // close outfile

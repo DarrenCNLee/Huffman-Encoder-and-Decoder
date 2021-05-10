@@ -31,8 +31,8 @@ uint8_t ham_encode(BitMatrix *G, uint8_t msg) {
 
 // code influenced by Eugene's lab section on 5/4
 HAM_STATUS ham_decode(BitMatrix *Ht, uint8_t code, uint8_t *msg) {
-    int lookup[TABLE_SIZE] = { HAM_OK, 4, 5, HAM_ERR, 6, HAM_ERR, HAM_ERR, 3, 7, HAM_ERR,
-        HAM_ERR, // create lookup table with int array
+    // create lookup table with int array
+    int lookup[TABLE_SIZE] = { HAM_OK, 4, 5, HAM_ERR, 6, HAM_ERR, HAM_ERR, 3, 7, HAM_ERR, HAM_ERR,
         2, HAM_ERR, 1, 0, HAM_ERR };
     BitMatrix *c = bm_from_data(code, BYTE_SIZE); // create c bit matrix from the 8 bits of code
     BitMatrix *e = bm_multiply(c, Ht);

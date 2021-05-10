@@ -55,4 +55,6 @@ program does not modify the message.
 
 	hamming.h - Contains the interface for the Hamming Code module
 
+	stat.h - Contains the declaration for the uncorrected_errors variable to count how many errors are left uncorrected when decoding
+
 	WRITEUP.pdf - Contains graphs showing the amount of entropy before and after encoding and analysis of the graphs

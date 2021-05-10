@@ -17,7 +17,7 @@ struct BitVector {
     uint8_t *vector;
 };
 
-// constructore function influenced by Professor Long's code on Piazza
+// constructor function influenced by Professor Long's code on Piazza
 BitVector *bv_create(uint32_t length) {
     BitVector *v = (BitVector *) malloc(sizeof(BitVector));
     if (v) {
@@ -30,6 +30,10 @@ BitVector *bv_create(uint32_t length) {
         // allocate memory for vector
         v->vector = (uint8_t *) calloc(length / BYTE_SIZE + offset, sizeof(uint8_t));
         v->length = length;
+        if (!v->vector) {
+            free(v);
+            v = NULL;
+        }
         return v;
     } else { // if sufficient memory cannot be allocated, return NULL
         return NULL;
@@ -37,9 +41,11 @@ BitVector *bv_create(uint32_t length) {
 }
 
 void bv_delete(BitVector **v) {
-    free((*v)->vector); // free memory allocated for vector
-    free(*v); // free bit vector
-    (*v) = NULL; // set pointer to NULL
+    if (*v && (*v)->vector) {
+        free((*v)->vector); // free memory allocated for vector
+        free(*v); // free bit vector
+        *v = NULL; // set pointer to NULL
+    }
 }
 
 uint32_t bv_length(BitVector *v) {
@@ -48,8 +54,8 @@ uint32_t bv_length(BitVector *v) {
 
 // code inspired by Eugene's lab section on 5/4
 void bv_set_bit(BitVector *v, uint32_t i) {
-    v->vector[i / BYTE_SIZE]
-        |= (1 << (i % BYTE_SIZE)); // OR the byte i is in with 1 left-shifted by i % 8
+    // OR the byte i is in with 1 left-shifted by i % 8
+    v->vector[i / BYTE_SIZE] |= (1 << (i % BYTE_SIZE));
 }
 
 // code inspired by Eugene's lab section on 5/4
@@ -65,8 +71,8 @@ uint8_t bv_get_bit(BitVector *v, uint32_t i) {
 
 void bv_xor_bit(BitVector *v, uint32_t i, uint8_t bit) {
     assert(bit <= 1); // a bit is either 0 or 1
-    v->vector[i / BYTE_SIZE]
-        ^= (bit << (i % BYTE_SIZE)); // XOR the byte i is in with the bit left-shifted by i % 8
+    // XOR the byte i is in with the bit left-shifted by i % 8
+    v->vector[i / BYTE_SIZE] ^= (bit << (i % BYTE_SIZE));
 }
 
 void bv_print(BitVector *v) {
