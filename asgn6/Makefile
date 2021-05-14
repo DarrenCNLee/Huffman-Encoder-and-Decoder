@@ -1,0 +1,49 @@
+CC = clang
+CFLAGS = -Wall -Wextra -Werror -Wpedantic
+
+all:		encode decode entropy
+
+encode:		encode.o
+		$(CC) -o encode encode.o huffman.o code.o
+
+decode: 	decode.o
+		$(CC) -o decode decode.o huffman.o code.o
+
+entropy:	entropy.o
+		$(CC) -o entropy entropy.o
+
+encode.o:	encode.c
+		$(CC) $(CFLAGS) -c encode.c
+
+decode.o:	decode.c
+		$(CC) $(CFLAGS) -c decode.c
+
+entropy.o:	entropy.c
+		$(CC) $(CFLAGS) -c entropy.c
+
+huffman.o:	huffman.c
+		$(CC) $(CFLAGS) -c huffman.c
+
+code.o:		code.c
+		$(CC) $(CFLAGS) -c code.c
+
+node.o:		node.c
+		$(CC) $(CFLAGS) -c node.c
+
+pq.o:		pq.c
+		$(CC) $(CFLAGS) -c pq.c
+
+io.o:		io.c
+		$(CC) $(CLAGS) -c io.c
+
+stack.o:	stack.c
+		$(CC) $(CLAGS) -c stack.c
+
+clean:
+		rm -f encode decode entropy encode.o decode.o entropy.o huffman.o code.o
+
+format:
+		clang-format -i -style=file *.c *.h
+
+scan-build:	clean
+		scan-build make
