@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-// code provided by Professor Long in assignment pdf
+// struct code provided by Professor Long in assignment pdf
 typedef struct Code {
     uint32_t top;
     uint8_t bits[MAX_CODE_SIZE];
