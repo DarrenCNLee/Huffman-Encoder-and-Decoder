@@ -3,11 +3,11 @@ CFLAGS = -Wall -Wextra -Werror -Wpedantic
 
 all:		encode decode entropy
 
-encode:		encode.o
-		$(CC) -o encode encode.o huffman.o code.o
+encode:		encode.o huffman.o code.o node.o stack.o pq.o io.o
+		$(CC) -o encode encode.o huffman.o code.o node.o stack.o pq.o io.o
 
-decode: 	decode.o
-		$(CC) -o decode decode.o huffman.o code.o
+decode: 	decode.o huffman.o stack.o node.o
+		$(CC) -o decode decode.o huffman.o stack.o node.o
 
 entropy:	entropy.o
 		$(CC) -o entropy entropy.o
