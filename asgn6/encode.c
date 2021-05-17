@@ -18,19 +18,19 @@
 
 static uint8_t buffer[BLOCK];
 
-void postorder_tree(Node *n, FILE *outfile) {
-    // uint8_t l = 'L', i = 'I';
+void postorder_tree(Node *n, int outfile) {
+    //   uint8_t l = 'L', i = 'I';
     if (n) {
         postorder_tree(n->left, outfile);
         postorder_tree(n->right, outfile);
-        if (!n->left && !n->right) {
-            //   write_bytes(outfile, &l, 1);
-            //  write_bytes(outfile, &n->symbol, 1);
-            fprintf(outfile, "L");
-            fprintf(outfile, "%" PRIu8, n->symbol);
+        if (n->left == NULL && n->right == NULL) {
+            write(outfile, "L", 1);
+            write(outfile, &((char) n->symbol), 1);
+            //        printf("L");
+            //       printf("%c", n->symbol);
         } else {
-            //        write_bytes(outfile, &i, 1);
-            fprintf(outfile, "I");
+            write(outfile, "I", 1);
+            // printf("I");
         }
     }
 }
@@ -38,16 +38,15 @@ void postorder_tree(Node *n, FILE *outfile) {
 int main(int argc, char **argv) {
     int opt = 0, unique = 0;
     struct stat statbuf;
-    //  int infile = 0, outfile = 1;
+    int infile = 0, outfile = 1;
 
-    FILE *infile = stdin, *outfile = stdout;
+    // FILE *infile = stdin, *outfile = stdout;
 
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
-        case 'h':
-            break;
-            //   case 'i': infile = open(optarg, O_RDONLY);
-            //   case 'o': outfile = open(optarg, O_WRONLY);
+        case 'h': break;
+        case 'i': infile = open(optarg, O_RDONLY);
+        case 'o': outfile = open(optarg, O_WRONLY);
         case 'v': break;
         }
     }
@@ -55,22 +54,23 @@ int main(int argc, char **argv) {
     for (uint32_t i = 0; i < ALPHABET; i++) {
         hist[i] = 0;
     }
-    //    fstat(infile, &statbuf);
-    //   fchmod(outfile, statbuf.st_mode);
-    // for (uint32_t i = 0; i < statbuf.st_size; i++) {
-    // read_bytes(infile, buffer, 1);
-
-    //   hist[(uint8_t) buffer]++;
-    // }
-
-    int c;
-    while ((c = fgetc(infile)) != EOF) {
-        hist[c]++;
+    fstat(infile, &statbuf);
+    fchmod(outfile, statbuf.st_mode);
+    //  fstat(fileno(infile), &statbuf);
+    //  fchmod(fileno(outfile), statbuf.st_mode);
+    for (uint32_t i = 0; i < statbuf.st_size; i++) {
+        read_bytes(infile, buffer, 1);
+        hist[(uint8_t) buffer]++;
     }
+    //  int c;
+    //  while ((c = fgetc(infile)) != EOF) {
+    //      hist[c]++;
+    //  }
 
-    hist[0]++;
-    hist[255]++;
     Code table[ALPHABET];
+    for (uint32_t i = 0; i < ALPHABET; i++) {
+        table[i] = code_init();
+    }
     Node *root = build_tree(hist);
     build_codes(root, table);
     Header h;
@@ -83,24 +83,21 @@ int main(int argc, char **argv) {
     }
     h.tree_size = 3 * unique - 1;
     h.file_size = statbuf.st_size;
-    // write_bytes(outfile, (uint8_t *) &h, sizeof(Header));
-
-    write(1, &h, sizeof(Header));
-
+    write(outfile, &h, sizeof(Header));
     postorder_tree(root, outfile);
-    //  lseek(infile, 0, SEEK_SET);
-    fseek(infile, 0, SEEK_SET);
-    //    for (uint32_t i = 0; i < statbuf.st_size; i++) {
-    //        read_bytes(infile, buffer, 1);
-    //        write_code(outfile, &table[(uint8_t) buffer]);
-    //    }
-
-    while ((c = fgetc(infile)) != EOF) {
-        write_code(1, &table[(uint8_t) buffer]);
+    lseek(infile, 0, SEEK_SET);
+    // fseek(infile, 0, SEEK_SET);
+    for (uint32_t i = 0; i < statbuf.st_size; i++) {
+        read_bytes(infile, buffer, 1);
+        write_code(outfile, &table[(uint8_t) buffer]);
     }
-    //    flush_codes(outfile);
+
+    //  while ((c = fgetc(infile)) != EOF) {
+    //      write_code(1, &table[c]);
+    //  }
+    flush_codes(outfile);
     delete_tree(&root);
-    //   close(infile);
-    //  close(outfile);
+    close(infile);
+    close(outfile);
     return 0;
 }

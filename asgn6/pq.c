@@ -2,6 +2,7 @@
 
 #include "node.h"
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -55,8 +56,14 @@ bool enqueue(PriorityQueue *q, Node *n) {
     }
     // code influenced by Eugene's lab section on 5/11
     q->slot = q->tail;
-    while (q->slot != q->head
-           && q->elements[(q->slot - 1 + q->capacity) % q->capacity]->frequency > n->frequency) {
+    while ((q->slot != q->head)
+           && (q->elements[(q->slot - 1 + q->capacity) % q->capacity]->frequency > n->frequency)) {
+        q->elements[q->slot] = q->elements[(q->slot - 1 + q->capacity) % q->capacity];
+        q->slot--;
+    }
+    while ((q->slot != q->head)
+           && (q->elements[(q->slot - 1 + q->capacity) % q->capacity]->frequency == n->frequency)
+           && (q->elements[(q->slot - 1 + q->capacity) % q->capacity]->symbol > n->symbol)) {
         q->elements[q->slot] = q->elements[(q->slot - 1 + q->capacity) % q->capacity];
         q->slot--;
     }
@@ -77,7 +84,13 @@ bool dequeue(PriorityQueue *q, Node **n) {
 }
 
 void pq_print(PriorityQueue *q) {
-    for (uint32_t i = q->head; i < q->size; i++) {
-        node_print(q->elements[i]);
+    if (!pq_full(q)) {
+        for (uint32_t i = q->head; i < q->tail; i++) {
+            node_print(q->elements[i]);
+        }
+    } else {
+        for (uint32_t i = q->head; i <= (q->tail - 1 + q->capacity) % q->capacity; i++) {
+            node_print(q->elements[i]);
+        }
     }
 }
