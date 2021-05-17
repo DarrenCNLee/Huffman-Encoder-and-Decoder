@@ -5,7 +5,6 @@
 #include "io.h"
 #include "node.h"
 #include "pq.h"
-#include "stack.h"
 
 #include <fcntl.h>
 #include <inttypes.h>
@@ -19,18 +18,16 @@
 static uint8_t buffer[BLOCK];
 
 void postorder_tree(Node *n, int outfile) {
-    //   uint8_t l = 'L', i = 'I';
     if (n) {
         postorder_tree(n->left, outfile);
         postorder_tree(n->right, outfile);
         if (n->left == NULL && n->right == NULL) {
             write(outfile, "L", 1);
-            write(outfile, &((char) n->symbol), 1);
-            //        printf("L");
+            //   char c = (char) n->symbol;
+            write(outfile, &n->symbol, 1);
             //       printf("%c", n->symbol);
         } else {
             write(outfile, "I", 1);
-            // printf("I");
         }
     }
 }
@@ -58,9 +55,12 @@ int main(int argc, char **argv) {
     fchmod(outfile, statbuf.st_mode);
     //  fstat(fileno(infile), &statbuf);
     //  fchmod(fileno(outfile), statbuf.st_mode);
+    //  static uint8_t buf[BLOCK];
     for (uint32_t i = 0; i < statbuf.st_size; i++) {
-        read_bytes(infile, buffer, 1);
-        hist[(uint8_t) buffer]++;
+        static uint8_t buf[BLOCK];
+        read_bytes(infile, buf, 1);
+        //    while (read_bytes(infile, buf, 1) != 0) {
+        hist[(uint8_t) buf]++;
     }
     //  int c;
     //  while ((c = fgetc(infile)) != EOF) {
