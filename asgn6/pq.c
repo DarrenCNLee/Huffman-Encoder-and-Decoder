@@ -56,16 +56,16 @@ bool enqueue(PriorityQueue *q, Node *n) {
     }
     // code influenced by Eugene's lab section on 5/11
     q->slot = q->tail;
-    while ((q->slot > q->head)
+    while ((q->slot != q->head)
            && (q->elements[(q->slot - 1 + q->capacity) % q->capacity]->frequency > n->frequency)) {
         q->elements[q->slot] = q->elements[(q->slot - 1 + q->capacity) % q->capacity];
-        q->slot--;
+        q->slot = (q->slot - 1 + q->capacity) % q->capacity;
     }
-    while ((q->slot > q->head)
+    while ((q->slot != q->head)
            && (q->elements[(q->slot - 1 + q->capacity) % q->capacity]->frequency == n->frequency)
            && (q->elements[(q->slot - 1 + q->capacity) % q->capacity]->symbol > n->symbol)) {
         q->elements[q->slot] = q->elements[(q->slot - 1 + q->capacity) % q->capacity];
-        q->slot--;
+        q->slot = (q->slot - 1 + q->capacity) % q->capacity;
     }
     q->elements[q->slot] = n;
     q->tail = (q->tail + 1) % q->capacity;
