@@ -2,6 +2,7 @@
 
 #include "code.h"
 #include "defines.h"
+#include "io.h"
 #include "node.h"
 #include "pq.h"
 #include "stack.h"
@@ -21,9 +22,6 @@ void postorder(Node *n, Code table[static ALPHABET], Code c) {
         code_pop_bit(&c, &bit);
         if (n->left == NULL && n->right == NULL) {
             table[n->symbol] = c;
-            //    printf("table[%c]=", n->symbol);
-            //   code_print(&c);
-            //   printf("\n");
         }
     }
 }
@@ -47,36 +45,17 @@ Node *build_tree(uint64_t hist[static ALPHABET]) {
     enqueue(q, parent);
     for (uint32_t i = 0; i < ALPHABET; i++) {
         if (hist[i] > 0 && i != 0 && i != 255) {
-            //  if (hist[i] > 0 ) {
-            // Node *n = node_create(i, hist[i]);
             n = node_create(i, hist[i]);
             enqueue(q, n);
-            //    printf("enqueuing: \n");
-            //    node_print(n);
-            //    printf("\n");
         }
     }
     while (pq_size(q) > 1) {
         dequeue(q, &left);
-        //   printf("dequeuing: \n");
-        //    node_print(left);
-        //   printf("\n");
         dequeue(q, &right);
-        //   printf("dequeuing: \n");
-        //   node_print(right);
-        //   printf("\n");
-
-        // Node *parent = node_join(left, right);
         parent = node_join(left, right);
         enqueue(q, parent);
-        //   printf("enqueuing: \n");
-        //   node_print(parent);
-        //   printf("\n");
     }
     dequeue(q, &root);
-    //    printf("dequeuing: \n");
-    //    node_print(root);
-    //   printf("\n");
     return root;
 }
 
