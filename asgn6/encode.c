@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
             hist[buffer[i]]++;
         }
     }
-    static Code table[ALPHABET];
+    Code table[ALPHABET];
     Node *root = build_tree(hist);
     build_codes(root, table);
     Header h;
@@ -67,7 +67,6 @@ int main(int argc, char **argv) {
     write(outfile, &h, sizeof(Header));
     postorder_tree(root, outfile);
     lseek(infile, 0, SEEK_SET);
-    // fseek(infile, 0, SEEK_SET);
     while ((c = read_bytes(infile, buffer, BLOCK)) != 0) {
         for (int i = 0; i < c; i++) {
             write_code(outfile, &(table[buffer[i]]));

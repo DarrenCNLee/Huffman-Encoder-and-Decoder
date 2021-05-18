@@ -69,8 +69,8 @@ void write_code(int outfile, Code *c) {
 }
 
 void flush_codes(int outfile) {
-    //  int offset = bufindex % BLOCK ? 1 : 0;
+    int offset = bufindex % BLOCK ? 1 : 0;
     if (bufindex > 0) {
-        write_bytes(outfile, buffer, bufindex);
+        write_bytes(outfile, buffer + offset, bufindex);
     }
 }
