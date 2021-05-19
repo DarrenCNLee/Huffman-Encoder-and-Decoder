@@ -28,11 +28,7 @@ void postorder(Node *n, Code table[static ALPHABET], Code c) {
 
 Node *build_tree(uint64_t hist[static ALPHABET]) {
     PriorityQueue *q = pq_create(ALPHABET);
-    Node *left;
-    Node *right;
-    Node *root;
-    Node *n;
-    Node *parent;
+    Node *left, *right, *root, *n, *parent;
     for (uint32_t i = 0; i < ALPHABET; i++) {
         if (hist[i] > 0) {
             n = node_create(i, hist[i]);
