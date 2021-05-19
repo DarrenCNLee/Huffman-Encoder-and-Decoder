@@ -33,18 +33,8 @@ Node *build_tree(uint64_t hist[static ALPHABET]) {
     Node *root;
     Node *n;
     Node *parent;
-    hist[0]++;
-    hist[255]++;
-    n = node_create(0, hist[0]);
-    enqueue(q, n);
-    n = node_create(255, hist[255]);
-    enqueue(q, n);
-    dequeue(q, &left);
-    dequeue(q, &right);
-    parent = node_join(left, right);
-    enqueue(q, parent);
     for (uint32_t i = 0; i < ALPHABET; i++) {
-        if (hist[i] > 0 && i != 0 && i != 255) {
+        if (hist[i] > 0) {
             n = node_create(i, hist[i]);
             enqueue(q, n);
         }

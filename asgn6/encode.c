@@ -33,7 +33,7 @@ void postorder_tree(Node *n, int outfile) {
 int main(int argc, char **argv) {
     int opt = 0, unique = 0;
     struct stat statbuf;
-    int infile = 0, outfile = 1;
+    int infile = STDIN_FILENO, outfile = STDOUT_FILENO;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'h': break;
@@ -51,6 +51,8 @@ int main(int argc, char **argv) {
             hist[buffer[i]]++;
         }
     }
+    hist[0]++;
+    hist[255]++;
     Code table[ALPHABET];
     Node *root = build_tree(hist);
     build_codes(root, table);
@@ -64,7 +66,8 @@ int main(int argc, char **argv) {
     h.permissions = statbuf.st_mode;
     h.tree_size = 3 * unique - 1;
     h.file_size = statbuf.st_size;
-    write(outfile, &h, sizeof(Header));
+    // code inspired by Eugene's lab section on 5/18
+    write_bytes(outfile, (uint8_t *) &h, sizeof(Header));
     postorder_tree(root, outfile);
     lseek(infile, 0, SEEK_SET);
     while ((c = read_bytes(infile, buffer, BLOCK)) != 0) {
