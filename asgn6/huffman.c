@@ -40,6 +40,7 @@ Node *build_tree(uint64_t hist[static ALPHABET]) {
         enqueue(q, node_join(left, right));
     }
     dequeue(q, &root);
+    pq_delete(&q);
     return root;
 }
 
@@ -53,17 +54,16 @@ Node *rebuild_tree(uint16_t nbytes, uint8_t tree_dump[static nbytes]) {
     Node *left, *right, *root;
     for (uint16_t i = 0; i < nbytes; i++) {
         if (tree_dump[i] == 'L') {
-            Node *n = node_create(tree_dump[i + 1], 0);
-            stack_push(s, n);
+            stack_push(s, node_create(tree_dump[i + 1], 0));
             i++;
-        }
-        if (tree_dump[i] == 'I') {
+        } else if (tree_dump[i] == 'I') {
             stack_pop(s, &right);
             stack_pop(s, &left);
             stack_push(s, node_join(left, right));
         }
     }
     stack_pop(s, &root);
+    stack_delete(&s);
     return root;
 }
 
@@ -71,7 +71,6 @@ void delete_tree(Node **root) {
     if (*root) {
         delete_tree(&(*root)->left);
         delete_tree(&(*root)->right);
-        free(*root);
+        node_delete(root);
     }
-    *root = NULL;
 }

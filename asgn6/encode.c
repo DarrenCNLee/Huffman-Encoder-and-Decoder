@@ -36,7 +36,20 @@ int main(int argc, char **argv) {
     int infile = STDIN_FILENO, outfile = STDOUT_FILENO;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
-        case 'h': write(outfile, "SYNOPSIS", sizeof("SYNOPSIS")); return 0;
+        case 'h':
+            fprintf(stdout, "SYNOPSIS\n");
+            fprintf(stdout, "  A Huffman encoder.\n");
+            fprintf(stdout, "  Compresses a file using the Huffman coding algorithm.\n");
+            fprintf(stdout, "\n");
+            fprintf(stdout, "USAGE\n");
+            fprintf(stdout, "  ./encode [-h] [-i infile] [-o outfile]\n");
+            fprintf(stdout, "\n");
+            fprintf(stdout, "OPTIONS\n");
+            fprintf(stdout, "  -h             Program usage and help.\n");
+            fprintf(stdout, "  -v             Print compression statistics.\n");
+            fprintf(stdout, "  -i infile      Input file to compress.\n");
+            fprintf(stdout, "  -o outfile     Output of compressed data.\n");
+            return 1;
         case 'i': infile = open(optarg, O_RDONLY); break;
         case 'o': outfile = open(optarg, O_WRONLY); break;
         case 'v': break;

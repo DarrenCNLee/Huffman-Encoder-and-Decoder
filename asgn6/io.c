@@ -6,7 +6,7 @@
 #define BYTE_SIZE 8
 
 static uint8_t buffer[BLOCK] = { 0 };
-static uint32_t bufindex = 0;
+static uint32_t bufindex;
 
 uint8_t code_get_bit(Code *c, uint32_t i) {
     // AND the byte i is in with 1 left-shifted by 1 % 8, then shift back to the right by i % 8
@@ -56,7 +56,7 @@ int write_bytes(int outfile, uint8_t *buf, int nbytes) {
 bool read_bit(int infile, uint8_t *bit) {
     int bytes_read = 0;
     uint32_t last_bit = 0;
-    if (bufindex == 0) {
+    if (!bufindex) {
         bytes_read = read_bytes(infile, buffer, BLOCK);
         if (bytes_read < BLOCK) {
             last_bit = bytes_read * BYTE_SIZE + 1;
