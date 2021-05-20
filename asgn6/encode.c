@@ -21,7 +21,7 @@ void postorder_tree(Node *n, int outfile) {
     if (n) {
         postorder_tree(n->left, outfile);
         postorder_tree(n->right, outfile);
-        if (n->left == NULL && n->right == NULL) {
+        if (!n->left && !n->right) {
             write(outfile, "L", 1);
             write_bytes(outfile, &n->symbol, 1);
         } else {
@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
     int infile = STDIN_FILENO, outfile = STDOUT_FILENO;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
-        case 'h': break;
+        case 'h': write(outfile, "SYNOPSIS", sizeof("SYNOPSIS")); return 0;
         case 'i': infile = open(optarg, O_RDONLY); break;
         case 'o': outfile = open(optarg, O_WRONLY); break;
         case 'v': break;

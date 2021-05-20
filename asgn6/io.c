@@ -5,7 +5,7 @@
 
 #define BYTE_SIZE 8
 
-static uint8_t buffer[BLOCK];
+static uint8_t buffer[BLOCK] = { 0 };
 static uint32_t bufindex = 0;
 
 uint8_t code_get_bit(Code *c, uint32_t i) {

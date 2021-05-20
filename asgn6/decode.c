@@ -30,19 +30,19 @@ int main(int argc, char **argv) {
         case 'v': break;
         }
     }
-    read(infile, buffer, 4);
+    read_bytes(infile, buffer, 4);
     // if (*buffer != MAGIC) {
     //     return 1;
     // }
-    read(infile, buffer, 2);
+    read_bytes(infile, buffer, 2);
     //    fchmod(outfile, buffer);
-    read(infile, buffer, 2);
+    read_bytes(infile, buffer, 2);
     uint16_t tree_size = *buffer;
     //  uint8_t tree_dump[tree_size];
-    read(infile, buffer, 2);
+    read_bytes(infile, buffer, 2);
     //    uint16_t file_size = buffer[0];
     for (uint16_t i = 0; i < tree_size; i++) {
-        read(infile, buffer, 1);
+        read_bytes(infile, buffer, 1);
         //       tree_dump[i] = *buffer;
     }
     //  Node *root = rebuild_tree(tree_size, tree_dump);
