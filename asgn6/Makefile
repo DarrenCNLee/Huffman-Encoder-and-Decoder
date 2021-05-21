@@ -40,7 +40,7 @@ stack.o:	stack.c
 		$(CC) $(CFLAGS) -c stack.c
 
 clean:
-		rm -f encode decode entropy encode.o decode.o entropy.o huffman.o code.o
+		rm -f encode decode entropy encode.o decode.o entropy.o huffman.o code.o node.o pq.o io.o stack.o
 
 format:
 		clang-format -i -style=file *.c *.h
