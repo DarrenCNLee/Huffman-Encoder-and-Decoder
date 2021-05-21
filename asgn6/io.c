@@ -37,7 +37,7 @@ void buf_clr_bit(uint8_t *buf, uint32_t i) {
 // code influenced by Sahiti's lab section on 5/12
 int read_bytes(int infile, uint8_t *buf, int nbytes) {
     int total = 0, bytes = 0; // initialize total and bytes
-    while (total < nbytes) { // read until total is at least nbytes
+    while (total != nbytes) { // read until total is at least nbytes
         // read nbytes-total and store number of bytes read in bytes
         bytes = read(infile, buf, nbytes - total);
         if (!bytes) { // if bytes is 0, break the while loop
@@ -45,13 +45,14 @@ int read_bytes(int infile, uint8_t *buf, int nbytes) {
         }
         total += bytes; // total increases by bytes
     }
+    bytes_read += total;
     return total; // return total number of bytes read
 }
 
 // code influenced by Sahiti's lab section on 5/12
 int write_bytes(int outfile, uint8_t *buf, int nbytes) {
     int total = 0, bytes = 0; // initialize total and bytes
-    while (total < nbytes) { // write until total is at least nbytes
+    while (total != nbytes) { // write until total is at least nbytes
         // write nbytes-total and store the number of bytes written in bytes
         bytes = write(outfile, buf, nbytes - total);
         if (!bytes) { // if bytes is 0, break the while loop
@@ -59,18 +60,18 @@ int write_bytes(int outfile, uint8_t *buf, int nbytes) {
         }
         total += bytes; // increase total by bytes
     }
+    bytes_written += total;
     return total; // return the total number of bytes written
 }
 
 // code influenced by Eugene's lab section on 5/11
 bool read_bit(int infile, uint8_t *bit) {
-    int bytes_read = 0; // initialize bytes_read
-    uint32_t last_bit = 0; // last_bit will be the last_bit in the file
+    uint32_t last_bit = 0, read = 0; // last_bit will be the last_bit in the file
     if (!bufindex) { // if bufindex is 0 and the buffer is empty, read a block
-        bytes_read = read_bytes(infile, buffer, BLOCK);
-        if (bytes_read < BLOCK) {
-            // if the number of bytes read is less than a block, last_bit is bytes_read*8+1
-            last_bit = bytes_read * BYTE_SIZE + 1;
+        read = read_bytes(infile, buffer, BLOCK);
+        if (read < BLOCK) {
+            // if the number of bytes read is less than a block, last_bit is read*8+1
+            last_bit = read * BYTE_SIZE + 1;
         }
     }
     *bit = buf_get_bit(buffer, bufindex); // store the bit at the buffer index in the buffer in bit

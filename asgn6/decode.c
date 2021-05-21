@@ -22,8 +22,30 @@
 
 static uint8_t buffer[BLOCK] = { 0 }; // create buffer
 
+uint64_t bytes_written, bytes_read, decoded;
+
+// helper function to walk the tree
+void walk_tree(Node **walk, Node *root, int outfile, int infile) {
+    uint8_t bit;
+    if (*walk) {
+        // if the current node is a leaf, write the symbol and return to the root
+        if (!(*walk)->left && !(*walk)->right) {
+            write_bytes(outfile, &(*walk)->symbol, 1);
+            *walk = root;
+            decoded++; // increment the number of symbols decoded
+        }
+        read_bit(infile, &bit);
+        if (!bit) { // if the bit is a 0, walk down the left node
+            *walk = (*walk)->left;
+        } else { // if the bit is a 1, walk down the right node
+            *walk = (*walk)->right;
+        }
+    }
+}
+
 int main(int argc, char **argv) {
-    int opt = 0;
+    // v is a flag for printing stats
+    int opt = 0, v = 0;
     int infile = STDIN_FILENO, outfile = STDOUT_FILENO; // defaults for infile and outfile
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) { // read options
         switch (opt) {
@@ -42,7 +64,11 @@ int main(int argc, char **argv) {
             fprintf(stdout, "  -o outfile     Output of decompressed data.\n");
             return 0;
         case 'i': infile = open(optarg, O_RDONLY); break; // specify infile with i option
-        case 'o': outfile = open(optarg, O_WRONLY); break; // specify outfile with o option
+        case 'o':
+            // specify outfile with o option
+            outfile = open(optarg, O_WRONLY | O_CREAT | O_TRUNC);
+            break;
+        case 'v': v = 1; break; // specify to print statistics
         }
     }
     Header h;
@@ -51,8 +77,8 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Invalid magic number.\n");
         return 1;
     }
-    fchmod(outfile,
-        h.permissions); // set the permissions for the outfile to match the header permissions
+    // set the permissions for the outfile to match the header permissions
+    fchmod(outfile, h.permissions);
     uint16_t tree_size = h.tree_size;
     uint8_t tree_dump[tree_size]; // create a tree dump of size tree_size
     read_bytes(infile, buffer, tree_size); // read the tree dump into the buffer
@@ -61,24 +87,15 @@ int main(int argc, char **argv) {
     }
     Node *root = rebuild_tree(tree_size, tree_dump); // rebuild the tree
     Node *walk = root;
-    uint8_t bit;
-    uint64_t decoded = 0;
     // read until bits until the number of symbols decoded matches the file size
     while (decoded != h.file_size) {
-        if (walk) {
-            // if the current node is a leaf, write the symbol and return to the root
-            if (!walk->left && !walk->right) {
-                write_bytes(outfile, &walk->symbol, 1);
-                walk = root;
-                decoded++; // increment the number of symbols decoded
-            }
-            read_bit(infile, &bit);
-            if (!bit) { // if the bit is a 0, walk down the left node
-                walk = walk->left;
-            } else { // if the bit is a 1, walk down the right node
-                walk = walk->right;
-            }
-        }
+        walk_tree(&walk, root, outfile, infile);
+    }
+    if (v) { // if v flag is 1, print stats
+        fprintf(stderr, "Compressed file size: %" PRIu64 " bytes\n", bytes_read);
+        fprintf(stderr, "Decompressed file size: %" PRIu64 " bytes\n", bytes_written);
+        fprintf(stderr, "Space saving: %0.2lf%%\n",
+            (double) 100 * ((double) 1 - ((double) bytes_read / (double) bytes_written)));
     }
     delete_tree(&root);
     close(infile);
