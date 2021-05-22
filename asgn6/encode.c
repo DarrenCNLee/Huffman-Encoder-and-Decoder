@@ -37,7 +37,7 @@ void postorder_tree(Node *n, int outfile) {
 }
 
 int main(int argc, char **argv) {
-    // unique is for counting the number of unique symbols, v is a flag for printing stats
+    // unique is for counting the number of unique symbols, v is a flag for printing stats, seek is a flag for whether the file is seekable
     int opt = 0, unique = 0, v = 0;
     struct stat statbuf;
     // default infile is stdin, default outfile is stdout
@@ -65,6 +65,14 @@ int main(int argc, char **argv) {
             break;
         case 'v': v = 1; break; // specify to print statistics
         }
+    }
+    if (infile == -1) {
+        fprintf(stderr, "Error: Failed to open infile.\n");
+        return 1;
+    }
+    if (outfile == -1) {
+        fprintf(stderr, "Error: Failed to open outfile.\n");
+        return 1;
     }
     uint64_t hist[ALPHABET] = { 0 }; // create histogram
     fstat(infile, &statbuf); // get the stats of the infile

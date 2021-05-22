@@ -15,13 +15,13 @@ static uint32_t bufindex; // create buffer index
 // helper function to get the bit of a code at index i
 uint8_t code_get_bit(Code *c, uint32_t i) {
     // AND the byte i is in with 1 left-shifted by 1 % 8, then shift back to the right by i % 8
-    return (c->bits[i / BYTE_SIZE] & (1 << (i % BYTE_SIZE))) >> (i % BYTE_SIZE);
+    return (c->bits[i / BYTE_SIZE] & ((uint64_t) 1 << (i % BYTE_SIZE))) >> (i % BYTE_SIZE);
 }
 
 // helper function to get the bit of a buffer at index i
 uint8_t buf_get_bit(uint8_t *buf, uint32_t i) {
     // AND the byte i is in with 1 left-shifted by 1 % 8, then shift back to the right by i % 8
-    return (buf[i / BYTE_SIZE] & (1 << (i % BYTE_SIZE))) >> (i % BYTE_SIZE);
+    return (buf[i / BYTE_SIZE] & ((uint64_t) 1 << (i % BYTE_SIZE))) >> (i % BYTE_SIZE);
 }
 
 // helper function to set the bit of a buffer at index i to 1

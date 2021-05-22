@@ -71,6 +71,14 @@ int main(int argc, char **argv) {
         case 'v': v = 1; break; // specify to print statistics
         }
     }
+    if (infile == -1) { // if infile fails to open, print error message and exit program
+        fprintf(stderr, "Error: Failed to open infile.\n");
+        return 1;
+    }
+    if (outfile == -1) { // if outfile fails to open, print error message and exit program
+        fprintf(stderr, "Error: Failed to open outfile.\n");
+        return 1;
+    }
     Header h;
     read_bytes(infile, (uint8_t *) &h, sizeof(Header)); // read the header
     if (h.magic != MAGIC) { // print an error message if the magic number is invalid
@@ -80,6 +88,10 @@ int main(int argc, char **argv) {
     // set the permissions for the outfile to match the header permissions
     fchmod(outfile, h.permissions);
     uint16_t tree_size = h.tree_size;
+    if (tree_size > MAX_TREE_SIZE) {
+        fprintf(stdout, "Error: Invalid tree size.\n");
+        return 1;
+    }
     uint8_t tree_dump[tree_size]; // create a tree dump of size tree_size
     read_bytes(infile, buffer, tree_size); // read the tree dump into the buffer
     for (uint16_t i = 0; i < tree_size; i++) {

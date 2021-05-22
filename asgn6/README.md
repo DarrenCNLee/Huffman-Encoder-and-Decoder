@@ -13,6 +13,16 @@ reads a compressed file as input and decompresses it back to its original size.
 
 ## Building
 	$ make
+	builds the encoder, the decoder, and the entropy-measurement program
+
+	$ make encode
+	builds just the encoder
+	
+	$ make decode
+	builds just the decoder
+	
+	$ make entropy
+	builds just the entropy-measurement program
 ## Running
 	$ ./encode [-hv] [-i infile] [-o outfile]
 	

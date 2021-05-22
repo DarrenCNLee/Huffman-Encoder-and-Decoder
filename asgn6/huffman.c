@@ -35,7 +35,7 @@ Node *build_tree(uint64_t hist[static ALPHABET]) {
     PriorityQueue *q = pq_create(ALPHABET); // create a priority queue
     Node *left, *right, *root; // nodes for left, right, and root
     for (uint32_t i = 0; i < ALPHABET; i++) {
-        if (hist[i]) {
+        if (hist[i] > 0) {
             // if the histogram has a non-zero frequency for the symbol, enqueue a node with that symbol and that symbol's frequency
             enqueue(q, node_create(i, hist[i]));
         }

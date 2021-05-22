@@ -71,8 +71,9 @@ bool enqueue(PriorityQueue *q, Node *n) {
     if (pq_full(q)) {
         return false; // return false if the queue is full
     }
-    if ((n->symbol == 0 || n->symbol == 255) && n->frequency == 1) {
-        n->frequency = 0;
+    // give higher priority to 0 and 255 because we increment their counts in the histogram
+    if (n->symbol == 0 || n->symbol == 255) {
+        n->frequency--;
     }
     // code influenced by Eugene's lab section on 5/11
     q->slot = q->tail; // set slot equal to tail
@@ -88,8 +89,9 @@ bool enqueue(PriorityQueue *q, Node *n) {
         q->elements[q->slot] = q->elements[get_left(q, q->slot)];
         q->slot = get_left(q, q->slot); // move the slot to the left
     }
-    if ((n->symbol == 0 || n->symbol == 255) && n->frequency == 0) {
-        n->frequency = 1;
+    // restore the original frequency for 0 and 255
+    if (n->symbol == 0 || n->symbol == 255) {
+        n->frequency++;
     }
     q->elements[q->slot] = n; // set the element at the slot to n
     q->tail = get_right(q, q->tail); // move the tail to the right
