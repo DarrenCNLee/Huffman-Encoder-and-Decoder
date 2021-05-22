@@ -71,12 +71,15 @@ bool enqueue(PriorityQueue *q, Node *n) {
     if (pq_full(q)) {
         return false; // return false if the queue is full
     }
+    if ((n->symbol == 0 || n->symbol == 255) && n->frequency == 1) {
+        n->frequency = 0;
+    }
     // code influenced by Eugene's lab section on 5/11
     q->slot = q->tail; // set slot equal to tail
     // while the slot!=head and the element to the left of the slot has a higher frequency than the element at the slot
     while (q->slot != q->head && q->elements[get_left(q, q->slot)]->frequency > n->frequency) {
-        q->elements[q->slot] = q->elements[get_left(
-            q, q->slot)]; // copy the element to the left of the slot to the element at the slot
+        // copy the element to the left of the slot to the element at the slot
+        q->elements[q->slot] = q->elements[get_left(q, q->slot)];
         q->slot = get_left(q, q->slot); // move the slot to the left
     }
     // while the slot!=head and the frequencies of the slot and its left are equal and the symbol of the element to the left of the slot is greater than the symbol of the element at the slot
@@ -84,6 +87,9 @@ bool enqueue(PriorityQueue *q, Node *n) {
            && q->elements[get_left(q, q->slot)]->symbol > n->symbol) {
         q->elements[q->slot] = q->elements[get_left(q, q->slot)];
         q->slot = get_left(q, q->slot); // move the slot to the left
+    }
+    if ((n->symbol == 0 || n->symbol == 255) && n->frequency == 0) {
+        n->frequency = 1;
     }
     q->elements[q->slot] = n; // set the element at the slot to n
     q->tail = get_right(q, q->tail); // move the tail to the right

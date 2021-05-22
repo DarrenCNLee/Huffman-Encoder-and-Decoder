@@ -70,15 +70,15 @@ int main(int argc, char **argv) {
     fstat(infile, &statbuf); // get the stats of the infile
     fchmod(outfile, statbuf.st_mode); // set the permissions of the outfile
     int c; // c counts how many bytes are returned by read_bytes
+    hist[0]++;
+    hist[255]++;
     while ((c = read_bytes(infile, buffer, BLOCK)) != 0) {
         for (int i = 0; i < c; i++) {
             // increment the counts in the histogram for each time a symbol appears
             hist[buffer[i]]++;
         }
     }
-    hist[0]++;
-    hist[255]++;
-    Code table[ALPHABET]; // create code table
+    Code table[ALPHABET] = { 0 }; // create code table
     Node *root = build_tree(hist); // build the tree
     build_codes(root, table); // build the codes and store them in the code table
     Header h;
