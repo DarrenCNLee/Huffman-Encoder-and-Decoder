@@ -21,7 +21,6 @@
 #define BYTE_SIZE 8
 
 static uint8_t buffer[BLOCK] = { 0 }; // create buffer
-
 uint64_t bytes_written, bytes_read, decoded;
 
 // helper function to walk the tree
@@ -44,8 +43,8 @@ void walk_tree(Node **walk, Node *root, int outfile, int infile) {
 }
 
 int main(int argc, char **argv) {
-    // v is a flag for printing stats
-    int opt = 0, v = 0;
+    // v is a flag for printing stats, temp is a flag for creating a temp file
+    int opt = 0, v = 0, temp = 0;
     int infile = STDIN_FILENO, outfile = STDOUT_FILENO; // defaults for infile and outfile
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) { // read options
         switch (opt) {
@@ -79,6 +78,20 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Error: Failed to open outfile.\n");
         return 1;
     }
+    if (infile == STDIN_FILENO) { // if infile is stdin
+        temp = 1;
+        int tempfile = open("tempdecode", O_RDWR | O_CREAT); // create a temp file
+        int written;
+        // copy stdin to temp file
+        while (read_bytes(infile, buffer, 1) != 0) {
+            written = write_bytes(tempfile, buffer, 1);
+            // do not count bytes written to temp file for file size
+            bytes_written -= written;
+        }
+        fchmod(tempfile, S_IRUSR | S_IWUSR); // set temp file permissions
+        infile = tempfile; // set infile to temp file
+        lseek(infile, 0, SEEK_SET); // go back to start of infile
+    }
     Header h;
     read_bytes(infile, (uint8_t *) &h, sizeof(Header)); // read the header
     if (h.magic != MAGIC) { // print an error message if the magic number is invalid
@@ -88,7 +101,7 @@ int main(int argc, char **argv) {
     // set the permissions for the outfile to match the header permissions
     fchmod(outfile, h.permissions);
     uint16_t tree_size = h.tree_size;
-    if (tree_size > MAX_TREE_SIZE) {
+    if (tree_size > MAX_TREE_SIZE) { // if the tree size is invalid, print an error message
         fprintf(stdout, "Error: Invalid tree size.\n");
         return 1;
     }
@@ -104,12 +117,18 @@ int main(int argc, char **argv) {
         walk_tree(&walk, root, outfile, infile);
     }
     if (v) { // if v flag is 1, print stats
+        if (temp) { // if we read the infile twice, divide by 2
+            bytes_read /= 2;
+        }
         fprintf(stderr, "Compressed file size: %" PRIu64 " bytes\n", bytes_read);
         fprintf(stderr, "Decompressed file size: %" PRIu64 " bytes\n", bytes_written);
         fprintf(stderr, "Space saving: %0.2lf%%\n",
             (double) 100 * ((double) 1 - ((double) bytes_read / (double) bytes_written)));
     }
     delete_tree(&root);
+    if (temp) { // if a temp file was created
+        remove("tempdecode"); // remove it
+    }
     close(infile);
     close(outfile);
     return 0;

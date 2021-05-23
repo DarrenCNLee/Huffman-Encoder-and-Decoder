@@ -24,21 +24,22 @@ uint64_t bytes_written, bytes_read;
 
 // This function writes the tree dump to an outfile given a root node and outfile.
 void postorder_tree(Node *n, int outfile) {
+    uint8_t l = 'L', i = 'I';
     if (n) {
         postorder_tree(n->left, outfile);
         postorder_tree(n->right, outfile);
         if (!n->left && !n->right) { // check if the node is a leaf
-            bytes_written += write(outfile, "L", 1);
+            write_bytes(outfile, &l, 1);
             write_bytes(outfile, &n->symbol, 1);
         } else { // else the node is an interior node
-            bytes_written += write(outfile, "I", 1);
+            write_bytes(outfile, &i, 1);
         }
     }
 }
 
 int main(int argc, char **argv) {
     // unique is for counting the number of unique symbols, v is a flag for printing stats, seek is a flag for whether the file is seekable
-    int opt = 0, unique = 0, v = 0;
+    int opt = 0, unique = 0, v = 0, seek = 1;
     struct stat statbuf;
     // default infile is stdin, default outfile is stdout
     int infile = STDIN_FILENO, outfile = STDOUT_FILENO;
@@ -66,18 +67,33 @@ int main(int argc, char **argv) {
         case 'v': v = 1; break; // specify to print statistics
         }
     }
-    if (infile == -1) {
+    if (infile == -1) { // if the infile fails to open, print an error message and exit
         fprintf(stderr, "Error: Failed to open infile.\n");
         return 1;
     }
-    if (outfile == -1) {
+    if (outfile == -1) { // if the outfile fails to open, print an error message and exit
         fprintf(stderr, "Error: Failed to open outfile.\n");
         return 1;
+    }
+    if (infile == STDIN_FILENO) { // if the infile is stdin
+        seek = 0; // the file is not seekable
+        // tempfile = fileno(tmpfile()); // create a temporary file
+        int tempfile = open("tempencode", O_RDWR | O_CREAT);
+        int written;
+        while (read_bytes(infile, buffer, 1) != 0) {
+            written = write_bytes(tempfile, buffer, 1); // copy stdin to temp file
+            // don't count writing to temp file when counting total bytes written
+            bytes_written -= written;
+        }
+        fchmod(tempfile, S_IRUSR | S_IWUSR); // set the permissions for the temp file
+        infile = tempfile; // set the infile to the temp file
+        lseek(infile, 0, SEEK_SET); // go to the beginning of the infile
     }
     uint64_t hist[ALPHABET] = { 0 }; // create histogram
     fstat(infile, &statbuf); // get the stats of the infile
     fchmod(outfile, statbuf.st_mode); // set the permissions of the outfile
     int c; // c counts how many bytes are returned by read_bytes
+    // increment symbols 0 and 255
     hist[0]++;
     hist[255]++;
     while ((c = read_bytes(infile, buffer, BLOCK)) != 0) {
@@ -111,13 +127,23 @@ int main(int argc, char **argv) {
     }
     flush_codes(outfile); // flush codes left in the buffer
     if (v) { // if v flag is 1, print stats
-        // we read through the file twice so divide bytes_read by 2
-        fprintf(stderr, "Uncompressed file size: %" PRIu64 " bytes\n", bytes_read / 2);
+        uint64_t uncomp_size;
+        // if the file is seekable, use the header file size for uncompressed size
+        if (seek) {
+            uncomp_size = h.file_size;
+            // else we read the file 3 times, so uncompressed size is bytes_read / 3
+        } else {
+            uncomp_size = bytes_read / 3;
+        }
+        fprintf(stderr, "Uncompressed file size: %" PRIu64 " bytes\n", uncomp_size);
         fprintf(stderr, "Compressed file size: %" PRIu64 " bytes\n", bytes_written);
         fprintf(stderr, "Space saving: %.2lf%%\n",
-            (double) 100 * ((double) 1 - ((double) bytes_written / ((double) bytes_read / 2))));
+            (double) 100 * ((double) 1 - ((double) bytes_written / ((double) uncomp_size))));
     }
     delete_tree(&root);
+    if (!seek) { // if the file is not seekable, remove the temp file
+        remove("tempencode");
+    }
     close(infile);
     close(outfile);
     return 0;
