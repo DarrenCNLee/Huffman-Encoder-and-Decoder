@@ -93,7 +93,8 @@ int main(int argc, char **argv) {
     }
     if (infile == STDIN_FILENO) { // if infile is stdin
         temp = 1;
-        int tempfile = open("tempdecode", O_RDWR | O_CREAT); // create a temp file
+        // create a temp file
+        int tempfile = open("tempdecode", O_RDWR | O_CREAT | O_TRUNC, 0600);
         int written;
         // copy stdin to temp file
         while (read_bytes(infile, buffer, 1) != 0) {
@@ -101,7 +102,6 @@ int main(int argc, char **argv) {
             // do not count bytes written to temp file for file size
             bytes_written -= written;
         }
-        fchmod(tempfile, S_IRUSR | S_IWUSR); // set temp file permissions
         infile = tempfile; // set infile to temp file
         lseek(infile, 0, SEEK_SET); // go back to start of infile
     }

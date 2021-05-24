@@ -91,15 +91,14 @@ int main(int argc, char **argv) {
     }
     if (infile == STDIN_FILENO) { // if the infile is stdin
         seek = 0; // the file is not seekable
-        // tempfile = fileno(tmpfile()); // create a temporary file
-        int tempfile = open("tempencode", O_RDWR | O_CREAT);
+        // create a temp file
+        int tempfile = open("tempencode", O_RDWR | O_CREAT | O_TRUNC, 0600);
         int written;
         while (read_bytes(infile, buffer, 1) != 0) {
             written = write_bytes(tempfile, buffer, 1); // copy stdin to temp file
             // don't count writing to temp file when counting total bytes written
             bytes_written -= written;
         }
-        fchmod(tempfile, S_IRUSR | S_IWUSR); // set the permissions for the temp file
         infile = tempfile; // set the infile to the temp file
         lseek(infile, 0, SEEK_SET); // go to the beginning of the infile
     }
