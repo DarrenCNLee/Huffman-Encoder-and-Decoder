@@ -68,6 +68,19 @@ int main(int argc, char **argv) {
             outfile = open(optarg, O_WRONLY | O_CREAT | O_TRUNC);
             break;
         case 'v': v = 1; break; // specify to print statistics
+        default: // print help message and exit program if invalid option is entered
+            fprintf(stdout, "SYNOPSIS\n");
+            fprintf(stdout, "  A Huffman decoder.\n");
+            fprintf(stdout, "  Decompresses a file using the Huffman coding algorithm.\n");
+            fprintf(stdout, "\n");
+            fprintf(stdout, "USAGE\n");
+            fprintf(stdout, "  ./decode [-h] [-i infile] [-o outfile]\n");
+            fprintf(stdout, "\n");
+            fprintf(stdout, "OPTIONS\n");
+            fprintf(stdout, "  -h             Program usage and help.\n");
+            fprintf(stdout, "  -v             Print compression statistics.\n");
+            fprintf(stdout, "  -i infile      Input file to decompress.\n");
+            return 0;
         }
     }
     if (infile == -1) { // if infile fails to open, print error message and exit program
@@ -93,7 +106,10 @@ int main(int argc, char **argv) {
         lseek(infile, 0, SEEK_SET); // go back to start of infile
     }
     Header h;
-    read_bytes(infile, (uint8_t *) &h, sizeof(Header)); // read the header
+    if (read_bytes(infile, (uint8_t *) &h, sizeof(Header)) != sizeof(Header)) { // read the header
+        fprintf(stderr, "Error: unable to read header.\n");
+        return 1; // print error and exit if the header cannot be read
+    }
     if (h.magic != MAGIC) { // print an error message if the magic number is invalid
         fprintf(stderr, "Invalid magic number.\n");
         return 1;
@@ -127,7 +143,7 @@ int main(int argc, char **argv) {
     }
     delete_tree(&root);
     if (temp) { // if a temp file was created
-        remove("tempdecode"); // remove it
+        unlink("tempdecode"); // remove it
     }
     close(infile);
     close(outfile);

@@ -65,6 +65,20 @@ int main(int argc, char **argv) {
             outfile = open(optarg, O_WRONLY | O_CREAT | O_TRUNC);
             break;
         case 'v': v = 1; break; // specify to print statistics
+        default: // print help message and exit program if invalid option is entered
+            fprintf(stdout, "SYNOPSIS\n");
+            fprintf(stdout, "  A Huffman encoder.\n");
+            fprintf(stdout, "  Compresses a file using the Huffman coding algorithm.\n");
+            fprintf(stdout, "\n");
+            fprintf(stdout, "USAGE\n");
+            fprintf(stdout, "  ./encode [-h] [-i infile] [-o outfile]\n");
+            fprintf(stdout, "\n");
+            fprintf(stdout, "OPTIONS\n");
+            fprintf(stdout, "  -h             Program usage and help.\n");
+            fprintf(stdout, "  -v             Print compression statistics.\n");
+            fprintf(stdout, "  -i infile      Input file to compress.\n");
+            fprintf(stdout, "  -o outfile     Output of compressed data.\n");
+            return 0;
         }
     }
     if (infile == -1) { // if the infile fails to open, print an error message and exit
@@ -142,7 +156,7 @@ int main(int argc, char **argv) {
     }
     delete_tree(&root);
     if (!seek) { // if the file is not seekable, remove the temp file
-        remove("tempencode");
+        unlink("tempencode");
     }
     close(infile);
     close(outfile);
