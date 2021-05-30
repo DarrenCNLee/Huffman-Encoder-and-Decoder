@@ -3,8 +3,8 @@ CFLAGS= -Wall -Wextra -Werror -Wpedantic
 
 all:		banhammer
 
-banhammer:	banhammer.o
-		$(CC) -o banhammer banhammer.o
+banhammer:	banhammer.o ht.o speck.o ll.o node.o bf.o bv.o parser.o
+		$(CC) -o banhammer banhammer.o ht.o speck.o ll.o node.o bf.o bv.o parser.o
 
 banhammer.o:	banhammer.c
 		$(CC) $(CFLAGS) -c banhammer.c

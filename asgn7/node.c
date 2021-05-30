@@ -10,7 +10,7 @@
 #include <string.h>
 
 char *stringdup(char *source) {
-    char *copy = malloc(strlen(source) + 1);
+    char *copy = (char *) malloc(strlen(source) + 1);
     if (!copy) {
         return NULL;
     }
@@ -22,8 +22,18 @@ Node *node_create(char *oldspeak, char *newspeak) {
     // allocate memory for the node
     Node *n = (Node *) malloc(sizeof(Node));
     if (n) { // if the allocation succeeds
-        n->oldspeak = stringdup(oldspeak);
-        n->newspeak = stringdup(newspeak);
+        if (oldspeak) {
+            n->oldspeak = stringdup(oldspeak);
+        } else {
+            n->oldspeak = NULL;
+        }
+        if (newspeak) {
+            n->newspeak = stringdup(newspeak);
+        } else {
+            n->newspeak = NULL;
+        }
+        n->next = NULL;
+        n->prev = NULL;
         return n; // return the node
     } else { // if the allocation fails
         return NULL; // set the pointer to null
@@ -34,6 +44,8 @@ void node_delete(Node **n) {
     free((*n)->oldspeak);
     free((*n)->newspeak);
     free(*n); // free the memory for n
+    (*n)->oldspeak = NULL;
+    (*n)->newspeak = NULL;
     *n = NULL; // set the pointer to null
 }
 
