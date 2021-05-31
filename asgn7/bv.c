@@ -71,7 +71,7 @@ uint8_t bv_get_bit(BitVector *bv, uint32_t i) {
 
 void bv_print(BitVector *bv) {
     for (uint32_t i = 0; i < bv_length(bv); i++) {
-        printf("%" PRIu8 " ", bv_get_bit(bv, i)); // print each bit of the bit vector
+        printf("%" PRIu8, bv_get_bit(bv, i)); // print each bit of the bit vector
     }
     printf("\n");
 }

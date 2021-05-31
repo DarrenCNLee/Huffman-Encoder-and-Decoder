@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // struct definition provided by Professor Long in assignment pdf
 struct LinkedList {
@@ -16,8 +17,8 @@ struct LinkedList {
 LinkedList *ll_create(bool mtf) {
     LinkedList *ll = (LinkedList *) malloc(sizeof(LinkedList));
     if (ll) {
-        ll->head = node_create("head", "head");
-        ll->tail = node_create("tail", "tail");
+        ll->head = node_create(NULL, NULL);
+        ll->tail = node_create(NULL, NULL);
         ll->head->next = ll->tail;
         ll->tail->prev = ll->head;
         ll->mtf = mtf;
@@ -29,15 +30,21 @@ LinkedList *ll_create(bool mtf) {
 }
 
 void ll_delete(LinkedList **ll) {
-    Node *n;
-    for (uint32_t i = 0; i < (*ll)->length; i++) {
-        n = (*ll)->head->next;
-        (*ll)->head->next = (*ll)->head->next->next;
-        (*ll)->head->next->prev = (*ll)->head;
-        node_delete(&n);
+    if (*ll && (*ll)->head) {
+        Node *curr = (*ll)->head;
+        for (uint32_t i = 0; i < (*ll)->length; i++) {
+            if (curr->next) {
+                curr = curr->next;
+                node_delete(&curr);
+            } else {
+                break;
+            }
+        }
+        node_delete(&(*ll)->head);
+        node_delete(&(*ll)->tail);
+        free(*ll);
+        *ll = NULL;
     }
-    free(*ll);
-    *ll = NULL;
 }
 
 uint32_t ll_length(LinkedList *ll) {
@@ -49,7 +56,7 @@ Node *ll_lookup(LinkedList *ll, char *oldspeak) {
         Node *curr = ll->head;
         for (uint32_t i = 0; i < ll->length; i++) {
             curr = curr->next;
-            if (curr->oldspeak == oldspeak) {
+            if (!strcmp(curr->oldspeak, oldspeak)) {
                 if (ll->mtf) {
                     curr->prev->next = curr->next;
                     curr->next->prev = curr->prev;
@@ -57,8 +64,8 @@ Node *ll_lookup(LinkedList *ll, char *oldspeak) {
                     curr->prev = ll->head;
                     ll->head->next->prev = curr;
                     ll->head->next = curr;
-                    return curr;
                 }
+                return curr;
             }
         }
     }

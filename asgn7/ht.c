@@ -64,6 +64,8 @@ uint32_t ht_count(HashTable *ht) {
 
 void ht_print(HashTable *ht) {
     for (uint32_t i = 0; i < ht->size; i++) {
-        ll_print(ht->lists[i]);
+        if (ht->lists[i]) {
+            ll_print(ht->lists[i]);
+        }
     }
 }
