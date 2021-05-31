@@ -30,21 +30,17 @@ LinkedList *ll_create(bool mtf) {
 }
 
 void ll_delete(LinkedList **ll) {
-    if (*ll && (*ll)->head) {
-        Node *curr = (*ll)->head;
-        for (uint32_t i = 0; i < (*ll)->length; i++) {
-            if (curr->next) {
-                curr = curr->next;
-                node_delete(&curr);
-            } else {
-                break;
-            }
+    Node *curr = (*ll)->head;
+    for (uint32_t i = 0; i < (*ll)->length; i++) {
+        if (curr) {
+            curr = curr->next;
+            node_delete(&curr);
         }
-        node_delete(&(*ll)->head);
-        node_delete(&(*ll)->tail);
-        free(*ll);
-        *ll = NULL;
     }
+    node_delete(&(*ll)->head);
+    node_delete(&(*ll)->tail);
+    free(*ll);
+    *ll = NULL;
 }
 
 uint32_t ll_length(LinkedList *ll) {

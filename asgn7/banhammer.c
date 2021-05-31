@@ -4,6 +4,7 @@
 #include "parser.h"
 #include "speck.h"
 
+#include <ctype.h>
 #include <regex.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,7 +17,7 @@ int main(int argc, char **argv) {
     // code inspired by assignment pdf
     regex_t re;
     int opt, c, stats = 0, thoughtcrime = 0, counseling = 0;
-    char old[32], new[32];
+    char old[2048], new[2048];
     bool mtf = false;
     uint64_t hash_size = 10000, bloom_size = 1 << 20;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
@@ -79,7 +80,8 @@ int main(int argc, char **argv) {
     fclose(new_file);
     char *word;
     Node *n;
-    while ((word = next_word(stdin, &re)) != NULL) {
+    while (word = (next_word(stdin, &re)) != NULL) {
+        word[0] = tolower(word[0]);
         if (bf_probe(bf, word)) {
             n = ht_lookup(ht, word);
             if (n) {
