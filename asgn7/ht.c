@@ -41,11 +41,11 @@ uint32_t ht_size(HashTable *ht) {
 }
 
 Node *ht_lookup(HashTable *ht, char *oldspeak) {
-    return ll_lookup(ht->lists[hash(ht->salt, oldspeak)], oldspeak);
+    return ll_lookup(ht->lists[hash(ht->salt, oldspeak) % ht_size(ht)], oldspeak);
 }
 
 void ht_insert(HashTable *ht, char *oldspeak, char *newspeak) {
-    uint32_t index = hash(ht->salt, oldspeak);
+    uint32_t index = hash(ht->salt, oldspeak) % ht_size(ht);
     if (!ht->lists[index]) {
         ht->lists[index] = ll_create(ht->mtf);
     }

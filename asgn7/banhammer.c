@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
     // code inspired by assignment pdf
     regex_t re;
     int opt, c, stats = 0, thoughtcrime = 0, counseling = 0;
-    char *old, *new;
+    char old[32], new[32];
     bool mtf = false;
     uint64_t hash_size = 10000, bloom_size = 1 << 20;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {

@@ -16,8 +16,10 @@ struct LinkedList {
 LinkedList *ll_create(bool mtf) {
     LinkedList *ll = (LinkedList *) malloc(sizeof(LinkedList));
     if (ll) {
-        ll->head = node_create(NULL, NULL);
-        ll->tail = node_create(NULL, NULL);
+        ll->head = node_create("head", "head");
+        ll->tail = node_create("tail", "tail");
+        ll->head->next = ll->tail;
+        ll->tail->prev = ll->head;
         ll->mtf = mtf;
         ll->length = 0;
         return ll;
@@ -27,10 +29,12 @@ LinkedList *ll_create(bool mtf) {
 }
 
 void ll_delete(LinkedList **ll) {
+    Node *n;
     for (uint32_t i = 0; i < (*ll)->length; i++) {
-        node_delete(&(*ll)->head->next);
+        n = (*ll)->head->next;
         (*ll)->head->next = (*ll)->head->next->next;
-        (*ll)->head->next->next->prev = (*ll)->head;
+        (*ll)->head->next->prev = (*ll)->head;
+        node_delete(&n);
     }
     free(*ll);
     *ll = NULL;
@@ -41,18 +45,20 @@ uint32_t ll_length(LinkedList *ll) {
 }
 
 Node *ll_lookup(LinkedList *ll, char *oldspeak) {
-    Node *curr = ll->head;
-    for (uint32_t i = 0; i < ll->length; i++) {
-        curr = curr->next;
-        if (curr->oldspeak == oldspeak) {
-            if (ll->mtf) {
-                curr->prev->next = curr->next;
-                curr->next->prev = curr->prev;
-                curr->next = ll->head->next;
-                curr->prev = ll->head;
-                ll->head->next->prev = curr;
-                ll->head->next = curr;
-                return curr;
+    if (ll) {
+        Node *curr = ll->head;
+        for (uint32_t i = 0; i < ll->length; i++) {
+            curr = curr->next;
+            if (curr->oldspeak == oldspeak) {
+                if (ll->mtf) {
+                    curr->prev->next = curr->next;
+                    curr->next->prev = curr->prev;
+                    curr->next = ll->head->next;
+                    curr->prev = ll->head;
+                    ll->head->next->prev = curr;
+                    ll->head->next = curr;
+                    return curr;
+                }
             }
         }
     }

@@ -51,6 +51,9 @@ void node_delete(Node **n) {
 
 // print function provided by Professor Long in assignment pdf
 void node_print(Node *n) {
-    printf("%s -> %s\n", n->oldspeak, n->newspeak);
-    printf("%s\n", n->oldspeak);
+    if (n->oldspeak && n->newspeak) {
+        printf("%s -> %s\n", n->oldspeak, n->newspeak);
+    } else if (n->oldspeak) {
+        printf("%s\n", n->oldspeak);
+    }
 }
