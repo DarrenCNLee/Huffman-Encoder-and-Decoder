@@ -8,15 +8,16 @@
 #include <regex.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
-#define OPTIONS "htfms"
-#define WORD    "[_a-zA-Z0-9'-]+"
+#define OPTIONS "ht:f:ms"
+#define WORD    "[a-zA-Z0-9_'-]+"
 
 int main(int argc, char **argv) {
     // code inspired by assignment pdf
     regex_t re;
-    int opt, c, stats = 0, thoughtcrime = 0, counseling = 0;
+    int opt, stats = 0, thoughtcrime = 0, counseling = 0;
     char old[2048], new[2048];
     bool mtf = false;
     uint64_t hash_size = 10000, bloom_size = 1 << 20;
@@ -67,21 +68,23 @@ int main(int argc, char **argv) {
     LinkedList *bad_list = ll_create(mtf);
     LinkedList *right_list = ll_create(mtf);
     FILE *bad_file = fopen("badspeak.txt", "r");
-    while ((c = fscanf(bad_file, "%s\n", old)) != EOF) {
+    while (fscanf(bad_file, "%s\n", old) != EOF) {
         bf_insert(bf, old);
         ht_insert(ht, old, NULL);
     }
     fclose(bad_file);
     FILE *new_file = fopen("newspeak.txt", "r");
-    while ((c = fscanf(new_file, "%s %s\n", old, new)) != EOF) {
+    while (fscanf(new_file, "%s %s\n", old, new) != EOF) {
         bf_insert(bf, old);
         ht_insert(ht, old, new);
     }
     fclose(new_file);
     char *word;
     Node *n;
-    while (word = (next_word(stdin, &re)) != NULL) {
-        word[0] = tolower(word[0]);
+    while ((word = (next_word(stdin, &re))) != NULL) {
+        for (uint32_t i = 0; i < strlen(word); i++) {
+            word[i] = tolower(word[i]);
+        }
         if (bf_probe(bf, word)) {
             n = ht_lookup(ht, word);
             if (n) {
