@@ -12,7 +12,7 @@
 #include <unistd.h>
 
 #define OPTIONS "ht:f:ms"
-#define WORD    "[a-zA-Z0-9_'-]+"
+#define WORD    "(\\w+['-]?\\w+['-]?\\w+|\\w|\\w+['-]?\\w+)+"
 
 int main(int argc, char **argv) {
     // code inspired by assignment pdf
@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
     char *word;
     Node *n;
     while ((word = (next_word(stdin, &re))) != NULL) {
-        for (uint32_t i = 0; i < strlen(word); i++) {
+        for (uint32_t i = 0; i < strlen(word) + 1; i++) {
             word[i] = tolower(word[i]);
         }
         if (bf_probe(bf, word)) {
