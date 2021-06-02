@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+uint64_t seeks, links;
+
 // struct definition provided by Professor Long in assignment pdf
 struct LinkedList {
     uint32_t length;
@@ -30,17 +32,16 @@ LinkedList *ll_create(bool mtf) {
 }
 
 void ll_delete(LinkedList **ll) {
-    Node *curr = (*ll)->head;
-    for (uint32_t i = 0; i < (*ll)->length; i++) {
-        if (curr) {
-            curr = curr->next;
+    if (*ll) {
+        Node *curr = (*ll)->head;
+        while (curr) {
+            Node *next = curr->next;
             node_delete(&curr);
+            curr = next;
         }
+        free(*ll);
+        *ll = NULL;
     }
-    node_delete(&(*ll)->head);
-    node_delete(&(*ll)->tail);
-    free(*ll);
-    *ll = NULL;
 }
 
 uint32_t ll_length(LinkedList *ll) {
@@ -49,6 +50,7 @@ uint32_t ll_length(LinkedList *ll) {
 
 Node *ll_lookup(LinkedList *ll, char *oldspeak) {
     if (ll) {
+        seeks++;
         Node *curr = ll->head;
         for (uint32_t i = 0; i < ll->length; i++) {
             curr = curr->next;
@@ -63,6 +65,7 @@ Node *ll_lookup(LinkedList *ll, char *oldspeak) {
                 }
                 return curr;
             }
+            links++;
         }
     }
     return NULL;

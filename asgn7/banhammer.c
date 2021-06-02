@@ -5,6 +5,7 @@
 #include "speck.h"
 
 #include <ctype.h>
+#include <inttypes.h>
 #include <regex.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,7 +13,7 @@
 #include <unistd.h>
 
 #define OPTIONS "ht:f:ms"
-#define WORD    "(\\w+['-]?\\w+['-]?\\w+|\\w|\\w+['-]?\\w+)+"
+#define WORD    "\\w+([-']\\w+)*"
 
 int main(int argc, char **argv) {
     // code inspired by assignment pdf
@@ -20,7 +21,7 @@ int main(int argc, char **argv) {
     int opt, stats = 0, thoughtcrime = 0, counseling = 0;
     char old[2048], new[2048];
     bool mtf = false;
-    uint64_t hash_size = 10000, bloom_size = 1 << 20;
+    uint64_t hash_size = 10000, bloom_size = 1048576;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'h': // help message inspired by resources repository program
@@ -82,7 +83,7 @@ int main(int argc, char **argv) {
     char *word;
     Node *n;
     while ((word = (next_word(stdin, &re))) != NULL) {
-        for (uint32_t i = 0; i < strlen(word) + 1; i++) {
+        for (uint32_t i = 0; i < strlen(word); i++) {
             word[i] = tolower(word[i]);
         }
         if (bf_probe(bf, word)) {
@@ -91,7 +92,7 @@ int main(int argc, char **argv) {
                 if (n->newspeak) {
                     ll_insert(right_list, word, n->newspeak);
                     counseling = 1;
-                } else {
+                } else if (!n->newspeak) {
                     ll_insert(bad_list, word, NULL);
                     thoughtcrime = 1;
                 }
@@ -110,6 +111,11 @@ int main(int argc, char **argv) {
             printf("%s", goodspeak_message);
             ll_print(right_list);
         }
+    } else if (stats) {
+        printf("Seeks: %" PRIu64 "\n", seeks);
+        printf("Average seek length: %.6lf\n", (double) links / (double) seeks);
+        printf("Hash table load: %.6lf%%\n", 100 * (double) ht_count(ht) / (double) ht_size(ht));
+        printf("Bloom filter load: %.6lf%%\n", 100 * (double) bf_count(bf) / (double) bf_size(bf));
     }
     ll_delete(&bad_list);
     ll_delete(&right_list);
