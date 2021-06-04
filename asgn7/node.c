@@ -14,7 +14,7 @@ char *stringdup(char *source) {
     if (!copy) {
         return NULL;
     }
-    strcpy(copy, source);
+    strncpy(copy, source, strlen(source) + 1);
     return copy;
 }
 
