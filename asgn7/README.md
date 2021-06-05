@@ -8,7 +8,7 @@ This program implements a Bloom filter that checks for badspeak and oldspeak wor
 and issues warnings based on what crimes the citizen using these words has committed.
 The Bloom filter uses a SPECK block cipher as a has function to create a hash table.
 The hash table stores translations from oldspeak to newspeak as well as oldspeak words
-without translatsions, known as badspeak words. Linked lists are used in the hash table
+without translations, known as badspeak words. Linked lists are used in the hash table
 to resolve hash collisions.
 
 ## Building
@@ -29,7 +29,7 @@ to resolve hash collisions.
 	speck.h - contains interface for the SPECK cipher hash function
 	speck.c - provided by course repo, contains the implementation of the SPECK cipher hash function
 	ht.h - contains the interface for the hash table ADT
-	ht.c - contains the implmentation for the hash table ADT
+	ht.c - contains the implementation for the hash table ADT
 	ll.h - contains the interface for the linked list ADT
 	ll.c - contains the implementation for the linked list ADT
 	node.h - contains the interface for the node ADT

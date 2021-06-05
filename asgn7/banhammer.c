@@ -142,7 +142,7 @@ int main(int argc, char **argv) {
     while (fscanf(new_file, "%s %s\n", old, new) != EOF) {
         // insert the oldspeak into the Bloom filter
         bf_insert(bf, old);
-        //insert the oldspeak and newspeak pairs into the hash table
+        // insert the oldspeak and newspeak pairs into the hash table
         ht_insert(ht, old, new);
     }
     fclose(new_file);
