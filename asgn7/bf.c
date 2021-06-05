@@ -1,3 +1,7 @@
+// Darren Lee
+// CSE13S
+// This program implements the Bloom filter ADT.
+
 #include "bf.h"
 
 #include "bv.h"
@@ -33,9 +37,11 @@ BloomFilter *bf_create(uint32_t size) {
 }
 
 void bf_delete(BloomFilter **bf) {
-    bv_delete(&(*bf)->filter);
-    free(*bf);
-    *bf = NULL;
+    if (*bf) {
+        bv_delete(&(*bf)->filter); // delete the filter
+        free(*bf); // free the Bloom filter
+        *bf = NULL; // set the pointer to null
+    }
 }
 
 uint32_t bf_size(BloomFilter *bf) {
@@ -43,12 +49,14 @@ uint32_t bf_size(BloomFilter *bf) {
 }
 
 void bf_insert(BloomFilter *bf, char *oldspeak) {
+    // set the bits at the indices gained from hashing the oldspeak with the 3 salts
     bv_set_bit(bf->filter, hash(bf->primary, oldspeak) % bf_size(bf));
     bv_set_bit(bf->filter, hash(bf->secondary, oldspeak) % bf_size(bf));
     bv_set_bit(bf->filter, hash(bf->tertiary, oldspeak) % bf_size(bf));
 }
 
 bool bf_probe(BloomFilter *bf, char *oldspeak) {
+    // check if the bits at the indices obtained by hashing the oldspeak with the salts are 1
     return (bv_get_bit(bf->filter, hash(bf->primary, oldspeak) % bf_size(bf))
             && bv_get_bit(bf->filter, hash(bf->secondary, oldspeak) % bf_size(bf))
             && bv_get_bit(bf->filter, hash(bf->tertiary, oldspeak) % bf_size(bf)));
@@ -57,8 +65,8 @@ bool bf_probe(BloomFilter *bf, char *oldspeak) {
 uint32_t bf_count(BloomFilter *bf) {
     uint32_t count = 0;
     for (uint32_t i = 0; i < bv_length(bf->filter); i++) {
-        if (bv_get_bit(bf->filter, i)) {
-            count++;
+        if (bv_get_bit(bf->filter, i)) { // if the bit is set
+            count++; // increment count
         }
     }
     return count;

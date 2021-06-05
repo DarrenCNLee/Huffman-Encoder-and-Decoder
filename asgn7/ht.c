@@ -1,3 +1,7 @@
+// Darren Lee
+// CSE13S
+// This program implements the hash table ADT.
+
 #include "ht.h"
 
 #include "ll.h"
@@ -33,14 +37,16 @@ HashTable *ht_create(uint32_t size, bool mtf) {
 }
 
 void ht_delete(HashTable **ht) {
-    for (uint32_t i = 0; i < ht_size(*ht); i++) {
-        if ((*ht)->lists[i]) {
-            ll_delete(&((*ht)->lists[i]));
+    if (*ht) {
+        for (uint32_t i = 0; i < ht_size(*ht); i++) {
+            if ((*ht)->lists[i]) { // delete each of the linked lists
+                ll_delete(&((*ht)->lists[i]));
+            }
         }
+        free((*ht)->lists);
+        free(*ht); // free the hash table, and the lists
+        *ht = NULL; // set the pointer to null
     }
-    free((*ht)->lists);
-    free(*ht);
-    *ht = NULL;
 }
 
 uint32_t ht_size(HashTable *ht) {
@@ -48,26 +54,25 @@ uint32_t ht_size(HashTable *ht) {
 }
 
 Node *ht_lookup(HashTable *ht, char *oldspeak) {
-    if (ht) {
-        return ll_lookup(ht->lists[hash(ht->salt, oldspeak) % ht_size(ht)], oldspeak);
-    } else {
-        return NULL;
-    }
+    // use ll_lookup to search for the oldspeak
+    return ll_lookup(ht->lists[hash(ht->salt, oldspeak) % ht_size(ht)], oldspeak);
+    // returns null if the node is not fount
 }
 
 void ht_insert(HashTable *ht, char *oldspeak, char *newspeak) {
+    // hash the oldspeak to get the index
     uint32_t index = hash(ht->salt, oldspeak) % ht_size(ht);
-    if (!ht->lists[index]) {
-        ht->lists[index] = ll_create(ht->mtf);
+    if (!ht->lists[index]) { // if the list at the index is null
+        ht->lists[index] = ll_create(ht->mtf); // create the list
     }
-    ll_insert(ht->lists[index], oldspeak, newspeak);
+    ll_insert(ht->lists[index], oldspeak, newspeak); // insert the old and newspeak into the list
 }
 
 uint32_t ht_count(HashTable *ht) {
     uint32_t count = 0;
-    for (uint32_t i = 0; i < ht->size; i++) {
-        if (ht->lists[i]) {
-            count++;
+    for (uint32_t i = 0; i < ht_size(ht); i++) {
+        if (ht->lists[i]) { // if the list is not null
+            count++; // increment count
         }
     }
     return count;
@@ -75,8 +80,8 @@ uint32_t ht_count(HashTable *ht) {
 
 void ht_print(HashTable *ht) {
     for (uint32_t i = 0; i < ht_size(ht); i++) {
-        if (ht->lists[i]) {
-            ll_print(ht->lists[i]);
+        if (ht->lists[i]) { // if the list is not null
+            ll_print(ht->lists[i]); // print the list
         }
     }
 }
