@@ -116,6 +116,8 @@ int main(int argc, char **argv) {
     if (bad_file == NULL) { // if the file fails to open, print error message and exit
         clear_words();
         regfree(&re);
+        ll_delete(&bad_list);
+        ll_delete(&right_list);
         bf_delete(&bf);
         ht_delete(&ht);
         fprintf(stderr, "Error: Failed to open badspeak.txt.\n");
@@ -133,6 +135,8 @@ int main(int argc, char **argv) {
     if (new_file == NULL) { // if the file fails to open, print error message and exit
         clear_words();
         regfree(&re);
+        ll_delete(&bad_list);
+        ll_delete(&right_list);
         bf_delete(&bf);
         ht_delete(&ht);
         fprintf(stderr, "Error: Failed to open newspeak.txt.\n");
