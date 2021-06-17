@@ -23,6 +23,7 @@ uint8_t pack_byte(uint8_t upper, uint8_t lower) {
 int main(int argc, char **argv) {
     // statbuf for file permissions; code provided by Professor Long in assigment pdf
     struct stat statbuf;
+    int c_high;
     // initialize statistics
     uint32_t bytes_processed = 0, corrected_errors = 0;
     // opt is for getopt, c_low is for fgetc, stat is a flag for printing statistics
@@ -98,16 +99,19 @@ int main(int argc, char **argv) {
     while ((c_low = fgetc(infile)) != EOF) { // read infile till end of file
         // decode the lower nibble of the message
         HAM_STATUS status_low = ham_decode(Ht, c_low, &msg_low);
+        bytes_processed++; // increment bytes_processed
         if (status_low == HAM_CORRECT) {
             corrected_errors++; // increment corrected_errors if an error has been corrected
         }
         // decode the upper nibble of the message
-        HAM_STATUS status_high = ham_decode(Ht, fgetc(infile), &msg_high);
-        if (status_high == HAM_CORRECT) {
-            corrected_errors++;
+        if ((c_high = fgetc(infile)) != EOF) {
+            HAM_STATUS status_high = ham_decode(Ht, c_high, &msg_high);
+            if (status_high == HAM_CORRECT) {
+                corrected_errors++;
+            }
+            bytes_processed++; // increment bytes_processed
+            fputc(pack_byte(msg_high, msg_low), outfile); // print the packed byte to the outfile
         }
-        bytes_processed += 2; // increment bytes_processed
-        fputc(pack_byte(msg_high, msg_low), outfile); // print the packed byte to the outfile
     }
     if (stat) { // if stat flag is 1, print the statistics for the decoder to stderr
         fprintf(stderr, "Total bytes processed: %" PRIu32 "\n", bytes_processed);
