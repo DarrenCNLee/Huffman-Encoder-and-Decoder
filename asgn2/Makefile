@@ -18,3 +18,6 @@ clean:
 
 scan-build:	clean
 		scan-build make
+
+format: 	
+		clang-format -i -style=file *.[ch]
