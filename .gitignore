@@ -42,6 +42,7 @@ names.sh
 test.sh
 testdecode.sh
 testencode.sh
+testensize.sh
 badheadertest.sh
 expencode
 everybyte
