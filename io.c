@@ -48,7 +48,8 @@ int read_bytes(int infile, uint8_t *buf, int nbytes) {
             break;
         }
     }
-
+    
+    bytes_read += total;
     return total;
         
     while (total != nbytes) { // read until total is at least nbytes
@@ -78,7 +79,8 @@ int write_bytes(int outfile, uint8_t *buf, int nbytes) {
             break;
         }
     }
-
+    
+    bytes_written += total;
     return total;
     
     while (total != nbytes) { // write until total is at least nbytes
