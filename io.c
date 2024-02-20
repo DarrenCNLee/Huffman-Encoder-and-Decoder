@@ -40,9 +40,9 @@ int read_bytes(int infile, uint8_t *buf, int nbytes) {
 
     // read until total is at least nbytes
     while (true) {
-        // read nbytes-total and store number of bytes read in bytes
-        // if bytes is 0, break the while loop
+        // read nbytes and store number of bytes read in bytes
         if ((bytes = read(infile, buf + total, nbytes)) <= 0) {
+            // if bytes is 0, break the while loop
             break;
         }
 
@@ -56,7 +56,9 @@ int read_bytes(int infile, uint8_t *buf, int nbytes) {
     bytes_read += total;
     // return total number of bytes read
     return total;
-        
+
+
+    
     // while (total != nbytes) { 
        
     //     bytes = read(infile, buf, nbytes - total);
@@ -73,11 +75,15 @@ int read_bytes(int infile, uint8_t *buf, int nbytes) {
 int write_bytes(int outfile, uint8_t *buf, int nbytes) {
     int total = 0, bytes = 0; // initialize total and bytes
 
+    // write until total is at least nbytes
     while (true) {
+        // write nbytes and store the number of bytes written in bytes
         if ((bytes = write(outfile, buf + total, nbytes)) <= 0) {
+            // if bytes is 0, break the while loop
             break;
         }
 
+        // increase total by bytes
         total += bytes;
 
         if (total == nbytes) {
@@ -86,18 +92,21 @@ int write_bytes(int outfile, uint8_t *buf, int nbytes) {
     }
     
     bytes_written += total;
+    // return the total number of bytes written
     return total;
+
+
     
-    while (total != nbytes) { // write until total is at least nbytes
-        // write nbytes-total and store the number of bytes written in bytes
-        bytes = write(outfile, buf, nbytes - total);
-        if (!bytes) { // if bytes is 0, break the while loop
-            break;
-        }
-        total += bytes; // increase total by bytes
-    }
-    bytes_written += total;
-    return total; // return the total number of bytes written
+    // while (total != nbytes) { // write until total is at least nbytes
+    //     // write nbytes-total and store the number of bytes written in bytes
+    //     bytes = write(outfile, buf, nbytes - total);
+    //     if (!bytes) { // if bytes is 0, break the while loop
+    //         break;
+    //     }
+    //     total += bytes; // increase total by bytes
+    // }
+    // bytes_written += total;
+    // return total; // return the total number of bytes written
 }
 
 // code influenced by Eugene's lab section on 5/11
