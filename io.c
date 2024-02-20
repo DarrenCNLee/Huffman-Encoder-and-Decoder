@@ -43,7 +43,7 @@ int read_bytes(int infile, uint8_t *buf, int nbytes) {
             break;
         }
 
-        total += bytes
+        total += bytes;
         if (total == nbytes) {
             break;
         }
