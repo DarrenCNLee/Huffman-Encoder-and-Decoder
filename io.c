@@ -66,6 +66,21 @@ int read_bytes(int infile, uint8_t *buf, int nbytes) {
 // code influenced by Sahiti's lab section on 5/12
 int write_bytes(int outfile, uint8_t *buf, int nbytes) {
     int total = 0, bytes = 0; // initialize total and bytes
+
+    while (true) {
+        if ((bytes = write(outfile, buf + total, nbytes)) <= 0) {
+            break;
+        }
+
+        total += bytes;
+
+        if (total == nbytes) {
+            break;
+        }
+    }
+
+    return total;
+    
     while (total != nbytes) { // write until total is at least nbytes
         // write nbytes-total and store the number of bytes written in bytes
         bytes = write(outfile, buf, nbytes - total);
@@ -93,6 +108,9 @@ bool read_bit(int infile, uint8_t *bit) {
     if (bufindex == BLOCK * BYTE_SIZE) { // if the buffer is full
         bufindex = 0; // reset the buffer index
     }
+
+    return bufindex != last_bit; 
+        
     if (bufindex == last_bit) { // if the buffer index is the last bit, return false
         return false;
     } else { // else return true
