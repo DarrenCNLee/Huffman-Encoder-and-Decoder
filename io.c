@@ -37,6 +37,20 @@ void buf_clr_bit(uint8_t *buf, uint32_t i) {
 // code influenced by Sahiti's lab section on 5/12
 int read_bytes(int infile, uint8_t *buf, int nbytes) {
     int total = 0, bytes = 0; // initialize total and bytes
+
+    while (true) {
+        if ((bytes = read(infile, buf + total, nbytes)) <= 0) {
+            break;
+        }
+
+        total += bytes
+        if (total == nbytes) {
+            break;
+        }
+    }
+
+    return total;
+        
     while (total != nbytes) { // read until total is at least nbytes
         // read nbytes-total and store number of bytes read in bytes
         bytes = read(infile, buf, nbytes - total);
