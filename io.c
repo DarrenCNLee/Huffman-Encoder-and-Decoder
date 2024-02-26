@@ -125,13 +125,14 @@ bool read_bit(int infile, uint8_t *bit) {
         bufindex = 0; // reset the buffer index
     }
 
+    // return True if the buffer index is not the last bit
     return bufindex != last_bit; 
         
-    if (bufindex == last_bit) { // if the buffer index is the last bit, return false
-        return false;
-    } else { // else return true
-        return true;
-    }
+    // if (bufindex == last_bit) { // if the buffer index is the last bit, return false
+    //     return false;
+    // } else { // else return true
+    //     return true;
+    // }
 }
 
 // code influenced by Eugene's lab section on 5/11
